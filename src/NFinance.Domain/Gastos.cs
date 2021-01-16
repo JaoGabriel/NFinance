@@ -13,11 +13,11 @@ namespace NFinance.Domain
         public string Nome { get; set; }
         
         [Required]
-        [Range(typeof(decimal), "0", "999999999999", ErrorMessage = "Valor {0} deve estar entre {1} e {2}")]
+        [Range(0, 999999999999, ErrorMessage = "Valor {0} deve estar entre {1} e {2}")]
         public decimal ValorTotal { get; set; }
         
         [Required]
-        [Range(typeof(int), "0", "100", ErrorMessage = "Sua parcela {0} deve estar entre {1} e {2}")]
+        [Range(0, 100, ErrorMessage = "Sua parcela {0} deve estar entre {1} e {2}")]
         public int QuantidadeParcelas { get; set; }
         
         [Required]

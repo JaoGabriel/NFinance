@@ -14,7 +14,7 @@ namespace NFinance.Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RendaMensal = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    RendaMensal = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,7 +28,7 @@ namespace NFinance.Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ValorTotal = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
                     QuantidadeParcelas = table.Column<int>(type: "int", nullable: false),
                     DataDoGasto = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -44,7 +44,7 @@ namespace NFinance.Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Valor = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
                     DataAplicacao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -58,14 +58,14 @@ namespace NFinance.Infra.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ValorNaCarteira = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SaldoMensal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SaldoAnual = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    GastosMensal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    GastosAnual = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ValorInvestidoMensal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ValorInvestidoAnual = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ValorRecebidoAnual = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    ValorNaCarteira = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
+                    SaldoMensal = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
+                    SaldoAnual = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
+                    GastosMensal = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
+                    GastosAnual = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
+                    ValorInvestidoMensal = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
+                    ValorInvestidoAnual = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
+                    ValorRecebidoAnual = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,7 +79,7 @@ namespace NFinance.Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Valor = table.Column<decimal>(type: "FLOAT64(18,2)", nullable: false),
                     MotivoResgate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataResgate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

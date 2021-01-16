@@ -31,7 +31,7 @@ namespace NFinance.Infra.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("RendaMensal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.HasKey("Id");
 
@@ -56,7 +56,7 @@ namespace NFinance.Infra.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("ValorTotal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.HasKey("Id");
 
@@ -78,7 +78,7 @@ namespace NFinance.Infra.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.HasKey("Id");
 
@@ -93,28 +93,28 @@ namespace NFinance.Infra.Migrations
                         .UseIdentityColumn();
 
                     b.Property<decimal>("GastosAnual")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.Property<decimal>("GastosMensal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.Property<decimal>("SaldoAnual")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.Property<decimal>("SaldoMensal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.Property<decimal>("ValorInvestidoAnual")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.Property<decimal>("ValorInvestidoMensal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.Property<decimal>("ValorNaCarteira")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.Property<decimal>("ValorRecebidoAnual")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.HasKey("Id");
 
@@ -140,7 +140,7 @@ namespace NFinance.Infra.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("FLOAT64(18,2)");
 
                     b.HasKey("Id");
 

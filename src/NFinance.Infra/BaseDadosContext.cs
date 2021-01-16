@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Repository;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NFinance.Infra
@@ -14,6 +15,15 @@ namespace NFinance.Infra
         public DbSet<PainelDeControle> PainelDeControle { get; set; }
         public DbSet<Investimentos> Investimentos { get; set; }
         public DbSet<Resgate> Resgate { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
+                e => e.GetProperties().Where(p => p.ClrType == typeof(decimal))))
+                property.SetColumnType("FLOAT64");
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(BaseDadosContext).Assembly);
+        }
 
         public async Task<bool> Commit()
         {
