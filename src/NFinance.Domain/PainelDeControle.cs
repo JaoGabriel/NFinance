@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NFinance.Domain
 {
@@ -6,9 +7,11 @@ namespace NFinance.Domain
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int IdPainelDeControle { get; set; }
 
-        public decimal ValorNaCarteira { get; set; }
+        [ForeignKey("Id")]
+        [Required]
+        public Cliente IdCliente { get; set; }
 
         public decimal SaldoMensal { get; set; }
 

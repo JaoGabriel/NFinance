@@ -75,7 +75,7 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> CadastrarCliente(int id,[FromBody] Cliente cliente)
+        public async Task<IActionResult> AtualizarCliente(int id,[FromBody] Cliente cliente)
         {
             try
             {
