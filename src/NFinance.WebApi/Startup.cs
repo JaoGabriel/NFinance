@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Services;
 using NFinance.Infra;
 
 namespace NFinance.Api
@@ -21,13 +23,20 @@ namespace NFinance.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BaseDadosContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("BancoDeDados")));
+            services.AddScoped<BaseDadosContext, BaseDadosContext>();
+
+            //services.AddSingleton<IClienteService, ClienteService>();
+            //services.AddSingleton<IGastosService, GastosService>();
+            //services.AddSingleton<IResgateService, ResgateService>();
+            //services.AddSingleton<IInvestimentosService, InvestimentosService>();
+            //services.AddSingleton<IPainelDeControleService, PainelDeControleService>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NFinance.Api", Version = "v1" });
             });
-            services.AddDbContext<BaseContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("BancoDeDados")));
-            services.AddScoped<BaseContext, BaseContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

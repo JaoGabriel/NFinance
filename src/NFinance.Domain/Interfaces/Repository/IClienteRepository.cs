@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace NFinance.Domain.Interfaces
+namespace NFinance.Domain.Interfaces.Repository
 {
-    public interface IClienteService
+    public interface IClienteRepository : IDisposable
     {
         Task<List<Cliente>> ListarClientes();
         Task<Cliente> ConsultarCliente(int id);

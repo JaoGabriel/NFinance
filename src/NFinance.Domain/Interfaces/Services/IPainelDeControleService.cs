@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace NFinance.Domain.Interfaces
+namespace NFinance.Domain.Interfaces.Services
 {
     public interface IPainelDeControleService
     {

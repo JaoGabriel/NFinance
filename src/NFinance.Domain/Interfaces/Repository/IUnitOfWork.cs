@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace NFinance.Domain.Interfaces
+namespace NFinance.Domain.Interfaces.Repository
 {
     public interface IUnitOfWork
     {
