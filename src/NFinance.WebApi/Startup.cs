@@ -23,9 +23,7 @@ namespace NFinance.WebApi
             services.AddMvc();
             services.AddCors();
 
-            services.AddOpenApiDocument(c =>
-            c.DocumentName = _name
-            );
+            services.AddOpenApiDocument(c => c.Title = _name);
 
             services.AddInfraDataSqlServices(Configuration);
             services.AddDomainServices(Configuration);
