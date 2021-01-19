@@ -4,13 +4,12 @@ using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NFinance.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ResgateController : ControllerBase
     {
         private readonly ILogger<ResgateController> _logger;
@@ -22,8 +21,8 @@ namespace NFinance.WebApi.Controllers
             _resgateService = resgateService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListarGastos()
+        [HttpGet("/api/Resgates")]
+        public async Task<IActionResult> ListarResgates()
         {
             List<Resgate> listaResgates = new List<Resgate>();
             try
@@ -42,8 +41,8 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ConsultarGasto(int id)
+        [HttpGet("/api/Resgate/{id}")]
+        public async Task<IActionResult> ConsultarResgate(int id)
         {
             try
             {
@@ -58,8 +57,8 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CadastrarGasto(int idInvestimentos, [FromBody] Resgate resgate)
+        [HttpPost("/api/Resgate")]
+        public async Task<IActionResult> CadastrarResgate(int idInvestimentos, [FromBody] Resgate resgate)
         {
             try
             {

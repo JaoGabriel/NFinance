@@ -1,5 +1,4 @@
 ﻿using NFinance.Domain.Interfaces.Services;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NFinance.Domain.Services

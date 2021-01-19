@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace NFinance.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class InvestimentoController : ControllerBase
     {
         private readonly ILogger<InvestimentoController> _logger;
@@ -21,8 +21,8 @@ namespace NFinance.WebApi.Controllers
             _investimentosService = investimentosService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListarGastos()
+        [HttpGet("/api/Investimentos")]
+        public async Task<IActionResult> ListarInvestimentos()
         {
             List<Investimentos> listaInvestimentos = new List<Investimentos>();
             try
@@ -41,8 +41,8 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ConsultarGasto(int id)
+        [HttpGet("/api/Investimento/{id}")]
+        public async Task<IActionResult> ConsultarInvestimentos(int id)
         {
             try
             {
@@ -57,8 +57,8 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CadastrarGasto([FromBody] Investimentos investimentos)
+        [HttpPost("/api/Investimento")]
+        public async Task<IActionResult> CadastrarInvestimento([FromBody] Investimentos investimentos)
         {
             try
             {
@@ -73,8 +73,8 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> AtualizarGasto(int id, [FromBody] Investimentos investimentos)
+        [HttpPut("/api/Investimento/{id}")]
+        public async Task<IActionResult> AtualizarInvestimento(int id, [FromBody] Investimentos investimentos)
         {
             try
             {

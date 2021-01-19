@@ -11,7 +11,7 @@ namespace NFinance.Domain
 
         [ForeignKey("Id")]
         [Required]
-        public Cliente IdCliente { get; set; }
+        public Cliente Cliente { get; set; }
 
         public decimal SaldoMensal { get; set; }
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace NFinance.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ClienteController : ControllerBase
     {
 
@@ -22,7 +22,7 @@ namespace NFinance.Api.Controllers
             _clienteService = clienteService;
         }
 
-        [HttpGet]
+        [HttpGet("/api/Clientes")]
         public async Task<IActionResult> ListarClientes()
         {
             List<Cliente> listaClientes = new List<Cliente>();
@@ -42,7 +42,7 @@ namespace NFinance.Api.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("/api/Cliente/{id}")]
         public async Task<IActionResult> ConsultarCliente(int id)
         {
             try
@@ -58,7 +58,7 @@ namespace NFinance.Api.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("/api/Cliente")]
         public async Task<IActionResult> CadastrarCliente([FromBody] Cliente cliente)
         {
             try
@@ -74,7 +74,7 @@ namespace NFinance.Api.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("/api/Clientes/{id}")]
         public async Task<IActionResult> AtualizarCliente(int id,[FromBody] Cliente cliente)
         {
             try

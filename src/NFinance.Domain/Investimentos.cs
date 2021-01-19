@@ -9,7 +9,11 @@ namespace NFinance.Domain
         [Key]
         [Required]
         public int Id { get; set; }
-        
+
+        [ForeignKey("Id")]
+        [Required]
+        public Cliente Cliente { get; set; }
+
         [Required]
         public string Nome { get; set; }
         

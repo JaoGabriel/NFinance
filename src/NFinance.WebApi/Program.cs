@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace NFinance.Api
+namespace NFinance.WebApi
 {
     public class Program
     {

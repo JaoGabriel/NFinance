@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NFinance.Domain
 {
@@ -15,11 +14,5 @@ namespace NFinance.Domain
         [Required]
         [Range(0, 999999999999, ErrorMessage = "Valor {0} deve estar entre {1} e {2}")]
         public decimal RendaMensal { get; set; }
-
-        [ForeignKey("Id")]
-        public Investimentos Investimentos { get; set; }
-
-        [ForeignKey("Id")]
-        public Gastos Gastos { get; set; }
     }
 }

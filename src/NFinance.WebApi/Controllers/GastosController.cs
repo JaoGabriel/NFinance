@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace NFinance.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class GastosController : ControllerBase
     {
         private readonly ILogger<GastosController> _logger;
@@ -21,7 +21,7 @@ namespace NFinance.WebApi.Controllers
             _gastosService = gastosService;
         }
 
-        [HttpGet]
+        [HttpGet("/api/Gastos")]
         public async Task<IActionResult> ListarGastos()
         {
             List<Gastos> listaGastos = new List<Gastos>();
@@ -41,7 +41,7 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("/api/Gasto/{id}")]
         public async Task<IActionResult> ConsultarGasto(int id)
         {
             try
@@ -57,7 +57,7 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("/api/Gasto")]
         public async Task<IActionResult> CadastrarGasto([FromBody] Gastos gastos)
         {
             try
@@ -73,7 +73,7 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("/api/Gasto/{id}")]
         public async Task<IActionResult> AtualizarGasto(int id, [FromBody] Gastos gastos)
         {
             try

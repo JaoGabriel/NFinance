@@ -1,18 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.Services;
+using NFinance.Domain;
 using NFinance.Infra;
 
-namespace NFinance.Api
+namespace NFinance.WebApi
 {
     public class Startup
     {
+        private const string _name = "Nfinance.WebApi";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,36 +20,34 @@ namespace NFinance.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BaseDadosContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("BancoDeDados")));
-            services.AddScoped<BaseDadosContext, BaseDadosContext>();
+            services.AddMvc();
+            services.AddCors();
 
-            //services.AddSingleton<IClienteService, ClienteService>();
-            //services.AddSingleton<IGastosService, GastosService>();
-            //services.AddSingleton<IResgateService, ResgateService>();
-            //services.AddSingleton<IInvestimentosService, InvestimentosService>();
-            //services.AddSingleton<IPainelDeControleService, PainelDeControleService>();
+            services.AddOpenApiDocument(c =>
+            c.DocumentName = _name
+            );
+
+            services.AddInfraDataSqlServices(Configuration);
+            services.AddDomainServices(Configuration);
+            services.AddMemoryCache();
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NFinance.Api", Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NFinance.Api v1"));
-            }
+            //if (env.IsDevelopment())
+            //{
+            //app.UseDeveloperExceptionPage();
+
+            app.UseOpenApi(c => c.DocumentName = _name);
+            app.UseSwaggerUi3();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
