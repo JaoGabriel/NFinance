@@ -8,15 +8,16 @@ namespace NFinance.Domain
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [ForeignKey("Id")]
         [Required]
         public Cliente Cliente { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nome deve conter no minimo 10 letras e no maximo 100")]
+        [StringLength(100, MinimumLength = 10)]
         public string Nome { get; set; }
-        
+
         [Required]
         [Range(0, 999999999999, ErrorMessage = "Valor {0} deve estar entre {1} e {2}")]
         public decimal ValorTotal { get; set; }

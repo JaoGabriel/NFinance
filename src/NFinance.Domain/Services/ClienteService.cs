@@ -2,6 +2,7 @@
 using NFinance.Domain.Interfaces.Repository;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace NFinance.Domain.Services
 {
@@ -12,7 +13,7 @@ namespace NFinance.Domain.Services
         {
             _clienteRepository = clienteRepository;
         }
-        public async Task<Cliente> AtualiazarCliente(int id, Cliente cliente)
+        public async Task<Cliente> AtualiazarCliente(Guid id, Cliente cliente)
         {
             return await _clienteRepository.AtualiazarCliente(id,cliente);
         }
@@ -22,7 +23,7 @@ namespace NFinance.Domain.Services
             return await _clienteRepository.CadastrarCliente(cliente);
         }
 
-        public async Task<Cliente> ConsultarCliente(int id)
+        public async Task<Cliente> ConsultarCliente(Guid id)
         {
             return await _clienteRepository.ConsultarCliente(id);
         }

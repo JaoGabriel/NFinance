@@ -21,17 +21,20 @@ namespace NFinance.Infra.Migrations
 
             modelBuilder.Entity("NFinance.Domain.Cliente", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("RendaMensal")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 
@@ -40,21 +43,25 @@ namespace NFinance.Infra.Migrations
 
             modelBuilder.Entity("NFinance.Domain.Gastos", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DataDoGasto")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("QuantidadeParcelas")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ValorTotal")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 
@@ -63,18 +70,22 @@ namespace NFinance.Infra.Migrations
 
             modelBuilder.Entity("NFinance.Domain.Investimentos", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DataAplicacao")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 
@@ -83,34 +94,54 @@ namespace NFinance.Infra.Migrations
 
             modelBuilder.Entity("NFinance.Domain.PainelDeControle", b =>
                 {
-                    b.Property<int>("IdPainelDeControle")
+                    b.Property<Guid>("IdPainelDeControle")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("GastosAnual")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.Property<decimal>("GastosMensal")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("SaldoAnual")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.Property<decimal>("SaldoMensal")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.Property<decimal>("ValorInvestidoAnual")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.Property<decimal>("ValorInvestidoMensal")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.Property<decimal>("ValorRecebidoAnual")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("IdPainelDeControle");
 
@@ -121,18 +152,22 @@ namespace NFinance.Infra.Migrations
 
             modelBuilder.Entity("NFinance.Domain.Resgate", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DataResgate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MotivoResgate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("FLOAT64(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(38)
+                        .HasColumnType("DECIMAL(38)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 

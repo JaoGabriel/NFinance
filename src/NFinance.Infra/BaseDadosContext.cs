@@ -20,14 +20,18 @@ namespace NFinance.Infra
         {
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(decimal))))
-                property.SetColumnType("FLOAT64");
+            {
+                property.SetColumnType("DECIMAL");
+                property.SetPrecision(38);
+                property.SetDefaultValue(0);
+            }
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BaseDadosContext).Assembly);
         }
 
-        public async Task<bool> Commit()
+        public async Task<int> Commit()
         {
-            return await base.SaveChangesAsync() > 0;
+            return await base.SaveChangesAsync();
         }
     }
 }

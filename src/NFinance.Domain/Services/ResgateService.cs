@@ -1,5 +1,6 @@
 ﻿using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace NFinance.Domain.Services
             _resgateRepository = resgateRepository;
         }
 
-        public Task<Resgate> ConsultarResgate(int id)
+        public Task<Resgate> ConsultarResgate(Guid id)
         {
             return _resgateRepository.ConsultarResgate(id);
         }
@@ -24,7 +25,7 @@ namespace NFinance.Domain.Services
             return _resgateRepository.ListarResgates();
         }
 
-        public Task<Resgate> RealizarResgate(int id,Resgate resgate)
+        public Task<Resgate> RealizarResgate(Guid id,Resgate resgate)
         {
             return _resgateRepository.RealizarResgate(id,resgate);
         }

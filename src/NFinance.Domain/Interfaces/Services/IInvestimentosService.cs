@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NFinance.Domain.Interfaces.Services
@@ -7,7 +8,7 @@ namespace NFinance.Domain.Interfaces.Services
     {
         Task<Investimentos> RealizarInvestimento(Investimentos investimentos);
         Task<List<Investimentos>> ListarInvestimentos();
-        Task<Investimentos> ConsultarInvestimento(int id);
-        Task<Investimentos> AtualizarInvestimento(int id,Investimentos investimento);
+        Task<Investimentos> ConsultarInvestimento(Guid id);
+        Task<Investimentos> AtualizarInvestimento(Guid id,Investimentos investimento);
     }
 }

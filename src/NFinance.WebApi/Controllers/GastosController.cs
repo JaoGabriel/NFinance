@@ -4,6 +4,7 @@ using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace NFinance.WebApi.Controllers
@@ -22,6 +23,8 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Gastos")]
+        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarGastos()
         {
             List<Gastos> listaGastos = new List<Gastos>();
@@ -42,7 +45,9 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Gasto/{id}")]
-        public async Task<IActionResult> ConsultarGasto(int id)
+        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ConsultarGasto(Guid id)
         {
             try
             {
@@ -58,6 +63,8 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Gasto")]
+        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CadastrarGasto([FromBody] Gastos gastos)
         {
             try
@@ -74,7 +81,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPut("/api/Gasto/{id}")]
-        public async Task<IActionResult> AtualizarGasto(int id, [FromBody] Gastos gastos)
+        public async Task<IActionResult> AtualizarGasto(Guid id, [FromBody] Gastos gastos)
         {
             try
             {

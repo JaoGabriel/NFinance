@@ -8,7 +8,7 @@ namespace NFinance.Domain.Interfaces.Repository
     {
         Task<Investimentos> RealizarInvestimento(Investimentos investimentos);
         Task<List<Investimentos>> ListarInvestimentos();
-        Task<Investimentos> ConsultarInvestimento(int id);
-        Task<Investimentos> AtualizarInvestimento(int id, Investimentos investimento);
+        Task<Investimentos> ConsultarInvestimento(Guid id);
+        Task<Investimentos> AtualizarInvestimento(Guid id, Investimentos investimento);
     }
 }

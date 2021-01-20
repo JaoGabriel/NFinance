@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NFinance.Domain.Interfaces.Services
@@ -6,9 +7,9 @@ namespace NFinance.Domain.Interfaces.Services
     public interface IGastosService
     {
         Task<Gastos> CadastrarGasto(Gastos gastos);
-        Task<Gastos> AtualizarGasto(int id,Gastos gastos);
-        Task<int> ExcluirGasto(int id);
-        Task<Gastos> ConsultarGasto(int id);
+        Task<Gastos> AtualizarGasto(Guid id,Gastos gastos);
+        Task<Guid> ExcluirGasto(Guid id);
+        Task<Gastos> ConsultarGasto(Guid id);
         Task<List<Gastos>> ListarGastos();
     }
 }

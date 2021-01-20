@@ -4,6 +4,7 @@ using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace NFinance.WebApi.Controllers
@@ -22,6 +23,8 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Investimentos")]
+        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarInvestimentos()
         {
             List<Investimentos> listaInvestimentos = new List<Investimentos>();
@@ -42,7 +45,9 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Investimento/{id}")]
-        public async Task<IActionResult> ConsultarInvestimentos(int id)
+        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ConsultarInvestimentos(Guid id)
         {
             try
             {
@@ -58,6 +63,8 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Investimento")]
+        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CadastrarInvestimento([FromBody] Investimentos investimentos)
         {
             try
@@ -74,7 +81,9 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPut("/api/Investimento/{id}")]
-        public async Task<IActionResult> AtualizarInvestimento(int id, [FromBody] Investimentos investimentos)
+        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AtualizarInvestimento(Guid id, [FromBody] Investimentos investimentos)
         {
             try
             {

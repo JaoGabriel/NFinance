@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace NFinance.Domain.Interfaces.Services
 {
     public interface IPainelDeControleService
     {
-        Task<PainelDeControle> PainelDeControle(int id);
+        Task<PainelDeControle> PainelDeControle(Guid id);
     }
 }

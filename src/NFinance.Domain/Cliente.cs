@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace NFinance.Domain
 {
@@ -6,9 +7,10 @@ namespace NFinance.Domain
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nome deve conter no minimo 10 letras e no maximo 100")]
+        [StringLength(100,MinimumLength = 10)]
         public string Nome { get; set; }
 
         [Required]

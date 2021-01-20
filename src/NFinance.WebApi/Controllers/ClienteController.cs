@@ -4,6 +4,7 @@ using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace NFinance.Api.Controllers
@@ -23,6 +24,8 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpGet("/api/Clientes")]
+        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarClientes()
         {
             List<Cliente> listaClientes = new List<Cliente>();
@@ -43,7 +46,9 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpGet("/api/Cliente/{id}")]
-        public async Task<IActionResult> ConsultarCliente(int id)
+        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ConsultarCliente(Guid id)
         {
             try
             {
@@ -59,6 +64,8 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpPost("/api/Cliente")]
+        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CadastrarCliente([FromBody] Cliente cliente)
         {
             try
@@ -75,7 +82,9 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpPut("/api/Clientes/{id}")]
-        public async Task<IActionResult> AtualizarCliente(int id,[FromBody] Cliente cliente)
+        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AtualizarCliente(Guid id,[FromBody] Cliente cliente)
         {
             try
             {

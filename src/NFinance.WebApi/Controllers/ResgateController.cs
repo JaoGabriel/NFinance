@@ -4,6 +4,7 @@ using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace NFinance.WebApi.Controllers
@@ -22,6 +23,8 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Resgates")]
+        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarResgates()
         {
             List<Resgate> listaResgates = new List<Resgate>();
@@ -42,7 +45,9 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Resgate/{id}")]
-        public async Task<IActionResult> ConsultarResgate(int id)
+        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ConsultarResgate(Guid id)
         {
             try
             {
@@ -58,7 +63,9 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Resgate")]
-        public async Task<IActionResult> CadastrarResgate(int idInvestimentos, [FromBody] Resgate resgate)
+        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CadastrarResgate(Guid idInvestimentos, [FromBody] Resgate resgate)
         {
             try
             {

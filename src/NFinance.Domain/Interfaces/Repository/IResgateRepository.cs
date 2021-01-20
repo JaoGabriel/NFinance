@@ -6,8 +6,8 @@ namespace NFinance.Domain.Interfaces.Repository
 {
     public interface IResgateRepository : IDisposable
     {
-        Task<Resgate> RealizarResgate(int idInvestimento, Resgate resgate);
+        Task<Resgate> RealizarResgate(Guid idInvestimento, Resgate resgate);
         Task<List<Resgate>> ListarResgates();
-        Task<Resgate> ConsultarResgate(int id);
+        Task<Resgate> ConsultarResgate(Guid id);
     }
 }

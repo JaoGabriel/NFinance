@@ -22,7 +22,7 @@ namespace NFinance.Infra.Repository
             _context?.Dispose();
         }
 
-        public async Task<Resgate> ConsultarResgate(int id)
+        public async Task<Resgate> ConsultarResgate(Guid id)
         {
             return await _context.Resgate.FirstOrDefaultAsync(i => i.Id == id);
         }
@@ -32,7 +32,7 @@ namespace NFinance.Infra.Repository
             return await _context.Resgate.ToListAsync();
         }
 
-        public async Task<Resgate> RealizarResgate(int id,Resgate resgate)
+        public async Task<Resgate> RealizarResgate(Guid id,Resgate resgate)
         {
             var cliente = await _context.Cliente.FindAsync(id);
             var investimento = await _context.Investimentos.FindAsync(id);

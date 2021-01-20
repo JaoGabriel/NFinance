@@ -7,9 +7,9 @@ namespace NFinance.Domain.Interfaces.Repository
     public interface IGastosRepository : IDisposable
     {
         Task<Gastos> CadastrarGasto(Gastos gastos);
-        Task<Gastos> AtualizarGasto(int id, Gastos gastos);
-        Task<int> ExcluirGasto(int id);
-        Task<Gastos> ConsultarGasto(int id);
+        Task<Gastos> AtualizarGasto(Guid id, Gastos gastos);
+        Task<Guid> ExcluirGasto(Guid id);
+        Task<Gastos> ConsultarGasto(Guid id);
         Task<List<Gastos>> ListarGastos();
     }
 }

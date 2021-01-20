@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Repository;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace NFinance.Infra.Repository
             _context?.Dispose();
         }
 
-        public async Task<Cliente> AtualiazarCliente(int id, Cliente cliente)
+        public async Task<Cliente> AtualiazarCliente(Guid id, Cliente cliente)
         {
             var clienteAtualizar = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == id);
             _context.Entry(clienteAtualizar).CurrentValues.SetValues(cliente);
@@ -35,7 +36,7 @@ namespace NFinance.Infra.Repository
             return cliente;
         }
 
-        public async Task<Cliente> ConsultarCliente(int id)
+        public async Task<Cliente> ConsultarCliente(Guid id)
         {
             var cliente = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == id);
             return cliente;

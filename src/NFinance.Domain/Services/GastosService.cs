@@ -1,5 +1,6 @@
 ﻿using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace NFinance.Domain.Services
             _gastosRepository = gastosRepository;
         }
 
-        public Task<Gastos> AtualizarGasto(int id, Gastos gastos)
+        public Task<Gastos> AtualizarGasto(Guid id, Gastos gastos)
         {
             return _gastosRepository.AtualizarGasto(id,gastos);
         }
@@ -23,12 +24,12 @@ namespace NFinance.Domain.Services
             return _gastosRepository.CadastrarGasto(gastos);
         }
 
-        public Task<Gastos> ConsultarGasto(int id)
+        public Task<Gastos> ConsultarGasto(Guid id)
         {
             return _gastosRepository.ConsultarGasto(id);
         }
 
-        public Task<int> ExcluirGasto(int id)
+        public Task<Guid> ExcluirGasto(Guid id)
         {
             return _gastosRepository.ExcluirGasto(id);
         }

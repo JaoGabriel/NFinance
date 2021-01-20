@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Repository;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace NFinance.Infra.Repository
             _context?.Dispose();
         }
 
-        public async Task<Gastos> AtualizarGasto(int id, Gastos gastos)
+        public async Task<Gastos> AtualizarGasto(Guid id, Gastos gastos)
         {
             var gastoAtualizar = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
             _context.Entry(gastoAtualizar).CurrentValues.SetValues(gastos);
@@ -36,13 +37,13 @@ namespace NFinance.Infra.Repository
             return gastos;
         }
 
-        public async Task<Gastos> ConsultarGasto(int id)
+        public async Task<Gastos> ConsultarGasto(Guid id)
         {
             var gasto = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
             return gasto;
         }
 
-        public async Task<int> ExcluirGasto(int id)
+        public async Task<Guid> ExcluirGasto(Guid id)
         {
             var gasto = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
             _context.Gastos.Remove(gasto);

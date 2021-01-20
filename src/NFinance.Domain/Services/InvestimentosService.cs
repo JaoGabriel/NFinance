@@ -1,5 +1,6 @@
 ﻿using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,12 +15,12 @@ namespace NFinance.Domain.Services
             _investimentosRepository = investimentosRepository;
         }
 
-        public Task<Investimentos> AtualizarInvestimento(int id, Investimentos investimento)
+        public Task<Investimentos> AtualizarInvestimento(Guid id, Investimentos investimento)
         {
             return _investimentosRepository.AtualizarInvestimento(id,investimento);
         }
 
-        public Task<Investimentos> ConsultarInvestimento(int id)
+        public Task<Investimentos> ConsultarInvestimento(Guid id)
         {
             return _investimentosRepository.ConsultarInvestimento(id);
         }
