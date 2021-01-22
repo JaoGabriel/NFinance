@@ -13,9 +13,9 @@ namespace NFinance.Domain.Services
         {
             _clienteRepository = clienteRepository;
         }
-        public async Task<Cliente> AtualiazarCliente(Guid id, Cliente cliente)
+        public async Task<Cliente> AtualizarCliente(Guid id, Cliente cliente)
         {
-            return await _clienteRepository.AtualiazarCliente(id,cliente);
+            return await _clienteRepository.AtualizarCliente(id,cliente);
         }
 
         public async Task<Cliente> CadastrarCliente(Cliente cliente)

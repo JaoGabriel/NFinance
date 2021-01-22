@@ -9,6 +9,6 @@ namespace NFinance.Domain.Interfaces.Services
         Task<List<Cliente>> ListarClientes();
         Task<Cliente> ConsultarCliente(Guid id);
         Task<Cliente> CadastrarCliente(Cliente cliente);
-        Task<Cliente> AtualiazarCliente(Guid id, Cliente cliente);
+        Task<Cliente> AtualizarCliente(Guid id, Cliente cliente);
     }
 }

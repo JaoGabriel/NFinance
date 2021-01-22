@@ -21,7 +21,7 @@ namespace NFinance.Infra.Repository
             _context?.Dispose();
         }
 
-        public async Task<Cliente> AtualiazarCliente(Guid id, Cliente cliente)
+        public async Task<Cliente> AtualizarCliente(Guid id, Cliente cliente)
         {
             var clienteAtualizar = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == id);
             _context.Entry(clienteAtualizar).CurrentValues.SetValues(cliente);

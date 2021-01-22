@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NFinance.Domain;
-using NFinance.Domain.Interfaces.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using NFinance.Domain;
+using NFinance.Domain.Interfaces.Services;
 
-namespace NFinance.Api.Controllers
+namespace NFinance.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -24,8 +25,8 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpGet("/api/Clientes")]
-        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Cliente.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationFailure), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarClientes()
         {
             List<Cliente> listaClientes = new List<Cliente>();
@@ -46,8 +47,8 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpGet("/api/Cliente/{id}")]
-        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Cliente.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationFailure), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarCliente(Guid id)
         {
             try
@@ -64,13 +65,13 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpPost("/api/Cliente")]
-        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CadastrarCliente([FromBody] Cliente cliente)
+        [ProducesResponseType(typeof(Cliente.ViewModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationFailure), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CadastrarCliente([FromBody] Cliente request)
         {
             try
             {
-                var clienteResponse = await _clienteService.CadastrarCliente(cliente);
+                Cliente.Response clienteResponse = await _clienteService.CadastrarCliente(request);
                 _logger.LogInformation("Clientes Cadastrado Com Sucesso!");
                 return Ok(clienteResponse);
             }
@@ -82,14 +83,14 @@ namespace NFinance.Api.Controllers
         }
 
         [HttpPut("/api/Clientes/{id}")]
-        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Cliente), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Cliente.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationFailure), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> AtualizarCliente(Guid id,[FromBody] Cliente cliente)
         {
             try
             {
-                var clienteResponse = await _clienteService.AtualiazarCliente(id,cliente);
-                _logger.LogInformation("Clientes Atualizado Com Sucesso!");
+                var clienteResponse = await _clienteService.AtualizarCliente(id,cliente);
+                _logger.LogInformation("Cliente Atualizado Com Sucesso!");
                 return Ok(clienteResponse);
             }
             catch (Exception ex)
@@ -98,5 +99,6 @@ namespace NFinance.Api.Controllers
                 return BadRequest(ex);
             }
         }
-    }
+    } 
+    
 }

@@ -25,6 +25,5 @@ namespace NFinance.Domain
         [Required]
         [Range(typeof(DateTime), "01/01/1900", "12/31/2060", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataResgate { get; set; }
-
     }
 }
