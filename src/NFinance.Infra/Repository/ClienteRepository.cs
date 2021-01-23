@@ -45,7 +45,7 @@ namespace NFinance.Infra.Repository
         public async Task<List<Cliente>> ListarClientes()
         {
             var clienteList = await _context.Cliente.ToListAsync();
-            List<Cliente> listaCliente = new List<Cliente>();
+            var listaCliente = new List<Cliente>();
             foreach (var cliente in clienteList)
                 listaCliente.Add(cliente);
             

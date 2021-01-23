@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +22,6 @@ namespace NFinance.WebApi
         {
             services.AddMvc();
             services.AddCors();
-            services.AddAutoMapper(typeof(Startup));
 
             services.AddOpenApiDocument(c => c.Title = _name);
 

@@ -1,8 +1,8 @@
 ﻿using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Interfaces.Repository;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using NFinance.Model.ClientesViewModel;
 
 namespace NFinance.Domain.Services
 {
@@ -13,24 +13,34 @@ namespace NFinance.Domain.Services
         {
             _clienteRepository = clienteRepository;
         }
-        public async Task<Cliente> AtualizarCliente(Guid id, Cliente cliente)
+        public async Task<AtualizarClienteViewModel.Response> AtualizarCliente(Guid id, AtualizarClienteViewModel.Request clienteRequest)
         {
-            return await _clienteRepository.AtualizarCliente(id,cliente);
+            var cliente = new Cliente(id, clienteRequest);
+            var atualizado = await _clienteRepository.AtualizarCliente(id, cliente);
+            var response = new AtualizarClienteViewModel.Response() {Id = atualizado.Id,Nome = atualizado.Nome, RendaMensal = atualizado.RendaMensal };
+            return response;
         }
 
-        public async Task<Cliente> CadastrarCliente(Cliente cliente)
+        public async Task<CadastrarClienteViewModel.Response> CadastrarCliente(CadastrarClienteViewModel.Request clienteRequest)
         {
-            return await _clienteRepository.CadastrarCliente(cliente);
+            var cliente = new Cliente(clienteRequest);
+            var novoCliente = await _clienteRepository.CadastrarCliente(cliente);
+            var response = new CadastrarClienteViewModel.Response() {Id = novoCliente.Id,Nome = novoCliente.Nome,RendaMensal = novoCliente.RendaMensal };
+            return response;
         }
 
-        public async Task<Cliente> ConsultarCliente(Guid id)
+        public async Task<ConsultarClienteViewModel.Response> ConsultarCliente(Guid id)
         {
-            return await _clienteRepository.ConsultarCliente(id);
+            var clienteConsulta = await _clienteRepository.ConsultarCliente(id);
+            var response = new ConsultarClienteViewModel.Response() { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, RendaMensal = clienteConsulta.RendaMensal };
+            return response;
         }
 
-        public async Task<List<Cliente>> ListarClientes()
+        public async Task<ListarClientesViewModel.Response> ListarClientes()
         {
-            return await _clienteRepository.ListarClientes();
+            var listaClientes = await _clienteRepository.ListarClientes();
+            var response = new ListarClientesViewModel.Response(listaClientes);
+            return response;
         }
     }
 }
