@@ -8,7 +8,7 @@ namespace NFinance.Domain.Interfaces.Repository
     {
         Task<Gastos> CadastrarGasto(Gastos gastos);
         Task<Gastos> AtualizarGasto(Guid id, Gastos gastos);
-        Task<Guid> ExcluirGasto(Guid id);
+        Task<bool> ExcluirGasto(Guid id);
         Task<Gastos> ConsultarGasto(Guid id);
         Task<List<Gastos>> ListarGastos();
     }

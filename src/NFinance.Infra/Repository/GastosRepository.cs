@@ -43,12 +43,12 @@ namespace NFinance.Infra.Repository
             return gasto;
         }
 
-        public async Task<Guid> ExcluirGasto(Guid id)
+        public async Task<bool> ExcluirGasto(Guid id)
         {
             var gasto = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
             _context.Gastos.Remove(gasto);
             await UnitOfWork.Commit();
-            return id;
+            return true;
         }
 
         public async Task<List<Gastos>> ListarGastos()

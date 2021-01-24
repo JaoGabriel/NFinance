@@ -19,5 +19,11 @@ namespace NFinance.Model.ClientesViewModel
             Nome = cliente.Nome;
             RendaMensal = cliente.RendaMensal;
         }
+
+        public class Response
+        {
+            public Guid Id { get; set; }
+            public string Nome { get; set; }
+        }
     }
 }

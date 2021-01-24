@@ -7,7 +7,9 @@ namespace NFinance.Model.GastosViewModel
         public class Request
         {
             public Guid IdGasto { get; set; }
-            
+
+            public Guid IdCliente { get; set; }
+
             public string MotivoExclusao { get; set; }
         }
 

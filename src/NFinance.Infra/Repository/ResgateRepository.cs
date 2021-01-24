@@ -32,10 +32,9 @@ namespace NFinance.Infra.Repository
             return await _context.Resgate.ToListAsync();
         }
 
-        public async Task<Resgate> RealizarResgate(Guid id,Resgate resgate)
+        public async Task<Resgate> RealizarResgate(Resgate resgate)
         {
-            var cliente = await _context.Cliente.FindAsync(id);
-            var investimento = await _context.Investimentos.FindAsync(id);
+            var investimento = await _context.Investimentos.FindAsync(resgate.IdInvestimento);
             var resgateResponse = new Resgate() {Valor = resgate.Valor, MotivoResgate = resgate.MotivoResgate, DataResgate = DateTime.UtcNow};
             await _context.Resgate.AddAsync(resgateResponse);
             _context.Investimentos.Remove(investimento);

@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
+using NFinance.Model.ResgatesViewModel;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -23,19 +23,15 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Resgates")]
-        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ListarResgatesViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarResgates()
         {
-            List<Resgate> listaResgates = new List<Resgate>();
             try
             {
-                var resgates = await _resgateService.ListarResgates();
-                foreach (var resgate in resgates)
-                    listaResgates.Add(resgate);
-
+                var response = await _resgateService.ListarResgates();
                 _logger.LogInformation("Resgates Listados Com Sucesso!");
-                return Ok(listaResgates);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -46,7 +42,7 @@ namespace NFinance.WebApi.Controllers
 
         [HttpGet("/api/Resgate/{id}")]
         [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarResgate(Guid id)
         {
             try
@@ -63,13 +59,13 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Resgate")]
-        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CadastrarResgate(Guid idInvestimentos, [FromBody] Resgate resgate)
+        [ProducesResponseType(typeof(RealizarResgateViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CadastrarResgate([FromBody] RealizarResgateViewModel.Request resgateRequest)
         {
             try
             {
-                var resgateResponse = await _resgateService.RealizarResgate(idInvestimentos, resgate);
+                var resgateResponse = await _resgateService.RealizarResgate(resgateRequest);
                 _logger.LogInformation("Resgate Realizado Com Sucesso!");
                 return Ok(resgateResponse);
             }

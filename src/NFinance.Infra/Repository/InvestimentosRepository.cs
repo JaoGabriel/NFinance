@@ -23,7 +23,7 @@ namespace NFinance.Infra.Repository
         }
         public async Task<Investimentos> AtualizarInvestimento(Guid id, Investimentos investimento)
         {
-            var investimentoAtualizar = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
+            var investimentoAtualizar = await _context.Investimentos.FirstOrDefaultAsync(i => i.Id == id);
             _context.Entry(investimentoAtualizar).CurrentValues.SetValues(investimento);
             await UnitOfWork.Commit();
             return investimento;
@@ -31,8 +31,7 @@ namespace NFinance.Infra.Repository
 
         public async Task<Investimentos> ConsultarInvestimento(Guid id)
         {
-            var cliente = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == id);
-            var investimento = await _context.Investimentos.FirstOrDefaultAsync(i => i.Id == cliente.Id);
+            var investimento = await _context.Investimentos.FirstOrDefaultAsync(i => i.Id == id);
             return investimento;
         }
 

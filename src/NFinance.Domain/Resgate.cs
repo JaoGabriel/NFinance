@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NFinance.Model.ResgatesViewModel;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,7 +13,7 @@ namespace NFinance.Domain
 
         [ForeignKey("Id")]
         [Required]
-        public Investimentos IdInvestimento { get; set; }
+        public Guid IdInvestimento { get; set; }
 
         [Required]
         [Range(0 ,999999999999, ErrorMessage = "Valor {0} deve estar entre {1} e {2}")]
@@ -25,5 +26,25 @@ namespace NFinance.Domain
         [Required]
         [Range(typeof(DateTime), "01/01/1900", "12/31/2060", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataResgate { get; set; }
+
+        public Resgate() { }
+
+        public Resgate(Resgate resgate)
+        {
+            Id = Guid.NewGuid();
+            IdInvestimento = resgate.IdInvestimento;
+            Valor = resgate.Valor;
+            MotivoResgate = resgate.MotivoResgate;
+            DataResgate = resgate.DataResgate;
+        }
+
+        public Resgate(RealizarResgateViewModel.Request request)
+        {
+            Id = Guid.NewGuid();
+            IdInvestimento = request.IdInvestimento;
+            Valor = request.Valor;
+            MotivoResgate = request.MotivoResgate;
+            DataResgate = request.DataResgate;
+        }
     }
 }

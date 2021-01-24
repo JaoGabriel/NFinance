@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NFinance.Model.InvestimentosViewModel;
+using System;
 using System.Threading.Tasks;
 
 namespace NFinance.Domain.Interfaces.Services
 {
     public interface IInvestimentosService
     {
-        Task<Investimentos> RealizarInvestimento(Investimentos investimentos);
-        Task<List<Investimentos>> ListarInvestimentos();
-        Task<Investimentos> ConsultarInvestimento(Guid id);
-        Task<Investimentos> AtualizarInvestimento(Guid id,Investimentos investimento);
+        Task<RealizarInvestimentoViewModel.Response> RealizarInvestimento(RealizarInvestimentoViewModel.Request request);
+        Task<ListarInvestimentosViewModel.Response> ListarInvestimentos();
+        Task<ConsultarInvestimentoViewModel.Response> ConsultarInvestimento(Guid id);
+        Task<AtualizarInvestimentoViewModel.Response> AtualizarInvestimento(Guid id, AtualizarInvestimentoViewModel.Request request);
     }
 }

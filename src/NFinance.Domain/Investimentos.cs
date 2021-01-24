@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NFinance.Model.InvestimentosViewModel;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,7 +13,7 @@ namespace NFinance.Domain
 
         [ForeignKey("Id")]
         [Required]
-        public Cliente Cliente { get; set; }
+        public Guid IdCliente { get; set; }
 
         [Required(ErrorMessage = "Nome deve conter no minimo 10 letras e no maximo 100")]
         [StringLength(100, MinimumLength = 10)]
@@ -25,5 +26,34 @@ namespace NFinance.Domain
         [Required]
         [Range(typeof(DateTime),"01/01/1900","12/31/2060", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataAplicacao { get; set; }
+
+        public Investimentos() { }
+
+        public Investimentos(Investimentos investimentos)
+        {
+            Id = Guid.NewGuid();
+            IdCliente = investimentos.IdCliente;
+            Nome = investimentos.Nome;
+            Valor = investimentos.Valor;
+            DataAplicacao = investimentos.DataAplicacao;
+        }
+
+        public Investimentos(RealizarInvestimentoViewModel.Request request)
+        {
+            Id = Guid.NewGuid();
+            IdCliente = request.IdCliente;
+            Nome = request.Nome;
+            Valor = request.Valor;
+            DataAplicacao = request.DataAplicacao;
+        }
+
+        public Investimentos(Guid id, AtualizarInvestimentoViewModel.Request request)
+        {
+            Id = id;
+            IdCliente = request.IdCliente;
+            Nome = request.Nome;
+            Valor = request.Valor;
+            DataAplicacao = request.DataAplicacao;
+        }
     }
 }

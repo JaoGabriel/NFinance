@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Model.ClientesViewModel;
 
@@ -27,7 +24,7 @@ namespace NFinance.WebApi.Controllers
 
         [HttpGet("/api/Clientes")]
         [ProducesResponseType(typeof(ListarClientesViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ValidationFailure), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarClientes()
         {
             try
@@ -45,7 +42,7 @@ namespace NFinance.WebApi.Controllers
 
         [HttpGet("/api/Cliente/{id}")]
         [ProducesResponseType(typeof(ConsultarClienteViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ValidationFailure), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarCliente(Guid id)
         {
             try
@@ -63,7 +60,7 @@ namespace NFinance.WebApi.Controllers
 
         [HttpPost("/api/Cliente")]
         [ProducesResponseType(typeof(CadastrarClienteViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ValidationFailure), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CadastrarCliente([FromBody] CadastrarClienteViewModel.Request request)
         {
             try
@@ -81,7 +78,7 @@ namespace NFinance.WebApi.Controllers
 
         [HttpPut("/api/Clientes/{id}")]
         [ProducesResponseType(typeof(AtualizarClienteViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ValidationFailure), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> AtualizarCliente(Guid id,[FromBody] AtualizarClienteViewModel.Request request)
         {
             try

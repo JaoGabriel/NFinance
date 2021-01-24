@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
+using NFinance.Model.InvestimentosViewModel;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -23,19 +22,15 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Investimentos")]
-        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ListarInvestimentosViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarInvestimentos()
         {
-            List<Investimentos> listaInvestimentos = new List<Investimentos>();
             try
             {
-                var investimentos = await _investimentosService.ListarInvestimentos();
-                foreach (var investimento in investimentos)
-                    listaInvestimentos.Add(investimento);
-
+                var response = await _investimentosService.ListarInvestimentos();
                 _logger.LogInformation("Investimentos Listados Com Sucesso!");
-                return Ok(listaInvestimentos);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -45,8 +40,8 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Investimento/{id}")]
-        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ConsultarInvestimentoViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarInvestimentos(Guid id)
         {
             try
@@ -63,13 +58,13 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Investimento")]
-        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CadastrarInvestimento([FromBody] Investimentos investimentos)
+        [ProducesResponseType(typeof(RealizarInvestimentoViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> RealizarInvestimento([FromBody] RealizarInvestimentoViewModel.Request investimentosRequest)
         {
             try
             {
-                var investimentoResponse = await _investimentosService.RealizarInvestimento(investimentos);
+                var investimentoResponse = await _investimentosService.RealizarInvestimento(investimentosRequest);
                 _logger.LogInformation("Investimento Realizado Com Sucesso!");
                 return Ok(investimentoResponse);
             }
@@ -81,13 +76,13 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPut("/api/Investimento/{id}")]
-        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Investimentos), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> AtualizarInvestimento(Guid id, [FromBody] Investimentos investimentos)
+        [ProducesResponseType(typeof(AtualizarInvestimentoViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AtualizarInvestimento(Guid id, [FromBody] AtualizarInvestimentoViewModel.Request investimentosRequest)
         {
             try
             {
-                var investimentoResponse = await _investimentosService.AtualizarInvestimento(id, investimentos);
+                var investimentoResponse = await _investimentosService.AtualizarInvestimento(id, investimentosRequest);
                 _logger.LogInformation("Investimento Atualizado Com Sucesso!");
                 return Ok(investimentoResponse);
             }

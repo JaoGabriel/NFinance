@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
+using NFinance.Model.GastosViewModel;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -23,19 +22,15 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Gastos")]
-        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ListarGastosViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarGastos()
         {
-            List<Gastos> listaGastos = new List<Gastos>();
             try
             {
-                var gastos = await _gastosService.ListarGastos();
-                foreach (var gasto in gastos)
-                    listaGastos.Add(gasto);
-
+                var response = await _gastosService.ListarGastos();
                 _logger.LogInformation("Gasto Listados Com Sucesso!");
-                return Ok(listaGastos);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -45,8 +40,8 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Gasto/{id}")]
-        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ConsultarGastoViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarGasto(Guid id)
         {
             try
@@ -63,13 +58,13 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Gasto")]
-        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Gastos), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CadastrarGasto([FromBody] Gastos gastos)
+        [ProducesResponseType(typeof(CadastrarGastoViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CadastrarGasto([FromBody] CadastrarGastoViewModel.Request gastosRequest)
         {
             try
             {
-                var gastoResponse = await _gastosService.CadastrarGasto(gastos);
+                var gastoResponse = await _gastosService.CadastrarGasto(gastosRequest);
                 _logger.LogInformation("Gasto Cadastrado Com Sucesso!");
                 return Ok(gastoResponse);
             }
@@ -81,11 +76,31 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPut("/api/Gasto/{id}")]
-        public async Task<IActionResult> AtualizarGasto(Guid id, [FromBody] Gastos gastos)
+        [ProducesResponseType(typeof(AtualizarGastoViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AtualizarGasto(Guid id, [FromBody] AtualizarGastoViewModel.Request gastosRequest)
         {
             try
             {
-                var gastoResponse = await _gastosService.AtualizarGasto(id, gastos);
+                var gastoResponse = await _gastosService.AtualizarGasto(id, gastosRequest);
+                _logger.LogInformation("Gasto Atualizado Com Sucesso!");
+                return Ok(gastoResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation("Falha ao atualizar gasto", ex);
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete("/api/Gasto/{id}")]
+        [ProducesResponseType(typeof(ExcluirGastoViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ExcluirGasto([FromBody] ExcluirGastoViewModel.Request request)
+        {
+            try
+            {
+                var gastoResponse = await _gastosService.ExcluirGasto(request);
                 _logger.LogInformation("Gasto Atualizado Com Sucesso!");
                 return Ok(gastoResponse);
             }
