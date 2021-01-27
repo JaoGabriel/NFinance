@@ -15,9 +15,9 @@ namespace NFinance.Domain
         [Required]
         public Guid IdCliente { get; set; }
 
-        [Required(ErrorMessage = "Nome deve conter no minimo 10 letras e no maximo 100")]
+        [Required(ErrorMessage = "Nome do Investimento deve conter no minimo 10 letras e no maximo 100")]
         [StringLength(100, MinimumLength = 10)]
-        public string Nome { get; set; }
+        public string NomeInvestimento { get; set; }
 
         [Required]
         [Range(0, 999999999999, ErrorMessage = "Valor {0} deve estar entre {1} e {2}")]
@@ -33,7 +33,7 @@ namespace NFinance.Domain
         {
             Id = Guid.NewGuid();
             IdCliente = investimentos.IdCliente;
-            Nome = investimentos.Nome;
+            NomeInvestimento = investimentos.NomeInvestimento;
             Valor = investimentos.Valor;
             DataAplicacao = investimentos.DataAplicacao;
         }
@@ -42,7 +42,7 @@ namespace NFinance.Domain
         {
             Id = Guid.NewGuid();
             IdCliente = request.IdCliente;
-            Nome = request.Nome;
+            NomeInvestimento = request.Nome;
             Valor = request.Valor;
             DataAplicacao = request.DataAplicacao;
         }
@@ -51,7 +51,7 @@ namespace NFinance.Domain
         {
             Id = id;
             IdCliente = request.IdCliente;
-            Nome = request.Nome;
+            NomeInvestimento = request.Nome;
             Valor = request.Valor;
             DataAplicacao = request.DataAplicacao;
         }

@@ -5,13 +5,13 @@ namespace NFinance.Model.ResgatesViewModel
 {
     public class ListarResgatesViewModel
     {
-        public class Response : List<ResgateViewModel> 
+        public class Response : List<ResgateViewModel.Response> 
         {
             public Response(List<Resgate> resgate)
             {
                 foreach (var item in resgate)
                 {
-                    var resgateVm = new ResgateViewModel(item);
+                    var resgateVm = new ResgateViewModel.Response(item);
                     this.Add(resgateVm);
                 }
             }

@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace NFinance.Domain.Exceptions.Cliente
 {
+    [Serializable]
     public class NomeClienteException : DomainException
     {
         public override string ErrorCode => "ERRO_NOME_CLIENTE";

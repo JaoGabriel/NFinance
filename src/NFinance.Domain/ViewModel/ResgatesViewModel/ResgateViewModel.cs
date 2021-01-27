@@ -24,6 +24,30 @@ namespace NFinance.Model.ResgatesViewModel
             Valor = resgate.Valor;
             MotivoResgate = resgate.MotivoResgate;
             DataResgate = resgate.DataResgate;
+            Investimento.Id = resgate.IdInvestimento;
+        }
+
+        public class Response
+        {
+
+            public Guid Id { get; set; }
+
+            public Guid IdInvestimento { get; set; }
+
+            public decimal Valor { get; set; }
+
+            public string MotivoResgate { get; set; }
+
+            public DateTime DataResgate { get; set; }
+
+            public Response(Resgate resgate)
+            {
+                Id = resgate.Id;
+                IdInvestimento = resgate.IdInvestimento;
+                Valor = resgate.Valor;
+                MotivoResgate = resgate.MotivoResgate;
+                DataResgate = resgate.DataResgate;
+            }
         }
     }
 }

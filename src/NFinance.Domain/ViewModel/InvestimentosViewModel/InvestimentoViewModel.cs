@@ -10,7 +10,7 @@ namespace NFinance.Model.InvestimentosViewModel
         
         public ClienteViewModel.Response Cliente { get; set; }
         
-        public string Nome { get; set; }
+        public string NomeInvestimento { get; set; }
         
         public decimal Valor { get; set; }
         
@@ -24,17 +24,19 @@ namespace NFinance.Model.InvestimentosViewModel
 
             public Guid IdCliente { get; set; }
 
-            public string Nome { get; set; }
+            public string NomeInvestimento { get; set; }
 
             public decimal Valor { get; set; }
 
             public DateTime DataAplicacao { get; set; }
 
+            public Response() { }
+
             public Response(Investimentos investimentos)
             {
                 Id = investimentos.Id;
                 IdCliente =  investimentos.IdCliente;
-                Nome = investimentos.Nome;
+                NomeInvestimento = investimentos.NomeInvestimento;
                 Valor = investimentos.Valor;
                 DataAplicacao = investimentos.DataAplicacao;
             }
