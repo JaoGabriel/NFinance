@@ -21,7 +21,7 @@ namespace NFinance.Domain.Services
 
         public async Task<ConsultarResgateViewModel.Response> ConsultarResgate(Guid id)
         {
-            if (Guid.Empty.Equals(id)) throw new IdException();
+            if (Guid.Empty.Equals(id)) throw new IdException("Id resgate invalido");
 
             var resgate = await _resgateRepository.ConsultarResgate(id);
             var investimento = await _investimentosService.ConsultarInvestimento(resgate.IdInvestimento);
@@ -38,7 +38,7 @@ namespace NFinance.Domain.Services
 
         public async Task<RealizarResgateViewModel.Response> RealizarResgate(RealizarResgateViewModel.Request request)
         {
-            if (Guid.Empty.Equals(request.IdInvestimento)) throw new IdException();
+            if (Guid.Empty.Equals(request.IdInvestimento)) throw new IdException("Id resgate invalido");
             if (string.IsNullOrWhiteSpace(request.MotivoResgate) == true) throw new MotivoResgateException("Motivo nao deve ser branco,vazio ou nulo");
             if (request.Valor <= 0) throw new ValorException("Valor deve ser maior que zero");
             if (request.DataResgate > DateTime.MaxValue.AddYears(-7899) || request.DataResgate < DateTime.MinValue.AddYears(1949)) throw new DataResgateException();

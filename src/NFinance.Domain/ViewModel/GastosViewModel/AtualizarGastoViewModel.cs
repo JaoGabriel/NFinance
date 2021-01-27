@@ -8,7 +8,7 @@ namespace NFinance.Model.GastosViewModel
         {
             public Guid IdCliente { get; set; }
         
-            public string Nome { get; set; }
+            public string NomeGasto { get; set; }
 
             public decimal ValorTotal { get; set; }
         

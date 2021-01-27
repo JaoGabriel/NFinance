@@ -17,7 +17,7 @@ namespace NFinance.Domain.Services
         }
         public async Task<AtualizarClienteViewModel.Response> AtualizarCliente(Guid id, AtualizarClienteViewModel.Request clienteRequest)
         {
-            if (Guid.Empty.Equals(id)) throw new IdException();
+            if (Guid.Empty.Equals(id)) throw new IdException("Id cliente invalido");
             if (string.IsNullOrWhiteSpace(clienteRequest.Nome) == true) throw new NomeClienteException("Nome nao deve ser vazio, em branco ou nulo");
             if (clienteRequest.RendaMensal <= 0) throw new RendaMensalException("Renda Mensal deve ser maior que 0");
 
@@ -40,7 +40,7 @@ namespace NFinance.Domain.Services
 
         public async Task<ConsultarClienteViewModel.Response> ConsultarCliente(Guid id)
         {
-            if (Guid.Empty.Equals(id) || id == null) throw new IdException("Id nao pode ser 0 ou nulo");
+            if (Guid.Empty.Equals(id) || id == null) throw new IdException("Id cliente invalido");
             var clienteConsulta = await _clienteRepository.ConsultarCliente(id);
             var response = new ConsultarClienteViewModel.Response() { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, RendaMensal = clienteConsulta.RendaMensal };
             return response;

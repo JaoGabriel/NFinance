@@ -8,7 +8,7 @@ namespace NFinance.Model.InvestimentosViewModel
         {
             public Guid IdCliente { get; set; }
 
-            public string Nome { get; set; }
+            public string NomeInvestimento { get; set; }
         
             public decimal Valor { get; set; }
         

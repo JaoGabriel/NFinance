@@ -1,4 +1,6 @@
-﻿using NFinance.Domain.Interfaces.Repository;
+﻿using NFinance.Domain.Exceptions;
+using NFinance.Domain.Exceptions.Gasto;
+using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Model.ClientesViewModel;
 using NFinance.Model.GastosViewModel;
@@ -10,46 +12,65 @@ namespace NFinance.Domain.Services
     public class GastosService : IGastosService
     {
         private readonly IGastosRepository _gastosRepository;
-        private readonly IClienteRepository _clienteRepository;
-        public GastosService(IGastosRepository gastosRepository, IClienteRepository clienteRepository)
+        private readonly IClienteService _clienteService;
+        public GastosService(IGastosRepository gastosRepository, IClienteService clienteService)
         {
             _gastosRepository = gastosRepository;
-            _clienteRepository = clienteRepository;
+            _clienteService = clienteService;
         }
 
         public async Task<AtualizarGastoViewModel.Response> AtualizarGasto(Guid id, AtualizarGastoViewModel.Request request)
         {
+            if (Guid.Empty.Equals(id) == true) throw new IdException("ID gasto invalido");
+            if (Guid.Empty.Equals(request.IdCliente) == true) throw new IdException("ID cliente invalido");
+            if (string.IsNullOrWhiteSpace(request.NomeGasto) == true) throw new NomeGastoException("Nome nao deve ser vazio,branco ou nulo");
+            if (request.ValorTotal <= 0) throw new ValorGastoException("Valor deve ser maior que zero");
+            if (request.QuantidadeParcelas <= 0 || request.QuantidadeParcelas >= 1000) throw new QuantidadeParcelaExpcetion("Valor deve ser maior que zero e menor que mil");
+            if (request.DataDoGasto > DateTime.MaxValue.AddYears(-7899) || request.DataDoGasto < DateTime.MinValue.AddYears(1949)) throw new DataGastoException();
+
             var gasto = new Gastos(id,request);
-            var cliente = await _clienteRepository.ConsultarCliente(request.IdCliente);
+            var cliente = await _clienteService.ConsultarCliente(request.IdCliente);
             var atualizado = await _gastosRepository.AtualizarGasto(id, gasto);
-            var response = new AtualizarGastoViewModel.Response() {Id = atualizado.Id, Cliente = new ClienteViewModel.Response() {Id = cliente.Id,Nome = cliente.Nome } , Nome = atualizado.Nome,DataDoGasto = atualizado.DataDoGasto, QuantidadeParcelas = atualizado.QuantidadeParcelas,ValorTotal = atualizado.ValorTotal };
+            var response = new AtualizarGastoViewModel.Response() {Id = atualizado.Id, Cliente = new ClienteViewModel.Response() {Id = cliente.Id,Nome = cliente.Nome } , NomeGasto = atualizado.NomeGasto,DataDoGasto = atualizado.DataDoGasto, QuantidadeParcelas = atualizado.QuantidadeParcelas,ValorTotal = atualizado.ValorTotal };
             return response;
         }
 
         public async Task<CadastrarGastoViewModel.Response> CadastrarGasto(CadastrarGastoViewModel.Request request)
         {
+            if (Guid.Empty.Equals(request.IdCliente) == true) throw new IdException("ID cliente invalido");
+            if (string.IsNullOrWhiteSpace(request.NomeGasto) == true) throw new NomeGastoException("Nome nao deve ser vazio,branco ou nulo");
+            if (request.ValorTotal <= 0) throw new ValorGastoException("Valor deve ser maior que zero");
+            if (request.QuantidadeParcelas <= 0 || request.QuantidadeParcelas >= 1000) throw new QuantidadeParcelaExpcetion("Valor deve ser maior que zero e menor que mil");
+            if (request.DataDoGasto > DateTime.MaxValue.AddYears(-7899) || request.DataDoGasto < DateTime.MinValue.AddYears(1949)) throw new DataGastoException();
+
             var gasto = new Gastos(request);
-            var cliente = await _clienteRepository.ConsultarCliente(request.IdCliente);
+            var cliente = await _clienteService.ConsultarCliente(request.IdCliente);
             var cadastro = await _gastosRepository.CadastrarGasto(gasto);
-            var response = new CadastrarGastoViewModel.Response() { Id = cadastro.Id, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome }, Nome = cadastro.Nome, DataDoGasto = cadastro.DataDoGasto, QuantidadeParcelas = cadastro.QuantidadeParcelas, ValorTotal = cadastro.ValorTotal };
+            var response = new CadastrarGastoViewModel.Response() { Id = cadastro.Id, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome }, NomeGasto = cadastro.NomeGasto, DataDoGasto = cadastro.DataDoGasto, QuantidadeParcelas = cadastro.QuantidadeParcelas, ValorTotal = cadastro.ValorTotal };
             return response;
         }
 
         public async Task<ConsultarGastoViewModel.Response> ConsultarGasto(Guid id)
         {
+            if (Guid.Empty.Equals(id) == true) throw new IdException("ID gasto invalido");
+
             var gasto = await _gastosRepository.ConsultarGasto(id);
-            var cliente = await _clienteRepository.ConsultarCliente(gasto.IdCliente);
-            var response = new ConsultarGastoViewModel.Response() { Id = gasto.Id, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome }, Nome = gasto.Nome, DataDoGasto = gasto.DataDoGasto, QuantidadeParcelas = gasto.QuantidadeParcelas, ValorTotal = gasto.ValorTotal };
+            var cliente = await _clienteService.ConsultarCliente(gasto.IdCliente);
+            var response = new ConsultarGastoViewModel.Response() { Id = gasto.Id, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome }, NomeGasto = gasto.NomeGasto, DataDoGasto = gasto.DataDoGasto, QuantidadeParcelas = gasto.QuantidadeParcelas, ValorTotal = gasto.ValorTotal };
             return response;
         }
 
         public async Task<ExcluirGastoViewModel.Response> ExcluirGasto(ExcluirGastoViewModel.Request request)
         {
+            if (Guid.Empty.Equals(request.IdGasto) == true) throw new IdException("ID gasto invalido");
+            if (Guid.Empty.Equals(request.IdCliente) == true) throw new IdException("ID gasto invalido");
+            if (string.IsNullOrWhiteSpace(request.MotivoExclusao) == true) throw new NomeGastoException("Motivo exclusao nao pode ser vazio,branco ou nulo");
+
             var excluir = await _gastosRepository.ExcluirGasto(request.IdGasto);
             if(excluir == true)
                 return new ExcluirGastoViewModel.Response() { StatusCode = 200, DataExclusao = DateTime.UtcNow, Mensagem = "Excluido Com Sucesso" };
              else
-                return new ExcluirGastoViewModel.Response() { StatusCode = 400, DataExclusao = DateTime.UtcNow, Mensagem = "Excluido Com Sucesso" };
+                return new ExcluirGastoViewModel.Response() { StatusCode = 400, DataExclusao = DateTime.UtcNow, Mensagem = "Ocorreu um erro ao Excluir" };
         }
 
         public async Task<ListarGastosViewModel.Response> ListarGastos()

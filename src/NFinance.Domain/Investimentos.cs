@@ -24,7 +24,7 @@ namespace NFinance.Domain
         public decimal Valor { get; set; }
         
         [Required]
-        [Range(typeof(DateTime),"01/01/1900","12/31/2060", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
+        [Range(typeof(DateTime),"01/01/1950","12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataAplicacao { get; set; }
 
         public Investimentos() { }
@@ -42,7 +42,7 @@ namespace NFinance.Domain
         {
             Id = Guid.NewGuid();
             IdCliente = request.IdCliente;
-            NomeInvestimento = request.Nome;
+            NomeInvestimento = request.NomeInvestimento;
             Valor = request.Valor;
             DataAplicacao = request.DataAplicacao;
         }
@@ -51,7 +51,7 @@ namespace NFinance.Domain
         {
             Id = id;
             IdCliente = request.IdCliente;
-            NomeInvestimento = request.Nome;
+            NomeInvestimento = request.NomeInvestimento;
             Valor = request.Valor;
             DataAplicacao = request.DataAplicacao;
         }
