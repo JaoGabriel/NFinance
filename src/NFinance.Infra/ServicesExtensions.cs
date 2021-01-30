@@ -19,7 +19,6 @@ namespace NFinance.Infra
             services.AddTransient<IInvestimentosRepository, InvestimentosRepository>();
             services.AddTransient<IResgateRepository, ResgateRepository>();
             services.AddTransient<IGastosRepository, GastosRepository>();
-            services.AddTransient<IPainelDeControleRepository, PainelDeControleRepository>();
             services.AddScoped<BaseDadosContext, BaseDadosContext>();
         }
     }
