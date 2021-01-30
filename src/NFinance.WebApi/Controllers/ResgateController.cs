@@ -61,7 +61,7 @@ namespace NFinance.WebApi.Controllers
         [HttpPost("/api/Resgate")]
         [ProducesResponseType(typeof(RealizarResgateViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CadastrarResgate([FromBody] RealizarResgateViewModel.Request resgateRequest)
+        public async Task<IActionResult> RealizarResgate([FromBody] RealizarResgateViewModel.Request resgateRequest)
         {
             try
             {
