@@ -14,7 +14,7 @@ namespace NFinance.Tests.Service
 {
     public class ClienteServiceTests
     {
-        private IClienteRepository _clienteRepository;
+        private readonly IClienteRepository _clienteRepository;
 
         public ClienteServiceTests()
         {
@@ -27,7 +27,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void ClienteService_CadastrarCliente_ComSucesso()
+        public async Task ClienteService_CadastrarCliente_ComSucesso()
         {
             //Arrange
             var id = Guid.NewGuid();

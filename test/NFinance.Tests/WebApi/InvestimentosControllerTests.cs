@@ -165,8 +165,6 @@ namespace NFinance.Tests.WebApi
             decimal valorInvestimento = 1238.12M;
             var dataAplicacao = DateTime.Today;
             var idCliente = Guid.NewGuid();
-            var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente };
             var investimento = new Investimentos() {  Id = id,DataAplicacao = dataAplicacao, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, IdCliente = idCliente };
             var listaInvestimento = new List<Investimentos>();
             listaInvestimento.Add(investimento);

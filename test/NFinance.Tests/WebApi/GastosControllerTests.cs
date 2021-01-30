@@ -177,8 +177,6 @@ namespace NFinance.Tests.WebApi
             var dataGasto = DateTime.Today;
             var parcelas = 64;
             var idCliente = Guid.NewGuid();
-            var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente };
             var listaGasto = new List<Gastos>();
             var gasto = new Gastos() { Id = id, NomeGasto = nomeGasto, QuantidadeParcelas = parcelas, DataDoGasto = dataGasto, ValorTotal = valorTotal, IdCliente = idCliente };
             listaGasto.Add(gasto);

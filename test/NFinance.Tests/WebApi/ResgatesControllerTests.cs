@@ -119,8 +119,6 @@ namespace NFinance.Tests.WebApi
             //Arrange
             var id = Guid.NewGuid();
             var idInvestimento = Guid.NewGuid();
-            var idCliente = Guid.NewGuid();
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = "Joao Testes" };
             var resgate = new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = "Pagamento Faculdade", Valor = 1234.55M, DataResgate = DateTime.Today };
             var listaResgates = new List<Resgate>();
             listaResgates.Add(resgate);

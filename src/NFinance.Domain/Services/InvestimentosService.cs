@@ -22,9 +22,9 @@ namespace NFinance.Domain.Services
 
         public async Task<AtualizarInvestimentoViewModel.Response> AtualizarInvestimento(Guid id, AtualizarInvestimentoViewModel.Request request)
         {
-            if (Guid.Empty.Equals(id) == true) throw new IdException("Id investimento invalido");
-            if (Guid.Empty.Equals(request.IdCliente) == true) throw new IdException("Id cliente invalido");
-            if (string.IsNullOrWhiteSpace(request.NomeInvestimento) == true) throw new NomeInvestimentoException("Nome nao pode ser nulo,vazio ou em branco");
+            if (Guid.Empty.Equals(id)) throw new IdException("Id investimento invalido");
+            if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("Id cliente invalido");
+            if (string.IsNullOrWhiteSpace(request.NomeInvestimento)) throw new NomeInvestimentoException("Nome nao pode ser nulo,vazio ou em branco");
             if (request.Valor <= 0) throw new ValorInvestimentoException("Valor nao pode ser menor que zero");
             if (request.DataAplicacao > DateTime.MaxValue.AddYears(-7899) || request.DataAplicacao < DateTime.MinValue.AddYears(1949)) throw new DataInvestimentoException();
 
@@ -37,7 +37,7 @@ namespace NFinance.Domain.Services
 
         public async Task<ConsultarInvestimentoViewModel.Response> ConsultarInvestimento(Guid id)
         {
-            if (Guid.Empty.Equals(id) == true) throw new IdException("Id investimento invalido");
+            if (Guid.Empty.Equals(id)) throw new IdException("Id investimento invalido");
 
             var consulta = await _investimentosRepository.ConsultarInvestimento(id);
             var cliente = await _clienteService.ConsultarCliente(consulta.IdCliente);
@@ -54,8 +54,8 @@ namespace NFinance.Domain.Services
 
         public async Task<RealizarInvestimentoViewModel.Response> RealizarInvestimento(RealizarInvestimentoViewModel.Request request)
         {
-            if (Guid.Empty.Equals(request.IdCliente) == true) throw new IdException("Id cliente invalido");
-            if (string.IsNullOrWhiteSpace(request.NomeInvestimento) == true) throw new NomeInvestimentoException("Nome nao pode ser nulo,vazio ou em branco");
+            if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("Id cliente invalido");
+            if (string.IsNullOrWhiteSpace(request.NomeInvestimento)) throw new NomeInvestimentoException("Nome nao pode ser nulo,vazio ou em branco");
             if (request.Valor <= 0) throw new ValorInvestimentoException("Valor nao pode ser menor que zero");
             if (request.DataAplicacao > DateTime.MaxValue.AddYears(-7899) || request.DataAplicacao < DateTime.MinValue.AddYears(1949)) throw new DataInvestimentoException();
 

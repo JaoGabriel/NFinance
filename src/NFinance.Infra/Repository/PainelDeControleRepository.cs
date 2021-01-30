@@ -31,17 +31,11 @@ namespace NFinance.Infra.Repository
         public Task<PainelDeControle> PainelDeControle(Guid id)
         {
             throw new NotImplementedException();
-
-            //var response = new PainelDeControle() { ValorInvestidoMensal = ,SaldoMensal = ,GastosMensal = ,ValorInvestidoAnual = , SaldoAnual = ,GastosAnual = ,ValorRecebidoAnual =  };
-            //return response;
         }
 
         private Task SaldoMensal()
         {
-            var mesAtual = DateTime.UtcNow.Month;
             throw new NotImplementedException();
-
-            //Arrumar o investimento / gasto fazendo com que toda vez que for inserido um gasto ele gerar uma lista com todos os gastos do cliente
         }
 
         private async Task InvestimentoMensal()
@@ -57,7 +51,7 @@ namespace NFinance.Infra.Repository
             return gastoMensal.ValorTotal;
         }
 
-        private async Task<decimal> InvestimentoAnual(Guid id)
+        private async Task<decimal> InvestimentoAnual()
         {
             var listaInvestimentos = await _investimentoRepository.ListarInvestimentos();
             var response = listaInvestimentos.Sum(i => i.Valor);
@@ -71,7 +65,7 @@ namespace NFinance.Infra.Repository
             return recebidoAnual;
         }
 
-        private async Task<decimal> GastosAnual(Guid id)
+        private async Task<decimal> GastosAnual()
         {
             var gastos = await _gastosRepository.ListarGastos();
             var gastosAnual = gastos.Sum(i => i.ValorTotal);

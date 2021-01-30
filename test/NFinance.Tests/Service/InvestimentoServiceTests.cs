@@ -9,14 +9,15 @@ using NFinance.Model.InvestimentosViewModel;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NFinance.Tests.Service
 {
     public class InvestimentoServiceTests
     {
-        private IInvestimentosRepository _investimentosRepository;
-        private IClienteService _clienteService;
+        private readonly IInvestimentosRepository _investimentosRepository;
+        private readonly IClienteService _clienteService;
 
         public InvestimentoServiceTests()
         {
@@ -30,7 +31,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_RealizarInvestimento_ComSucesso()
+        public async Task InvestimentoService_RealizarInvestimento_ComSucesso()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -64,7 +65,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComSucesso()
+        public async Task InvestimentoService_AtualizarInvestimento_ComSucesso()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -98,7 +99,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_RealizarInvestimento_ComIdCliente_Invalido()
+        public async Task InvestimentoService_RealizarInvestimento_ComIdCliente_Invalido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -117,7 +118,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_RealizarInvestimento_ComNomeInvestimento_Vazio()
+        public async Task InvestimentoService_RealizarInvestimento_ComNomeInvestimento_Vazio()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -136,7 +137,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_RealizarInvestimento_ComNomeInvestimento_EmBranco()
+        public async Task InvestimentoService_RealizarInvestimento_ComNomeInvestimento_EmBranco()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -155,7 +156,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_RealizarInvestimento_ComNomeInvestimento_Nulo()
+        public async Task InvestimentoService_RealizarInvestimento_ComNomeInvestimento_Nulo()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -173,7 +174,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_RealizarInvestimento_ComValor_Invalido()
+        public async Task InvestimentoService_RealizarInvestimento_ComValor_Invalido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -192,7 +193,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_RealizarInvestimento_ComDataAplicacao_Invalido_Maior_Permitido()
+        public async Task InvestimentoService_RealizarInvestimento_ComDataAplicacao_Invalido_Maior_Permitido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -211,7 +212,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_RealizarInvestimento_ComDataAplicacao_Invalido_Menor_Permitido()
+        public async Task InvestimentoService_RealizarInvestimento_ComDataAplicacao_Invalido_Menor_Permitido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -231,7 +232,7 @@ namespace NFinance.Tests.Service
 
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComIdInvestimento_Invalido()
+        public async Task InvestimentoService_AtualizarInvestimento_ComIdInvestimento_Invalido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -251,7 +252,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComIdCliente_Invalido()
+        public async Task InvestimentoService_AtualizarInvestimento_ComIdCliente_Invalido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -270,7 +271,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_Nulo()
+        public async Task InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_Nulo()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -288,7 +289,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_Vazio()
+        public async Task InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_Vazio()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -307,7 +308,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_EmBranco()
+        public async Task InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_EmBranco()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -326,7 +327,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComValor_Invalido()
+        public async Task InvestimentoService_AtualizarInvestimento_ComValor_Invalido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -345,7 +346,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComDataAplicacao_Menor_Permitido()
+        public async Task InvestimentoService_AtualizarInvestimento_ComDataAplicacao_Menor_Permitido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -364,7 +365,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_AtualizarInvestimento_ComDataAplicacao_Maior_Permitido()
+        public async Task InvestimentoService_AtualizarInvestimento_ComDataAplicacao_Maior_Permitido()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -383,7 +384,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_ConsultarInvestimento_ComSucesso()
+        public async Task InvestimentoService_ConsultarInvestimento_ComSucesso()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -416,7 +417,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_ConsultarInvestimento_ComId_Vazio()
+        public async Task InvestimentoService_ConsultarInvestimento_ComId_Vazio()
         {
             //Arrange
             var id = Guid.Empty;
@@ -434,7 +435,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void InvestimentoService_ListarInvestimentos_ComSucesso()
+        public async Task InvestimentoService_ListarInvestimentos_ComSucesso()
         {
             //Arrange
             var id = Guid.NewGuid();

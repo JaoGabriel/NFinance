@@ -24,7 +24,7 @@ namespace NFinance.Domain
         {
             Id = Guid.NewGuid();
             Nome = cliente.Nome;
-            RendaMensal = RendaMensal;
+            RendaMensal = cliente.RendaMensal;
         }
 
         public Cliente(CadastrarClienteViewModel.Request clienteRequest)

@@ -4,18 +4,18 @@ using System.Runtime.Serialization;
 namespace NFinance.Domain.Exceptions.Gasto
 {
     [Serializable]
-    public class QuantidadeParcelaExpcetion : DomainException
+    public class QuantidadeParcelaException : DomainException
     {
         public override string ErrorCode => "ERRO_QUANTIDADE_PARCELA_GASTO";
         private const string DefaultMessage = "A quantidade inserida e invalida";
 
-        public QuantidadeParcelaExpcetion() : this(DefaultMessage)
+        public QuantidadeParcelaException() : this(DefaultMessage)
         {
         }
-        public QuantidadeParcelaExpcetion(string message) : base(message)
+        public QuantidadeParcelaException(string message) : base(message)
         {
         }
-        protected QuantidadeParcelaExpcetion(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected QuantidadeParcelaException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

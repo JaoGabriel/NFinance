@@ -17,7 +17,7 @@ namespace NFinance.Tests.Service
 {
     public class ResgateServiceTests
     {
-        private IResgateRepository _resgateRepository;
+        private readonly IResgateRepository _resgateRepository;
         private readonly IInvestimentosService _investimentosService;
 
         public ResgateServiceTests()
@@ -32,7 +32,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void ResgateService_RealizarResgate_ComSucesso()
+        public async Task ResgateService_RealizarResgate_ComSucesso()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -180,7 +180,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void ResgateService_ConsultarResgate_ComSucesso()
+        public async Task ResgateService_ConsultarResgate_ComSucesso()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -225,7 +225,7 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async void ResgateService_ListarResgates_ComSucesso()
+        public async Task ResgateService_ListarResgates_ComSucesso()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -235,7 +235,6 @@ namespace NFinance.Tests.Service
             var data = DateTime.Today;
             var listaResgates = new List<Resgate>();
             var listaInvestimentos = new List<Investimentos>();
-            var cliente = new ClienteViewModel.Response() { Id = Guid.NewGuid(), Nome = "Claudemir Tester" };
             var resgate = new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data };
             listaResgates.Add(resgate);
             var investimento = new Investimentos() { Id = idInvestimento, DataAplicacao = DateTime.Today.AddDays(-5), IdCliente = Guid.NewGuid(), NomeInvestimento = "Investimento JOSDaSDA", Valor = valor };

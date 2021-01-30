@@ -22,6 +22,7 @@ namespace NFinance.Infra.Repository
             _context?.Dispose();
         }
 
+
         public async Task<Gastos> AtualizarGasto(Guid id, Gastos gastos)
         {
             var gastoAtualizar = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
