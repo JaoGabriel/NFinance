@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Model.ClientesViewModel;
 using NFinance.WebApi.Controllers;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
 
 namespace NFinance.Tests.WebApi
@@ -33,19 +33,22 @@ namespace NFinance.Tests.WebApi
             //Arrange
             var id = Guid.NewGuid();
             var nome = "Jorgin da Lages";
-            decimal rendaMensal = 123812931.12387M;
+            var cpf = "123.123.123-11";
+            var email = "aloha@teste.com";
             _clienteService.CadastrarCliente(Arg.Any<CadastrarClienteViewModel.Request>())
                 .Returns(new CadastrarClienteViewModel.Response
                 {
                     Id = id,
                     Nome = nome,
-                    RendaMensal = rendaMensal
+                    Cpf = cpf,
+                    Email = email
                 });
             var controller = InicializarClienteController();
             var cliente = new CadastrarClienteViewModel.Request()
             {
                 Nome = nome,
-                RendaMensal = rendaMensal
+                Cpf = cpf,
+                Email = email
             };
 
             //Act
@@ -58,7 +61,8 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
             Assert.Equal(id, cadastrarClienteViewModel.Id);
             Assert.Equal(nome, cadastrarClienteViewModel.Nome);
-            Assert.Equal(rendaMensal, cadastrarClienteViewModel.RendaMensal);
+            Assert.Equal(cpf, cadastrarClienteViewModel.Cpf);
+            Assert.Equal(email, cadastrarClienteViewModel.Email);
         }
 
         [Fact]
@@ -67,13 +71,15 @@ namespace NFinance.Tests.WebApi
             //Arrange
             var id = Guid.NewGuid();
             var nome = "Jorgin da Lages";
-            decimal rendaMensal = 123812931.12387M;
+            var cpf = "123.123.123-11";
+            var email = "aloha@teste.com";
             _clienteService.ConsultarCliente(Arg.Any<Guid>())
                 .Returns(new ConsultarClienteViewModel.Response
                 {
                     Id = id,
                     Nome = nome,
-                    RendaMensal = rendaMensal
+                    Cpf = cpf,
+                    Email = email
                 });
             var controller = InicializarClienteController();
 
@@ -87,7 +93,8 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
             Assert.Equal(id, consultarClienteViewModel.Id);
             Assert.Equal(nome, consultarClienteViewModel.Nome);
-            Assert.Equal(rendaMensal, consultarClienteViewModel.RendaMensal);
+            Assert.Equal(cpf, consultarClienteViewModel.Cpf);
+            Assert.Equal(email, consultarClienteViewModel.Email);
         }
 
         [Fact]
@@ -96,9 +103,10 @@ namespace NFinance.Tests.WebApi
             //Arrange
             var id = Guid.NewGuid();
             var nome = "Jorgin da Lages";
-            decimal rendaMensal = 123812931.12387M;
+            var cpf = "123.123.123-11";
+            var email = "aloha@teste.com";
             var listaClientes = new List<Cliente>();
-            var cliente = new Cliente() { Id = id, Nome = nome, RendaMensal = rendaMensal };
+            var cliente = new Cliente() { Id = id, Nome = nome, CPF = cpf, Email = email};
             listaClientes.Add(cliente);
             var listarClientes = new ListarClientesViewModel.Response(listaClientes);
             _clienteService.ListarClientes().Returns(listarClientes);
@@ -114,7 +122,8 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
             Assert.Equal(id, listarClientesViewModel.Find(c => c.Id == id).Id);
             Assert.Equal(nome, listarClientesViewModel.Find(c => c.Id == id).Nome);
-            Assert.Equal(rendaMensal, listarClientesViewModel.Find(c => c.Id == id).RendaMensal);
+            Assert.Equal(cpf, listarClientesViewModel.Find(c => c.Id == id).Cpf);
+            Assert.Equal(email, listarClientesViewModel.Find(c => c.Id == id).Email);
         }
     }
 }

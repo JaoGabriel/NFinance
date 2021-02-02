@@ -1,6 +1,6 @@
-﻿using NFinance.Model.ClientesViewModel;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using NFinance.Domain.ViewModel.ClientesViewModel;
 
 namespace NFinance.Domain.Interfaces.Services
 {

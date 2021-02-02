@@ -7,7 +7,7 @@ namespace NFinance.Domain.Exceptions.Cliente
     public class NomeClienteException : DomainException
     {
         public override string ErrorCode => "ERRO_NOME_CLIENTE";
-        private const string DefaultMessage = "O nome deve ser maior que 10 caracteres";
+        private const string DefaultMessage = "O nome nao deve ser branco, nulo ou vazio";
 
         public NomeClienteException() : this(DefaultMessage)
         {

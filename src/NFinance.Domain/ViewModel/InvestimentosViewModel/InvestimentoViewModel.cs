@@ -1,6 +1,6 @@
 ﻿using System;
 using NFinance.Domain;
-using NFinance.Model.ClientesViewModel;
+using NFinance.Domain.ViewModel.ClientesViewModel;
 
 namespace NFinance.Model.InvestimentosViewModel
 {

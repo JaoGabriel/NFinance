@@ -1,7 +1,6 @@
-﻿using NFinance.Domain;
-using System;
+﻿using System;
 
-namespace NFinance.Model.ClientesViewModel
+namespace NFinance.Domain.ViewModel.ClientesViewModel
 {
     public class ClienteViewModel
     {
@@ -9,7 +8,9 @@ namespace NFinance.Model.ClientesViewModel
 
         public string Nome { get; set; }
 
-        public decimal RendaMensal { get; set; }
+        public string Cpf { get; set; }
+        
+        public string Email { get; set; }
 
         public ClienteViewModel() { }
 
@@ -17,13 +18,18 @@ namespace NFinance.Model.ClientesViewModel
         {
             Id = cliente.Id;
             Nome = cliente.Nome;
-            RendaMensal = cliente.RendaMensal;
+            Cpf = cliente.CPF;
+            Email = cliente.Email;
         }
 
         public class Response
         {
             public Guid Id { get; set; }
             public string Nome { get; set; }
+            
+            public string Cpf { get; set; }
+        
+            public string Email { get; set; }
         }
     }
 }

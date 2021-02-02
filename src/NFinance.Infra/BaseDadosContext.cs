@@ -12,7 +12,6 @@ namespace NFinance.Infra
 
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<Gastos> Gastos { get; set; }
-        public DbSet<PainelDeControle> PainelDeControle { get; set; }
         public DbSet<Investimentos> Investimentos { get; set; }
         public DbSet<Resgate> Resgate { get; set; }
 

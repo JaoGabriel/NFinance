@@ -1,4 +1,4 @@
-﻿namespace NFinance.Model.ClientesViewModel
+﻿namespace NFinance.Domain.ViewModel.ClientesViewModel
 {
     public class ConsultarClienteViewModel
     {

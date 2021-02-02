@@ -21,7 +21,6 @@ namespace NFinance.Domain
             services.AddTransient<IGastosService, GastosService>();
             services.AddTransient<IResgateService, ResgateService>();
             services.AddTransient<IInvestimentosService, InvestimentosService>();
-            services.AddTransient<IPainelDeControleService, PainelDeControleService>();
         }
     }
 }

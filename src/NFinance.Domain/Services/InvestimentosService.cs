@@ -2,10 +2,10 @@
 using NFinance.Domain.Exceptions.Investimento;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Model.ClientesViewModel;
 using NFinance.Model.InvestimentosViewModel;
 using System;
 using System.Threading.Tasks;
+using NFinance.Domain.ViewModel.ClientesViewModel;
 
 namespace NFinance.Domain.Services
 {

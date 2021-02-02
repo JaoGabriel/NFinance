@@ -1,7 +1,6 @@
-﻿using NFinance.Domain;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace NFinance.Model.ClientesViewModel
+namespace NFinance.Domain.ViewModel.ClientesViewModel
 {
     public class ListarClientesViewModel
     {

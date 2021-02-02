@@ -4,12 +4,12 @@ using NFinance.Domain.Exceptions.Gasto;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Services;
-using NFinance.Model.ClientesViewModel;
 using NFinance.Model.GastosViewModel;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
 
 namespace NFinance.Tests.Service

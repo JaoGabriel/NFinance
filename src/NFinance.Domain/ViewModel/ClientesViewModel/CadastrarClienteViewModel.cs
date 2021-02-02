@@ -1,4 +1,4 @@
-﻿namespace NFinance.Model.ClientesViewModel
+﻿namespace NFinance.Domain.ViewModel.ClientesViewModel
 {
     public class CadastrarClienteViewModel
     {
@@ -6,7 +6,9 @@
         {
             public string Nome { get; set; }
 
-            public decimal RendaMensal { get; set; }
+            public string Cpf { get; set; }
+            
+            public string Email { get; set; }
         }
 
         public class Response : ClienteViewModel { };
