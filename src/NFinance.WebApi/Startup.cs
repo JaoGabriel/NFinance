@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,9 +8,9 @@ using NFinance.Infra;
 
 namespace NFinance.WebApi
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
-        private const string _name = "Nfinance.WebApi";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,7 +24,7 @@ namespace NFinance.WebApi
             services.AddMvc();
             services.AddCors();
 
-            services.AddOpenApiDocument(c => c.Title = _name);
+            services.AddOpenApiDocument(c => c.Title = "Nfinance.WebApi");
 
             services.AddInfraDataSqlServices(Configuration);
             services.AddDomainServices(Configuration);
@@ -35,7 +36,7 @@ namespace NFinance.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseOpenApi(c => c.DocumentName = _name);
+            app.UseOpenApi(c => c.DocumentName = "Nfinance.WebApi");
             app.UseSwaggerUi3();
 
             app.UseHttpsRedirection();
@@ -44,10 +45,7 @@ namespace NFinance.WebApi
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

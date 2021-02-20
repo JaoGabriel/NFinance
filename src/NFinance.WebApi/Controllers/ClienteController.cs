@@ -12,9 +12,9 @@ namespace NFinance.WebApi.Controllers
     [Route("[controller]")]
     public class ClienteController : ControllerBase
     {
+        private readonly IClienteService _clienteService;
 
         private readonly ILogger<ClienteController> _logger;
-        private readonly IClienteService _clienteService;
 
         public ClienteController(ILogger<ClienteController> logger, IClienteService clienteService)
         {
@@ -22,9 +22,9 @@ namespace NFinance.WebApi.Controllers
             _clienteService = clienteService;
         }
 
-        [HttpGet("/api/Clientes")]
-        [ProducesResponseType(typeof(ListarClientesViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [HttpGet("/api/Clientes/Listar")]
+        [ProducesResponseType(typeof(ListarClientesViewModel.Response), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarClientes()
         {
             try
@@ -35,14 +35,14 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Falha ao listar clientes",ex);
+                _logger.LogInformation(ex,"Falha ao listar clientes");
                 return BadRequest(ex);
             }
         }
 
-        [HttpGet("/api/Cliente/{id}")]
-        [ProducesResponseType(typeof(ConsultarClienteViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [HttpGet("/api/Cliente/Consultar/{id}")]
+        [ProducesResponseType(typeof(ConsultarClienteViewModel.Response), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarCliente(Guid id)
         {
             try
@@ -53,14 +53,14 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Falha ao consultar cliente", ex);
+                _logger.LogInformation(ex,"Falha ao consultar cliente");
                 return BadRequest(ex);
             }
         }
 
-        [HttpPost("/api/Cliente")]
-        [ProducesResponseType(typeof(CadastrarClienteViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [HttpPost("/api/Cliente/Cadastrar")]
+        [ProducesResponseType(typeof(CadastrarClienteViewModel.Response), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CadastrarCliente([FromBody] CadastrarClienteViewModel.Request request)
         {
             try
@@ -71,15 +71,15 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Falha ao cadastrar cliente", ex);
+                _logger.LogInformation(ex,"Falha ao cadastrar cliente");
                 return BadRequest(ex);
             }
         }
 
-        [HttpPut("/api/Clientes/{id}")]
-        [ProducesResponseType(typeof(AtualizarClienteViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> AtualizarCliente(Guid id,[FromBody] AtualizarClienteViewModel.Request request)
+        [HttpPut("/api/Clientes/Atualizar/{id}")]
+        [ProducesResponseType(typeof(AtualizarClienteViewModel.Response), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AtualizarCliente(Guid id, [FromBody] AtualizarClienteViewModel.Request request)
         {
             try
             {
@@ -89,10 +89,9 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Falha ao atualizar cliente", ex);
+                _logger.LogInformation(ex,"Falha ao atualizar cliente");
                 return BadRequest(ex);
             }
         }
-    } 
-    
+    }
 }

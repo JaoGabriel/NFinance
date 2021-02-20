@@ -30,4 +30,8 @@
     <ProjectReference Include="..\..\src\NFinance.WebApi\NFinance.WebApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infra" />
+  </ItemGroup>
+
 </Project>

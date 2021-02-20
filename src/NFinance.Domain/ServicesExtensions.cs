@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Services;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NFinance.Domain
 {
@@ -19,6 +19,7 @@ namespace NFinance.Domain
         {
             services.AddTransient<IClienteService, ClienteService>();
             services.AddTransient<IGastosService, GastosService>();
+            services.AddTransient<IGanhoService, GanhoService>();
             services.AddTransient<IResgateService, ResgateService>();
             services.AddTransient<IInvestimentosService, InvestimentosService>();
         }

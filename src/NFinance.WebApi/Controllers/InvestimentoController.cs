@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Model.InvestimentosViewModel;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace NFinance.WebApi.Controllers
 {
@@ -12,18 +12,19 @@ namespace NFinance.WebApi.Controllers
     [Route("[controller]")]
     public class InvestimentoController : ControllerBase
     {
-        private readonly ILogger<InvestimentoController> _logger;
         private readonly IInvestimentosService _investimentosService;
+        private readonly ILogger<InvestimentoController> _logger;
 
-        public InvestimentoController(ILogger<InvestimentoController> logger, IInvestimentosService investimentosService)
+        public InvestimentoController(ILogger<InvestimentoController> logger,
+            IInvestimentosService investimentosService)
         {
             _logger = logger;
             _investimentosService = investimentosService;
         }
 
-        [HttpGet("/api/Investimentos")]
-        [ProducesResponseType(typeof(ListarInvestimentosViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [HttpGet("/api/Investimentos/Listar")]
+        [ProducesResponseType(typeof(ListarInvestimentosViewModel.Response), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarInvestimentos()
         {
             try
@@ -34,14 +35,14 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Falha ao listar investimentos", ex);
+                _logger.LogInformation(ex,"Falha ao listar investimentos");
                 return BadRequest(ex);
             }
         }
 
-        [HttpGet("/api/Investimento/{id}")]
-        [ProducesResponseType(typeof(ConsultarInvestimentoViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [HttpGet("/api/Investimento/Consultar/{id}")]
+        [ProducesResponseType(typeof(ConsultarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarInvestimentos(Guid id)
         {
             try
@@ -52,15 +53,16 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Falha ao consultar investimento", ex);
+                _logger.LogInformation(ex,"Falha ao consultar investimento");
                 return BadRequest(ex);
             }
         }
 
-        [HttpPost("/api/Investimento")]
-        [ProducesResponseType(typeof(RealizarInvestimentoViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> RealizarInvestimento([FromBody] RealizarInvestimentoViewModel.Request investimentosRequest)
+        [HttpPost("/api/Investimento/Investir")]
+        [ProducesResponseType(typeof(RealizarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> RealizarInvestimento(
+            [FromBody] RealizarInvestimentoViewModel.Request investimentosRequest)
         {
             try
             {
@@ -70,15 +72,16 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Falha ao cadastrar investimento", ex);
+                _logger.LogInformation(ex,"Falha ao cadastrar investimento");
                 return BadRequest(ex);
             }
         }
 
-        [HttpPut("/api/Investimento/{id}")]
-        [ProducesResponseType(typeof(AtualizarInvestimentoViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> AtualizarInvestimento(Guid id, [FromBody] AtualizarInvestimentoViewModel.Request investimentosRequest)
+        [HttpPut("/api/Investimento/Atualizar/{id}")]
+        [ProducesResponseType(typeof(AtualizarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AtualizarInvestimento(Guid id,
+            [FromBody] AtualizarInvestimentoViewModel.Request investimentosRequest)
         {
             try
             {
@@ -88,7 +91,7 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Falha ao atualizar investimento", ex);
+                _logger.LogInformation(ex,"Falha ao atualizar investimento");
                 return BadRequest(ex);
             }
         }

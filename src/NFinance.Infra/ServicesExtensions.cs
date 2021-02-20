@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Infra.Repository;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NFinance.Infra
 {
@@ -16,6 +16,7 @@ namespace NFinance.Infra
                 options.UseSqlServer(configuration.GetConnectionString("BancoDeDados")).EnableSensitiveDataLogging());
 
             services.AddTransient<IClienteRepository, ClienteRepository>();
+            services.AddTransient<IGanhoRepository, GanhoRepository>();
             services.AddTransient<IInvestimentosRepository, InvestimentosRepository>();
             services.AddTransient<IResgateRepository, ResgateRepository>();
             services.AddTransient<IGastosRepository, GastosRepository>();
