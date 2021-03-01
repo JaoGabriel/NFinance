@@ -42,13 +42,13 @@ namespace NFinance.Infra.Repository
             return resgateResponse;
         }
 
-        public async Task<List<Resgate>> ConsultarResgates(Guid idInvestimento)
+        public async Task<List<Resgate>> ConsultarResgates(Guid idCliente)
         {
             var resgates = await _context.Resgate.ToListAsync();
             var listResponse = new List<Resgate>();
 
             foreach (var resgate in resgates)
-                if (resgate.IdInvestimento.Equals(idInvestimento))
+                if (resgate.IdCliente.Equals(idCliente))
                     listResponse.Add(resgate);
 
             return listResponse;

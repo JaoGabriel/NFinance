@@ -7,7 +7,9 @@ namespace NFinance.Model.ResgatesViewModel
     public class ResgateViewModel
     {
         public Guid Id { get; set; }
-        
+
+        public Guid IdCliente { get; set; }
+
         public InvestimentoViewModel Investimento { get; set; }
         
         public decimal Valor { get; set; }
@@ -32,6 +34,8 @@ namespace NFinance.Model.ResgatesViewModel
 
             public Guid Id { get; set; }
 
+            public Guid IdCliente { get; set; }
+
             public Guid IdInvestimento { get; set; }
 
             public decimal Valor { get; set; }
@@ -44,6 +48,7 @@ namespace NFinance.Model.ResgatesViewModel
             {
                 Id = resgate.Id;
                 IdInvestimento = resgate.IdInvestimento;
+                IdCliente= resgate.IdCliente;
                 Valor = resgate.Valor;
                 MotivoResgate = resgate.MotivoResgate;
                 DataResgate = resgate.DataResgate;

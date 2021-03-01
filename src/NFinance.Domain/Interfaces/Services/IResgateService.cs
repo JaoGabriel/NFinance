@@ -9,6 +9,6 @@ namespace NFinance.Domain.Interfaces.Services
         Task<RealizarResgateViewModel.Response> RealizarResgate(RealizarResgateViewModel.Request request);
         Task<ListarResgatesViewModel.Response> ListarResgates();
         Task<ConsultarResgateViewModel.Response> ConsultarResgate(Guid id);
-        Task<ConsultarResgatesViewModel.Response> ConsultarResgates(Guid idInvestimento);
+        Task<ConsultarResgatesViewModel.Response> ConsultarResgates(Guid idCliente);
     }
 }

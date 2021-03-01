@@ -15,6 +15,10 @@ namespace NFinance.Domain
         [Required]
         public Guid IdInvestimento { get; set; }
 
+        [ForeignKey("Id")]
+        [Required]
+        public Guid IdCliente { get; set; }
+
         [Required]
         [Range(0 ,999999999999, ErrorMessage = "Valor {0} deve estar entre {1} e {2}")]
         public decimal Valor { get; set; }
@@ -33,6 +37,7 @@ namespace NFinance.Domain
         {
             Id = Guid.NewGuid();
             IdInvestimento = resgate.IdInvestimento;
+            IdCliente = resgate.IdCliente;
             Valor = resgate.Valor;
             MotivoResgate = resgate.MotivoResgate;
             DataResgate = resgate.DataResgate;
@@ -42,6 +47,7 @@ namespace NFinance.Domain
         {
             Id = Guid.NewGuid();
             IdInvestimento = request.IdInvestimento;
+            IdCliente = request.IdCliente;
             Valor = request.Valor;
             MotivoResgate = request.MotivoResgate;
             DataResgate = request.DataResgate;

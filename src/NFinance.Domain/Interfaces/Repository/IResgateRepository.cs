@@ -9,6 +9,6 @@ namespace NFinance.Domain.Interfaces.Repository
         Task<Resgate> RealizarResgate(Resgate resgate);
         Task<List<Resgate>> ListarResgates();
         Task<Resgate> ConsultarResgate(Guid id);
-        Task<List<Resgate>> ConsultarResgates(Guid idInvestimento);
+        Task<List<Resgate>> ConsultarResgates(Guid idCliente);
     }
 }
