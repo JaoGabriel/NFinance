@@ -57,6 +57,24 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
+        [HttpGet("/api/Gastos/Consultar/{idCliente}")]
+        [ProducesResponseType(typeof(ConsultarGastosViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ConsultarGastos(Guid idCliente)
+        {
+            try
+            {
+                var gastos = await _gastosService.ConsultarGastos(idCliente);
+                _logger.LogInformation("Gastos Encontrados Com Sucesso!");
+                return Ok(gastos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex, "Falha ao consultar");
+                return BadRequest(ex);
+            }
+        }
+
         [HttpPost("/api/Gasto/Cadastar")]
         [ProducesResponseType(typeof(CadastrarGastoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]

@@ -41,5 +41,17 @@ namespace NFinance.Infra.Repository
             await UnitOfWork.Commit();
             return resgateResponse;
         }
+
+        public async Task<List<Resgate>> ConsultarResgates(Guid idInvestimento)
+        {
+            var resgates = await _context.Resgate.ToListAsync();
+            var listResponse = new List<Resgate>();
+
+            foreach (var resgate in resgates)
+                if (resgate.IdInvestimento.Equals(idInvestimento))
+                    listResponse.Add(resgate);
+
+            return listResponse;
+        }
     }
 }

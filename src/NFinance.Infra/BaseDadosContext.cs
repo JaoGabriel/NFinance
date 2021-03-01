@@ -14,6 +14,7 @@ namespace NFinance.Infra
         public DbSet<Gastos> Gastos { get; set; }
         public DbSet<Investimentos> Investimentos { get; set; }
         public DbSet<Resgate> Resgate { get; set; }
+        public DbSet<Ganho> Ganhos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

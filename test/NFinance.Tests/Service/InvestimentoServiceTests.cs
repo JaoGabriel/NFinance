@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
+using System.Linq;
 
 namespace NFinance.Tests.Service
 {
@@ -466,6 +467,95 @@ namespace NFinance.Tests.Service
             Assert.Equal(data, response.Find(i => i.Id == id).DataAplicacao);
             Assert.Equal(valorInvestido, response.Find(i => i.Id == id).Valor);
             Assert.Equal(idCliente, response.Find(i => i.Id == id).IdCliente);
+        }
+
+        [Fact]
+        public async Task InvestimetoService_ConsultarInvestimentos_ComSucesso()
+        {
+            //Arrage
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var id3 = Guid.NewGuid();
+            var idCliente = Guid.NewGuid();
+            var valor = 120245.21M;
+            var nomeInvestimento = "TEsteee";
+            var dataAplicacao = DateTime.Today;
+            var investimento = new Investimentos { Id = id, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento1 = new Investimentos { Id = id1, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento2 = new Investimentos { Id = id2, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento3 = new Investimentos { Id = id3, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var listInvestimentos = new List<Investimentos> { investimento, investimento1, investimento2, investimento3 };
+            _investimentosRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimentos);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.ConsultarInvestimentos(idCliente);
+
+            //Assert
+            Assert.IsType<ConsultarInvestimentosViewModel.Response>(response);
+            Assert.NotNull(response);
+            Assert.Equal(4, response.Count);
+
+            //Assert dos ganhos do cliente - investimento 0
+            var responseTeste = response.FirstOrDefault(g => g.Id == id);
+            Assert.IsType<InvestimentoViewModel.Response>(responseTeste);
+            Assert.Equal(id, responseTeste.Id);
+            Assert.Equal(idCliente, responseTeste.IdCliente);
+            Assert.Equal(nomeInvestimento, responseTeste.NomeInvestimento);
+            Assert.Equal(valor, responseTeste.Valor);
+            Assert.Equal(dataAplicacao, responseTeste.DataAplicacao);
+
+            //Assert dos ganhos do cliente - investimento 1
+            var responseTeste1 = response.FirstOrDefault(g => g.Id == id1);
+            Assert.IsType<InvestimentoViewModel.Response>(responseTeste1);
+            Assert.Equal(id1, responseTeste1.Id);
+            Assert.Equal(idCliente, responseTeste1.IdCliente);
+            Assert.Equal(nomeInvestimento, responseTeste1.NomeInvestimento);
+            Assert.Equal(valor, responseTeste1.Valor);
+            Assert.Equal(dataAplicacao, responseTeste1.DataAplicacao);
+
+            //Assert dos ganhos do cliente - investimento 2
+            var responseTeste2 = response.FirstOrDefault(g => g.Id == id2);
+            Assert.IsType<InvestimentoViewModel.Response>(responseTeste2);
+            Assert.Equal(id2, responseTeste2.Id);
+            Assert.Equal(idCliente, responseTeste2.IdCliente);
+            Assert.Equal(nomeInvestimento, responseTeste2.NomeInvestimento);
+            Assert.Equal(valor, responseTeste2.Valor);
+            Assert.Equal(dataAplicacao, responseTeste2.DataAplicacao);
+
+            //Assert dos ganhos do cliente - investimento 3
+            var responseTeste3 = response.FirstOrDefault(g => g.Id == id3);
+            Assert.IsType<InvestimentoViewModel.Response>(responseTeste3);
+            Assert.Equal(id3, responseTeste3.Id);
+            Assert.Equal(idCliente, responseTeste3.IdCliente);
+            Assert.Equal(nomeInvestimento, responseTeste3.NomeInvestimento);
+            Assert.Equal(valor, responseTeste3.Valor);
+            Assert.Equal(dataAplicacao, responseTeste3.DataAplicacao);
+        }
+
+        [Fact]
+        public async Task InvestimetoService_ConsultarInvestimentos_ComIdCliente_Invalido()
+        {
+            //Arrage
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var id3 = Guid.NewGuid();
+            var idCliente = Guid.Empty;
+            var valor = 120245.21M;
+            var nomeInvestimento = "TEsteee";
+            var dataAplicacao = DateTime.Today;
+            var investimento = new Investimentos { Id = id, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento1 = new Investimentos { Id = id1, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento2 = new Investimentos { Id = id2, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento3 = new Investimentos { Id = id3, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var listInvestimentos = new List<Investimentos> { investimento, investimento1, investimento2, investimento3 };
+            _investimentosRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimentos);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.ConsultarInvestimentos(idCliente));
         }
     }
 }

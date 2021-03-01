@@ -65,12 +65,12 @@ namespace NFinance.WebApi.Controllers
             try
             {
                 var ganhos = await _ganhoService.ConsultarGanhos(idCliente);
-                _logger.LogInformation("Ganhos Encontrado Com Sucesso!");
+                _logger.LogInformation("Ganhos Encontrados Com Sucesso!");
                 return Ok(ganhos);
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex, "Falha ao consultar ganhos");
+                _logger.LogInformation(ex, "Falha ao consultar");
                 return BadRequest(ex);
             }
         }

@@ -23,8 +23,8 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Resgates/Listar")]
-        [ProducesResponseType(typeof(ListarResgatesViewModel.Response), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ListarResgatesViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarResgates()
         {
             try
@@ -35,14 +35,14 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex,"Falha ao listar resgates");
+                _logger.LogInformation(ex, "Falha ao listar resgates");
                 return BadRequest(ex);
             }
         }
 
         [HttpGet("/api/Resgate/Consultar/{id}")]
-        [ProducesResponseType(typeof(Resgate), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarResgate(Guid id)
         {
             try
@@ -53,14 +53,32 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex,"Falha ao consultar resgate");
+                _logger.LogInformation(ex, "Falha ao consultar resgate");
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("/api/Resgates/Consultar/{idCliente}")]
+        [ProducesResponseType(typeof(ConsultarResgatesViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ConsultarResgates(Guid idCliente)
+        {
+            try
+            {
+                var resgates = await _resgateService.ConsultarResgates(idCliente);
+                _logger.LogInformation("Resgates Encontrados Com Sucesso!");
+                return Ok(resgates);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex, "Falha ao consultar");
                 return BadRequest(ex);
             }
         }
 
         [HttpPost("/api/Resgate/Resgatar")]
-        [ProducesResponseType(typeof(RealizarResgateViewModel.Response), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(RealizarResgateViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> RealizarResgate([FromBody] RealizarResgateViewModel.Request resgateRequest)
         {
             try
@@ -71,7 +89,7 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex,"Falha ao cadastrar investimento");
+                _logger.LogInformation(ex, "Falha ao cadastrar investimento");
                 return BadRequest(ex);
             }
         }

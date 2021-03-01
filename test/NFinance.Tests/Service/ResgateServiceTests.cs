@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
+using System.Linq;
 
 namespace NFinance.Tests.Service
 {
@@ -259,6 +260,95 @@ namespace NFinance.Tests.Service
             Assert.Equal(valor, response.Find(r => r.Id == id).Valor);
             Assert.Equal(data, response.Find(r => r.Id == id).DataResgate);
             Assert.Equal(idInvestimento, response.Find(r => r.Id == id).IdInvestimento);
+        }
+
+        [Fact]
+        public async Task ResgateService_ConsultarResgates_ComSucesso()
+        {
+            //Arrage
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var id3 = Guid.NewGuid();
+            var idInvestimento = Guid.NewGuid();
+            var valor = 120245.21M;
+            var motivoResgate = "TEsteee";
+            var dataResgate = DateTime.Today;
+            var resgate = new Resgate { Id = id, IdInvestimento = idInvestimento, Valor = valor,  MotivoResgate = motivoResgate, DataResgate = dataResgate };
+            var resgate1 = new Resgate { Id = id1, IdInvestimento = idInvestimento, Valor = valor, MotivoResgate = motivoResgate, DataResgate = dataResgate };
+            var resgate2 = new Resgate { Id = id2, IdInvestimento = idInvestimento, Valor = valor, MotivoResgate = motivoResgate, DataResgate = dataResgate };
+            var resgate3 = new Resgate { Id = id3, IdInvestimento = idInvestimento, Valor = valor, MotivoResgate = motivoResgate, DataResgate = dataResgate };
+            var listResgates = new List<Resgate> { resgate, resgate1, resgate2, resgate3 };
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgates);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.ConsultarResgates(idInvestimento);
+
+            //Assert
+            Assert.IsType<ConsultarResgatesViewModel.Response>(response);
+            Assert.NotNull(response);
+            Assert.Equal(4, response.Count);
+
+            //Assert dos ganhos do cliente - resgate 0
+            var responseTeste = response.FirstOrDefault(g => g.Id == id);
+            Assert.IsType<ResgateViewModel.Response>(responseTeste);
+            Assert.Equal(id, responseTeste.Id);
+            Assert.Equal(idInvestimento, responseTeste.IdInvestimento);
+            Assert.Equal(motivoResgate, responseTeste.MotivoResgate);
+            Assert.Equal(valor, responseTeste.Valor);
+            Assert.Equal(dataResgate, responseTeste.DataResgate);
+
+            //Assert dos ganhos do cliente - resgate 1
+            var responseTeste1 = response.FirstOrDefault(g => g.Id == id1);
+            Assert.IsType<ResgateViewModel.Response>(responseTeste1);
+            Assert.Equal(id1, responseTeste1.Id);
+            Assert.Equal(idInvestimento, responseTeste1.IdInvestimento);
+            Assert.Equal(motivoResgate, responseTeste1.MotivoResgate);
+            Assert.Equal(valor, responseTeste1.Valor);
+            Assert.Equal(dataResgate, responseTeste1.DataResgate);
+
+            //Assert dos ganhos do cliente - resgate 2
+            var responseTeste2 = response.FirstOrDefault(g => g.Id == id2);
+            Assert.IsType<ResgateViewModel.Response>(responseTeste2);
+            Assert.Equal(id2, responseTeste2.Id);
+            Assert.Equal(idInvestimento, responseTeste2.IdInvestimento);
+            Assert.Equal(motivoResgate, responseTeste2.MotivoResgate);
+            Assert.Equal(valor, responseTeste2.Valor);
+            Assert.Equal(dataResgate, responseTeste2.DataResgate);
+
+            //Assert dos ganhos do cliente - resgate 3
+            var responseTeste3 = response.FirstOrDefault(g => g.Id == id3);
+            Assert.IsType<ResgateViewModel.Response>(responseTeste3);
+            Assert.Equal(id3, responseTeste3.Id);
+            Assert.Equal(idInvestimento, responseTeste3.IdInvestimento);
+            Assert.Equal(motivoResgate, responseTeste3.MotivoResgate);
+            Assert.Equal(valor, responseTeste3.Valor);
+            Assert.Equal(dataResgate, responseTeste3.DataResgate);
+        }
+
+        [Fact]
+        public async Task ResgateService_ConsultarResgates_ComIdInvestimento_Invalido()
+        {
+            //Arrage
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var id3 = Guid.NewGuid();
+            var idInvestimento = Guid.Empty;
+            var valor = 120245.21M;
+            var motivoResgate = "TEsteee";
+            var dataResgate = DateTime.Today;
+            var resgate = new Resgate { Id = id, IdInvestimento = idInvestimento, Valor = valor, MotivoResgate = motivoResgate, DataResgate = dataResgate };
+            var resgate1 = new Resgate { Id = id1, IdInvestimento = idInvestimento, Valor = valor, MotivoResgate = motivoResgate, DataResgate = dataResgate };
+            var resgate2 = new Resgate { Id = id2, IdInvestimento = idInvestimento, Valor = valor, MotivoResgate = motivoResgate, DataResgate = dataResgate };
+            var resgate3 = new Resgate { Id = id3, IdInvestimento = idInvestimento, Valor = valor, MotivoResgate = motivoResgate, DataResgate = dataResgate };
+            var listResgates = new List<Resgate> { resgate, resgate1, resgate2, resgate3 };
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgates);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.ConsultarResgates(idInvestimento));
         }
     }
 }

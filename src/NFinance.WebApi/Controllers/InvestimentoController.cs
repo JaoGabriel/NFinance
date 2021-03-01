@@ -43,7 +43,7 @@ namespace NFinance.WebApi.Controllers
         [HttpGet("/api/Investimento/Consultar/{id}")]
         [ProducesResponseType(typeof(ConsultarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ConsultarInvestimentos(Guid id)
+        public async Task<IActionResult> ConsultarInvestimento(Guid id)
         {
             try
             {
@@ -54,6 +54,24 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex,"Falha ao consultar investimento");
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("/api/Investimentos/Consultar/{idCliente}")]
+        [ProducesResponseType(typeof(ConsultarInvestimentosViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ConsultarInvestimentos(Guid idCliente)
+        {
+            try
+            {
+                var investimentos = await _investimentosService.ConsultarInvestimentos(idCliente);
+                _logger.LogInformation("Investimentos Encontrados Com Sucesso!");
+                return Ok(investimentos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex, "Falha ao consultar");
                 return BadRequest(ex);
             }
         }

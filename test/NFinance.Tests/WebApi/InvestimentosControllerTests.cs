@@ -141,7 +141,7 @@ namespace NFinance.Tests.WebApi
             var controller = InicializarInvestimentoController();
 
             //Act
-            var teste = controller.ConsultarInvestimentos(id);
+            var teste = controller.ConsultarInvestimento(id);
             var okResult = teste.Result as ObjectResult;
             var consultarInvesitimentoViewModel = Assert.IsType<ConsultarInvestimentoViewModel.Response>(okResult.Value);
 
@@ -185,6 +185,63 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(dataAplicacao, listarInvesitimentoViewModel.Find(i => i.Id == id).DataAplicacao);
             Assert.Equal(valorInvestimento, listarInvesitimentoViewModel.Find(i => i.Id == id).Valor);
             Assert.Equal(idCliente, listarInvesitimentoViewModel.Find(i => i.Id == id).IdCliente);
+        }
+
+        [Fact]
+        public void InvestimentosController_ConsultarInvestimentos_ComSucesso()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var idCliente = Guid.NewGuid();
+            var nomeInvestimento = "uasduhasha";
+            var valor = 1238.12M;
+            var dataAplicacao = DateTime.Today;
+            var listaInvestimento = new List<Investimentos>();
+            var investimento = new Investimentos
+            {
+                Id = id,
+                IdCliente = idCliente,
+                NomeInvestimento = nomeInvestimento,
+                Valor = valor,
+                DataAplicacao = dataAplicacao
+            };
+            var investimento1 = new Investimentos
+            {
+                Id = id1,
+                IdCliente = idCliente,
+                NomeInvestimento = nomeInvestimento,
+                Valor = valor,
+                DataAplicacao = dataAplicacao
+            };
+            listaInvestimento.Add(investimento);
+            listaInvestimento.Add(investimento1);
+            var listarInvestimentos = new ConsultarInvestimentosViewModel.Response(listaInvestimento);
+            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listarInvestimentos);
+            var controller = InicializarInvestimentoController();
+
+            //Act
+            var teste = controller.ConsultarInvestimentos(idCliente);
+            var okResult = teste.Result as ObjectResult;
+            var consultarInvestimentosViewModel = Assert.IsType<ConsultarInvestimentosViewModel.Response>(okResult.Value);
+
+            //Assert
+            Assert.NotNull(teste);
+            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+            //verificar o investimento
+            var investimentoTest = consultarInvestimentosViewModel.Find(g => g.Id == id);
+            Assert.Equal(id, investimentoTest.Id);
+            Assert.Equal(idCliente, investimentoTest.IdCliente);
+            Assert.Equal(nomeInvestimento, investimentoTest.NomeInvestimento);
+            Assert.Equal(valor, investimentoTest.Valor);
+            Assert.Equal(dataAplicacao, investimentoTest.DataAplicacao);
+            //verificar o investimento1
+            var investimentoTest1 = consultarInvestimentosViewModel.Find(g => g.Id == id1);
+            Assert.Equal(id1, investimentoTest1.Id);
+            Assert.Equal(idCliente, investimentoTest1.IdCliente);
+            Assert.Equal(nomeInvestimento, investimentoTest1.NomeInvestimento);
+            Assert.Equal(valor, investimentoTest1.Valor);
+            Assert.Equal(dataAplicacao, investimentoTest1.DataAplicacao);
         }
     }
 }

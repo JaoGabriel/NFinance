@@ -44,6 +44,18 @@ namespace NFinance.Infra.Repository
             return gasto;
         }
 
+        public async Task<List<Gastos>> ConsultarGastos(Guid idCliente)
+        {
+            var gastos = await _context.Gastos.ToListAsync();
+            var listResponse = new List<Gastos>();
+
+            foreach (var gasto in gastos)
+                if (gasto.IdCliente.Equals(idCliente))
+                    listResponse.Add(gasto);
+
+            return listResponse;
+        }
+
         public async Task<bool> ExcluirGasto(Guid id)
         {
             var gasto = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);

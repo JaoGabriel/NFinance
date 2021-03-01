@@ -139,5 +139,62 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(DateTime.Today, listarResgatesViewModel.Find(r => r.Id == id).DataResgate);
             Assert.Equal(idInvestimento, listarResgatesViewModel.Find(r => r.Id == id).IdInvestimento);
         }
+
+        [Fact]
+        public void ResgateController_ConsultarResgates_ComSucesso()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var idInvestimento = Guid.NewGuid();
+            var motivoResgate = "uasduhasha";
+            var valor = 1238.12M;
+            var dataResgate = DateTime.Today;
+            var listaResgate = new List<Resgate>();
+            var gasto = new Resgate
+            {
+                Id = id,
+                IdInvestimento = idInvestimento,
+                MotivoResgate = motivoResgate,
+                Valor = valor,
+                DataResgate = dataResgate
+            };
+            var gasto1 = new Resgate
+            {
+                Id = id1,
+                IdInvestimento = idInvestimento,
+                MotivoResgate = motivoResgate,
+                Valor = valor,
+                DataResgate = dataResgate
+            };
+            listaResgate.Add(gasto);
+            listaResgate.Add(gasto1);
+            var listarResgates = new ConsultarResgatesViewModel.Response(listaResgate);
+            _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listarResgates);
+            var controller = InicializarResgateController();
+
+            //Act
+            var teste = controller.ConsultarResgates(idInvestimento);
+            var okResult = teste.Result as ObjectResult;
+            var consultarResgatesViewModel = Assert.IsType<ConsultarResgatesViewModel.Response>(okResult.Value);
+
+            //Assert
+            Assert.NotNull(teste);
+            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+            //verificar o gasto
+            var resgateTest = consultarResgatesViewModel.Find(g => g.Id == id);
+            Assert.Equal(id, resgateTest.Id);
+            Assert.Equal(idInvestimento, resgateTest.IdInvestimento);
+            Assert.Equal(motivoResgate, resgateTest.MotivoResgate);
+            Assert.Equal(valor, resgateTest.Valor);
+            Assert.Equal(dataResgate, resgateTest.DataResgate);
+            //verificar o gasto1
+            var resgateTest1 = consultarResgatesViewModel.Find(g => g.Id == id1);
+            Assert.Equal(id1, resgateTest1.Id);
+            Assert.Equal(idInvestimento, resgateTest1.IdInvestimento);
+            Assert.Equal(motivoResgate, resgateTest1.MotivoResgate);
+            Assert.Equal(valor, resgateTest1.Valor);
+            Assert.Equal(dataResgate, resgateTest1.DataResgate);
+        }
     }
 }

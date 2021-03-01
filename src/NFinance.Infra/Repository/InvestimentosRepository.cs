@@ -49,16 +49,20 @@ namespace NFinance.Infra.Repository
         public async Task<Investimentos> RealizarInvestimento(Investimentos investimentos)
         {
             await _context.Investimentos.AddAsync(investimentos);
-            ListaInvestimentosCliente(investimentos);
             await UnitOfWork.Commit();
             return investimentos;
         }
 
-        public List<Investimentos> ListaInvestimentosCliente(Investimentos investimentos)
+        public async Task<List<Investimentos>> ConsultarInvestimentos(Guid idCliente)
         {
-            List<Investimentos> investCliente = new List<Investimentos>();
-             investCliente.Add(investimentos);
-            return investCliente;
+            var investimentos = await _context.Investimentos.ToListAsync();
+            var listResponse = new List<Investimentos>();
+
+            foreach (var investimento in investimentos)
+                if (investimento.IdCliente.Equals(idCliente))
+                    listResponse.Add(investimento);
+
+            return listResponse;
         }
     }
 }

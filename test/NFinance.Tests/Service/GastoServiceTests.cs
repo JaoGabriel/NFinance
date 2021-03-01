@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
+using System.Linq;
 
 namespace NFinance.Tests.Service
 {
@@ -675,6 +676,98 @@ namespace NFinance.Tests.Service
             Assert.Equal(valorTotal, response.Find(g => g.Id == id).ValorTotal);
             Assert.Equal(data, response.Find(g => g.Id == id).DataDoGasto);
             Assert.Equal(qtdParcelas, response.Find(g => g.Id == id).QuantidadeParcelas);
+        }
+
+        [Fact]
+        public async Task GastoService_ConsultarGastos_ComSucesso()
+        {
+            //Arrage
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var id3 = Guid.NewGuid();
+            var idCliente = Guid.NewGuid();
+            var valor = 120245.21M;
+            var nomeGasto = "TEsteee";
+            var dataDoGasto = DateTime.Today;
+            var gasto = new Gastos { Id = id, IdCliente = idCliente, ValorTotal = valor, NomeGasto = nomeGasto, QuantidadeParcelas = 2, DataDoGasto = dataDoGasto };
+            var gasto1 = new Gastos { Id = id1, IdCliente = idCliente, ValorTotal = valor, NomeGasto = nomeGasto, QuantidadeParcelas = 5, DataDoGasto = dataDoGasto };
+            var gasto2 = new Gastos { Id = id2, IdCliente = idCliente, ValorTotal = valor, NomeGasto = nomeGasto, QuantidadeParcelas = 7, DataDoGasto = dataDoGasto };
+            var gasto3 = new Gastos { Id = id3, IdCliente = idCliente, ValorTotal = valor, NomeGasto = nomeGasto, QuantidadeParcelas = 10, DataDoGasto = dataDoGasto };
+            var listGastos = new List<Gastos> { gasto, gasto1, gasto2, gasto3 };
+            _gastosRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGastos);
+            var services = InicializaServico();
+            
+            //Act
+            var response = await services.ConsultarGastos(idCliente);
+            
+            //Assert
+            Assert.IsType<ConsultarGastosViewModel.Response>(response);
+            Assert.NotNull(response);
+            Assert.Equal(4, response.Count);
+            
+            //Assert dos ganhos do cliente - gasto 0
+            var responseTeste = response.FirstOrDefault(g => g.Id == id);
+            Assert.IsType<GastoViewModel.Response>(responseTeste);
+            Assert.Equal(id, responseTeste.Id);
+            Assert.Equal(idCliente, responseTeste.IdCliente);
+            Assert.Equal(nomeGasto, responseTeste.NomeGasto);
+            Assert.Equal(valor, responseTeste.ValorTotal);
+            Assert.Equal(2,responseTeste.QuantidadeParcelas);
+            Assert.Equal(dataDoGasto,responseTeste.DataDoGasto);
+
+            //Assert dos ganhos do cliente - gasto 1
+            var responseTeste1 = response.FirstOrDefault(g => g.Id == id1);
+            Assert.IsType<GastoViewModel.Response>(responseTeste1);
+            Assert.Equal(id1, responseTeste1.Id);
+            Assert.Equal(idCliente, responseTeste1.IdCliente);
+            Assert.Equal(nomeGasto, responseTeste1.NomeGasto);
+            Assert.Equal(valor, responseTeste1.ValorTotal);
+            Assert.Equal(5, responseTeste1.QuantidadeParcelas);
+            Assert.Equal(dataDoGasto, responseTeste1.DataDoGasto);
+
+            //Assert dos ganhos do cliente - gasto 2
+            var responseTeste2 = response.FirstOrDefault(g => g.Id == id2);
+            Assert.IsType<GastoViewModel.Response>(responseTeste2);
+            Assert.Equal(id2, responseTeste2.Id);
+            Assert.Equal(idCliente, responseTeste2.IdCliente);
+            Assert.Equal(nomeGasto, responseTeste2.NomeGasto);
+            Assert.Equal(valor, responseTeste2.ValorTotal);
+            Assert.Equal(7, responseTeste2.QuantidadeParcelas);
+            Assert.Equal(dataDoGasto, responseTeste2.DataDoGasto);
+
+            //Assert dos ganhos do cliente - gasto 3
+            var responseTeste3 = response.FirstOrDefault(g => g.Id == id3);
+            Assert.IsType<GastoViewModel.Response>(responseTeste3);
+            Assert.Equal(id3, responseTeste3.Id);
+            Assert.Equal(idCliente, responseTeste3.IdCliente);
+            Assert.Equal(nomeGasto, responseTeste3.NomeGasto);
+            Assert.Equal(valor, responseTeste3.ValorTotal);
+            Assert.Equal(10, responseTeste3.QuantidadeParcelas);
+            Assert.Equal(dataDoGasto, responseTeste3.DataDoGasto);
+        }
+
+        [Fact]
+        public async Task GastosService_ConsultarGastos_ComIdCliente_Invalido()
+        {
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var id3 = Guid.NewGuid();
+            var idCliente = Guid.Empty;
+            var valor = 120245.21M;
+            var nomeGasto = "TEsteee";
+            var dataDoGasto = DateTime.Today;
+            var gasto = new Gastos { Id = id, IdCliente = idCliente, ValorTotal = valor, NomeGasto = nomeGasto, QuantidadeParcelas = 2, DataDoGasto = dataDoGasto };
+            var gasto1 = new Gastos { Id = id1, IdCliente = idCliente, ValorTotal = valor, NomeGasto = nomeGasto, QuantidadeParcelas = 5, DataDoGasto = dataDoGasto };
+            var gasto2 = new Gastos { Id = id2, IdCliente = idCliente, ValorTotal = valor, NomeGasto = nomeGasto, QuantidadeParcelas = 7, DataDoGasto = dataDoGasto };
+            var gasto3 = new Gastos { Id = id3, IdCliente = idCliente, ValorTotal = valor, NomeGasto = nomeGasto, QuantidadeParcelas = 10, DataDoGasto = dataDoGasto };
+            var listGanho = new List<Gastos> { gasto, gasto1, gasto2, gasto3 };
+            _gastosRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGanho);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.ConsultarGastos(idCliente));
         }
     }
 }

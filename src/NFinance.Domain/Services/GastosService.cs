@@ -60,6 +60,15 @@ namespace NFinance.Domain.Services
             return response;
         }
 
+        public async Task<ConsultarGastosViewModel.Response> ConsultarGastos(Guid idCliente)
+        {
+            if (Guid.Empty.Equals(idCliente)) throw new IdException("ID cliente invalido");
+
+            var consultarInvestimentos = await _gastosRepository.ConsultarGastos(idCliente);
+            var response = new ConsultarGastosViewModel.Response(consultarInvestimentos);
+            return response;
+        }
+
         public async Task<ExcluirGastoViewModel.Response> ExcluirGasto(ExcluirGastoViewModel.Request request)
         {
             if (Guid.Empty.Equals(request.IdGasto)) throw new IdException("ID gasto invalido");
