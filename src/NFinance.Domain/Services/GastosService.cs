@@ -81,12 +81,5 @@ namespace NFinance.Domain.Services
              else
                 return new ExcluirGastoViewModel.Response() { StatusCode = 400, DataExclusao = DateTime.UtcNow, Mensagem = "Ocorreu um erro ao Excluir" };
         }
-
-        public async Task<ListarGastosViewModel.Response> ListarGastos()
-        {
-            var listaGastos = await _gastosRepository.ListarGastos();
-            var response = new ListarGastosViewModel.Response(listaGastos);
-            return response;
-        }
     }
 }

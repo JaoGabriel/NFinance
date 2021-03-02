@@ -50,12 +50,5 @@ namespace NFinance.Domain.Services
             var response = new ConsultarClienteViewModel.Response() { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, Cpf = clienteConsulta.CPF,Email = clienteConsulta.Email};
             return response;
         }
-
-        public async Task<ListarClientesViewModel.Response> ListarClientes()
-        {
-            var listaClientes = await _clienteRepository.ListarClientes();
-            var response = new ListarClientesViewModel.Response(listaClientes);
-            return response;
-        }
     }
 }

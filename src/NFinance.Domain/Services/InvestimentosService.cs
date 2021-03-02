@@ -54,13 +54,6 @@ namespace NFinance.Domain.Services
             return response;
         }
 
-        public async Task<ListarInvestimentosViewModel.Response> ListarInvestimentos()
-        {
-            var listaInvestimentos = await _investimentosRepository.ListarInvestimentos();
-            var response = new ListarInvestimentosViewModel.Response(listaInvestimentos);
-            return response;
-        }
-
         public async Task<RealizarInvestimentoViewModel.Response> RealizarInvestimento(RealizarInvestimentoViewModel.Request request)
         {
             if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("Id cliente invalido");

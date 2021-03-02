@@ -2,7 +2,6 @@
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Repository;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
@@ -63,7 +62,7 @@ namespace NFinance.Infra.Repository
         {
             UnicodeEncoding encoding = new UnicodeEncoding();
             byte[] hashBytes;
-            using (HashAlgorithm hash = SHA1.Create())
+            using (HashAlgorithm hash = SHA256.Create())
                 hashBytes = hash.ComputeHash(encoding.GetBytes(value));
 
             StringBuilder hashValue = new StringBuilder(hashBytes.Length * 2);

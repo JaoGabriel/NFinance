@@ -38,13 +38,6 @@ namespace NFinance.Domain.Services
             return response;
         }
 
-        public async Task<ListarResgatesViewModel.Response> ListarResgates()
-        {
-            var listaResgate = await _resgateRepository.ListarResgates();
-            var response = new ListarResgatesViewModel.Response(listaResgate);
-            return response;
-        }
-
         public async Task<RealizarResgateViewModel.Response> RealizarResgate(RealizarResgateViewModel.Request request)
         {
             if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("Id cliente invalido");

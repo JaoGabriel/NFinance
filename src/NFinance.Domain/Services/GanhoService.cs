@@ -72,12 +72,5 @@ namespace NFinance.Domain.Services
             var response = new ExcluirGanhoViewModel.Response(excluir);
             return response;
         }
-
-        public async Task<ListarGanhosViewModel.Response> ListarGanhos()
-        {
-            var listarGanhos = await _ganhoRepository.ListarGanhos();
-            var response = new ListarGanhosViewModel.Response(listarGanhos);
-            return response;
-        }
     }
 }
