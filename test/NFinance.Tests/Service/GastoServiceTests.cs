@@ -637,48 +637,6 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async Task GastosService_ListarGasto_ComSucesso()
-        {
-            //Arrange
-            var id = Guid.NewGuid();
-            var idCliente = Guid.NewGuid();
-            var nomeGasto = "Teste@Sucesso";
-            var nomeCliente = "Claudemir Salbisn";
-            decimal valorTotal = 123871239.21M;
-            var qtdParcelas = 15;
-            var data = DateTime.Today;
-            var gasto = new Gastos() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, ValorTotal = valorTotal, DataDoGasto = data };
-            var cliente = new Cliente() { Id = idCliente , Nome = nomeCliente};
-            var listaGasto = new List<Gastos>();
-            var listaCliente = new List<Cliente>();
-            listaGasto.Add(gasto);
-            listaCliente.Add(cliente);
-            var listarCliente = new ListarClientesViewModel.Response(listaCliente);
-            _gastosRepository.ListarGastos().Returns(new List<Gastos>(listaGasto));
-            _clienteService.ListarClientes().Returns(listarCliente);
-            var services = InicializaServico();
-
-            //Act
-            var response = await services.ListarGastos();
-
-            //Assert
-            Assert.NotNull(response);
-            Assert.NotNull(response.Find(g => g.Id == id).NomeGasto);
-            Assert.False(response.Find(g => g.Id == id).QuantidadeParcelas <= 0);
-            Assert.False(response.Find(g => g.Id == id).QuantidadeParcelas >= 1000);
-            Assert.False(response.Find(g => g.Id == id).DataDoGasto.CompareTo(DateTime.MaxValue.AddYears(-7899)) > 0);
-            Assert.False(response.Find(g => g.Id == id).DataDoGasto.CompareTo(DateTime.MinValue.AddYears(1949)) < 0);
-            Assert.NotEqual(Guid.Empty, response.Find(g => g.Id == id).Id);
-            Assert.NotEqual(Guid.Empty, response.Find(g => g.Id == id).IdCliente);
-            Assert.Equal(id, response.Find(g => g.Id == id).Id);
-            Assert.Equal(idCliente, response.Find(g => g.Id == id).IdCliente);
-            Assert.Equal(nomeGasto, response.Find(g => g.Id == id).NomeGasto);
-            Assert.Equal(valorTotal, response.Find(g => g.Id == id).ValorTotal);
-            Assert.Equal(data, response.Find(g => g.Id == id).DataDoGasto);
-            Assert.Equal(qtdParcelas, response.Find(g => g.Id == id).QuantidadeParcelas);
-        }
-
-        [Fact]
         public async Task GastoService_ConsultarGastos_ComSucesso()
         {
             //Arrage

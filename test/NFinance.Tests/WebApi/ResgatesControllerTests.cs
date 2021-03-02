@@ -114,33 +114,6 @@ namespace NFinance.Tests.WebApi
         }
 
         [Fact]
-        public void ResgateController_ListarResgates_ComSucesso()
-        {
-            //Arrange
-            var id = Guid.NewGuid();
-            var idInvestimento = Guid.NewGuid();
-            var resgate = new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = "Pagamento Faculdade", Valor = 1234.55M, DataResgate = DateTime.Today };
-            var listaResgates = new List<Resgate>();
-            listaResgates.Add(resgate);
-            var listarResgates = new ListarResgatesViewModel.Response(listaResgates);
-            _resgateService.ListarResgates().Returns(listarResgates);
-            var controller = InicializarResgateController();
-            
-            //Act
-            var teste = controller.ListarResgates();
-            var okResult = teste.Result as ObjectResult;
-            var listarResgatesViewModel = Assert.IsType<ListarResgatesViewModel.Response>(okResult.Value);
-            //Assert
-            Assert.NotNull(teste);
-            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, listarResgatesViewModel.Find(r => r.Id == id).Id);
-            Assert.Equal("Pagamento Faculdade", listarResgatesViewModel.Find(r => r.Id == id).MotivoResgate);
-            Assert.Equal(1234.55M, listarResgatesViewModel.Find(r => r.Id == id).Valor);
-            Assert.Equal(DateTime.Today, listarResgatesViewModel.Find(r => r.Id == id).DataResgate);
-            Assert.Equal(idInvestimento, listarResgatesViewModel.Find(r => r.Id == id).IdInvestimento);
-        }
-
-        [Fact]
         public void ResgateController_ConsultarResgates_ComSucesso()
         {
             //Arrange

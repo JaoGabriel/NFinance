@@ -50,19 +50,9 @@ namespace NFinance.Infra.Repository
             return cliente;
         }
 
-        public async Task<List<Cliente>> ListarClientes()
-        {
-            var clienteList = await _context.Cliente.ToListAsync();
-            var listaCliente = new List<Cliente>();
-            foreach (var cliente in clienteList)
-                listaCliente.Add(cliente);
-            
-            return listaCliente;
-        }
-
         public async Task<Cliente> CredenciaisLogin(string usuario, string senha)
         {
-            var users = await ListarClientes();
+            var users = await _context.Cliente.ToListAsync();
             var senhaCriptografada = HashValue(senha);
             var response = users.Where(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senhaCriptografada).FirstOrDefault();
 

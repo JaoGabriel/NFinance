@@ -11,6 +11,5 @@ namespace NFinance.Domain.Interfaces.Repository
         Task<bool> ExcluirGasto(Guid id);
         Task<Gastos> ConsultarGasto(Guid id);
         Task<List<Gastos>> ConsultarGastos(Guid idCliente);
-        Task<List<Gastos>> ListarGastos();
     }
 }

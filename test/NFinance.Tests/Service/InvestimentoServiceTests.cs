@@ -436,40 +436,6 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async Task InvestimentoService_ListarInvestimentos_ComSucesso()
-        {
-            //Arrange
-            var id = Guid.NewGuid();
-            var idCliente = Guid.NewGuid();
-            var nomeInvestimento = "Teste@Sucesso";
-            var nomeCliente = "Jorge Nunes";
-            decimal valorInvestido = 553484.215M;
-            var data = DateTime.Today;
-            var investimento = new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            var listaInvestimento = new List<Investimentos>();
-            listaInvestimento.Add(investimento);
-            _investimentosRepository.ListarInvestimentos().Returns(new List<Investimentos>(listaInvestimento));
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
-            var services = InicializaServico();
-
-            //Act
-            var response = await services.ListarInvestimentos();
-
-            //Assert
-            Assert.NotNull(response);
-            Assert.NotNull(response.Find(i => i.Id == id).NomeInvestimento);
-            Assert.NotEqual(Guid.Empty, response.Find(i => i.Id == id).Id);
-            Assert.NotEqual(Guid.Empty, response.Find(i => i.Id == id).IdCliente);
-            Assert.NotEqual(0, response.Find(i => i.Id == id).Valor);
-            Assert.NotEqual("00/00/00", response.Find(i => i.Id == id).DataAplicacao.ToString());
-            Assert.Equal(id, response.Find(i => i.Id == id).Id);
-            Assert.Equal(nomeInvestimento, response.Find(i => i.Id == id).NomeInvestimento);
-            Assert.Equal(data, response.Find(i => i.Id == id).DataAplicacao);
-            Assert.Equal(valorInvestido, response.Find(i => i.Id == id).Valor);
-            Assert.Equal(idCliente, response.Find(i => i.Id == id).IdCliente);
-        }
-
-        [Fact]
         public async Task InvestimetoService_ConsultarInvestimentos_ComSucesso()
         {
             //Arrage

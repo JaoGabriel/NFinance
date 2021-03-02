@@ -389,34 +389,5 @@ namespace NFinance.Tests.Service
             //Assert
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.ConsultarCliente(id));
         }
-
-        [Fact]
-        public async Task ClienteService_ListarClientes_ComSucesso()
-        {
-            //Arrange
-            var id = Guid.NewGuid();
-            var nome = "Claudinho Teste";
-            var cpf = "123.123.123.11";
-            var email = "claudisney@teste.com";
-            var listaClientes = new List<Cliente>();
-            var cliente = new Cliente() { Id = id, Nome = nome, CPF = cpf, Email = email };
-            listaClientes.Add(cliente);
-            _clienteRepository.ListarClientes().Returns(new List<Cliente>(listaClientes));
-            var services = InicializaServico();
-
-            //Act
-            var response = await services.ListarClientes();
-
-            //Assert
-            Assert.True(response.Count > 0);
-            Assert.NotNull(response.Find(c => c.Id == id).Nome);
-            Assert.NotNull(response.Find(c => c.Id == id).Cpf);
-            Assert.NotNull(response.Find(c => c.Id == id).Email);
-            Assert.NotEqual(Guid.Empty, response.Find(c => c.Id == id).Id);
-            Assert.Equal(id, response.Find(c => c.Id == id).Id);
-            Assert.Equal(nome, response.Find(c => c.Id == id).Nome);
-            Assert.Equal(cpf, response.Find(c => c.Id == id).Cpf);
-            Assert.Equal(email, response.Find(c => c.Id == id).Email);
-        }
     }
 }

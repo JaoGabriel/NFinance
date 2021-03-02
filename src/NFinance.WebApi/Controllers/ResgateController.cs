@@ -23,25 +23,6 @@ namespace NFinance.WebApi.Controllers
             _resgateService = resgateService;
         }
 
-        [HttpGet("/api/Resgates/Listar")]
-        [Authorize]
-        [ProducesResponseType(typeof(ListarResgatesViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ListarResgates()
-        {
-            try
-            {
-                var response = await _resgateService.ListarResgates();
-                _logger.LogInformation("Resgates Listados Com Sucesso!");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex, "Falha ao listar resgates");
-                return BadRequest(ex);
-            }
-        }
-
         [HttpGet("/api/Resgate/Consultar/{id}")]
         [Authorize]
         [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]

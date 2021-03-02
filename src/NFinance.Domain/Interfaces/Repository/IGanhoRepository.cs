@@ -11,6 +11,5 @@ namespace NFinance.Domain.Interfaces.Repository
         Task<Ganho> ConsultarGanho(Guid id);
         Task<List<Ganho>> ConsultarGanhos(Guid idCliente);
         Task<bool> ExcluirGanho(Guid id);
-        Task<List<Ganho>> ListarGanhos();
     }
 }

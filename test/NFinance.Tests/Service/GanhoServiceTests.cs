@@ -461,68 +461,6 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async Task GanhoService_ListarGanhos_ComSucesso()
-        {
-            //Arrage
-            var id = Guid.NewGuid();
-            var id1 = Guid.NewGuid();
-            var id2 = Guid.NewGuid();
-            var id3 = Guid.NewGuid();
-            var idCliente = Guid.NewGuid();
-            var valor = 120245.21M;
-            var nomeGanho = "TEsteee";
-            var ganho = new Ganho
-                {Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
-            var ganho1 = new Ganho
-                {Id = id1, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = false};
-            var ganho2 = new Ganho
-                {Id = id2, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = false};
-            var ganho3 = new Ganho
-                {Id = id3, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
-            var listGanho = new List<Ganho> {ganho, ganho1, ganho2, ganho3};
-            _ganhoRepository.ListarGanhos().Returns(listGanho);
-            var services = InicializaServico();
-            //Act
-            var response = await services.ListarGanhos();
-            //Assert
-            Assert.IsType<ListarGanhosViewModel.Response>(response);
-            Assert.NotNull(response);
-            Assert.Equal(4, response.Count);
-            //Assert dos ganhos do cliente - ganho 0
-            var responseTeste = response.FirstOrDefault(g => g.Id == id);
-            Assert.IsType<GanhoViewModel>(responseTeste);
-            Assert.Equal(id, responseTeste.Id);
-            Assert.Equal(idCliente, responseTeste.IdCliente);
-            Assert.Equal(nomeGanho, responseTeste.NomeGanho);
-            Assert.Equal(valor, responseTeste.Valor);
-            Assert.True(responseTeste.Recorrente);
-            //Assert dos ganhos do cliente - ganho 1
-            var responseTeste1 = response.FirstOrDefault(g => g.Id == id1);
-            Assert.IsType<GanhoViewModel>(responseTeste1);
-            Assert.Equal(id1, responseTeste1.Id);
-            Assert.Equal(idCliente, responseTeste1.IdCliente);
-            Assert.Equal(nomeGanho, responseTeste1.NomeGanho);
-            Assert.Equal(valor, responseTeste1.Valor);
-            Assert.False(responseTeste1.Recorrente);
-            //Assert dos ganhos do cliente - ganho 2
-            var responseTeste2 = response.FirstOrDefault(g => g.Id == id2);
-            Assert.IsType<GanhoViewModel>(responseTeste2);
-            Assert.Equal(id2, responseTeste2.Id);
-            Assert.Equal(idCliente, responseTeste2.IdCliente);
-            Assert.Equal(nomeGanho, responseTeste2.NomeGanho);
-            Assert.Equal(valor, responseTeste2.Valor);
-            Assert.False(responseTeste2.Recorrente);
-            //Assert dos ganhos do cliente - ganho 3
-            var responseTeste3 = response.FirstOrDefault(g => g.Id == id3);
-            Assert.IsType<GanhoViewModel>(responseTeste3);
-            Assert.Equal(id3, responseTeste3.Id);
-            Assert.Equal(idCliente, responseTeste3.IdCliente);
-            Assert.Equal(nomeGanho, responseTeste3.NomeGanho);
-            Assert.Equal(valor, responseTeste3.Valor);
-            Assert.True(responseTeste3.Recorrente);
-        }
-
-        [Fact]
         public async Task GanhoService_ExcluirGanho_ComSucesso()
         {
             //Arrage

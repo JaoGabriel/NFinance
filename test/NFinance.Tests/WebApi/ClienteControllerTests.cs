@@ -96,34 +96,5 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(cpf, consultarClienteViewModel.Cpf);
             Assert.Equal(email, consultarClienteViewModel.Email);
         }
-
-        [Fact]
-        public void ClienteController_ListarClientes_ComSucesso()
-        {
-            //Arrange
-            var id = Guid.NewGuid();
-            var nome = "Jorgin da Lages";
-            var cpf = "123.123.123-11";
-            var email = "aloha@teste.com";
-            var listaClientes = new List<Cliente>();
-            var cliente = new Cliente() { Id = id, Nome = nome, CPF = cpf, Email = email};
-            listaClientes.Add(cliente);
-            var listarClientes = new ListarClientesViewModel.Response(listaClientes);
-            _clienteService.ListarClientes().Returns(listarClientes);
-            var controller = InicializarClienteController();           
-
-            //Act
-            var teste = controller.ListarClientes();
-            var okResult = teste.Result as ObjectResult;
-            var listarClientesViewModel = Assert.IsType<ListarClientesViewModel.Response>(okResult.Value);
-
-            //Assert
-            Assert.NotNull(teste);
-            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, listarClientesViewModel.Find(c => c.Id == id).Id);
-            Assert.Equal(nome, listarClientesViewModel.Find(c => c.Id == id).Nome);
-            Assert.Equal(cpf, listarClientesViewModel.Find(c => c.Id == id).Cpf);
-            Assert.Equal(email, listarClientesViewModel.Find(c => c.Id == id).Email);
-        }
     }
 }

@@ -11,6 +11,5 @@ namespace NFinance.Domain.Interfaces.Services
         Task<ExcluirGastoViewModel.Response> ExcluirGasto(ExcluirGastoViewModel.Request request);
         Task<ConsultarGastoViewModel.Response> ConsultarGasto(Guid id);
         Task<ConsultarGastosViewModel.Response> ConsultarGastos(Guid idCliente);
-        Task<ListarGastosViewModel.Response> ListarGastos();
     }
 }

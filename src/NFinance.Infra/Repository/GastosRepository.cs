@@ -63,15 +63,5 @@ namespace NFinance.Infra.Repository
             await UnitOfWork.Commit();
             return true;
         }
-
-        public async Task<List<Gastos>> ListarGastos()
-        {
-            var gastosList = await _context.Gastos.ToListAsync();
-            List<Gastos> listaGastos = new List<Gastos>();
-            foreach (var gastos in gastosList)
-                listaGastos.Add(gastos);
-
-            return listaGastos;
-        }
     }
 }

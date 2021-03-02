@@ -157,37 +157,6 @@ namespace NFinance.Tests.WebApi
         }
 
         [Fact]
-        public void InvestimentosController_ListarInvestimentos_ComSucesso()
-        {
-            //Arrange
-            var id = Guid.NewGuid();
-            var nomeInvestimento = "FIC FIM 123ADASE";
-            decimal valorInvestimento = 1238.12M;
-            var dataAplicacao = DateTime.Today;
-            var idCliente = Guid.NewGuid();
-            var investimento = new Investimentos() {  Id = id,DataAplicacao = dataAplicacao, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, IdCliente = idCliente };
-            var listaInvestimento = new List<Investimentos>();
-            listaInvestimento.Add(investimento);
-            var listarInvestimentos = new ListarInvestimentosViewModel.Response(listaInvestimento);
-            _investimentoService.ListarInvestimentos().Returns(listarInvestimentos);
-            var controller = InicializarInvestimentoController();
-
-            //Act
-            var teste = controller.ListarInvestimentos();
-            var okResult = teste.Result as ObjectResult;
-            var listarInvesitimentoViewModel = Assert.IsType<ListarInvestimentosViewModel.Response>(okResult.Value);
-
-            //Assert
-            Assert.NotNull(teste);
-            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, listarInvesitimentoViewModel.Find(i => i.Id == id).Id);
-            Assert.Equal(nomeInvestimento, listarInvesitimentoViewModel.Find(i => i.Id == id).NomeInvestimento);
-            Assert.Equal(dataAplicacao, listarInvesitimentoViewModel.Find(i => i.Id == id).DataAplicacao);
-            Assert.Equal(valorInvestimento, listarInvesitimentoViewModel.Find(i => i.Id == id).Valor);
-            Assert.Equal(idCliente, listarInvesitimentoViewModel.Find(i => i.Id == id).IdCliente);
-        }
-
-        [Fact]
         public void InvestimentosController_ConsultarInvestimentos_ComSucesso()
         {
             //Arrange

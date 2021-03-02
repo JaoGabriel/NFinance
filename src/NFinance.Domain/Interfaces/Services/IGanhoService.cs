@@ -11,6 +11,5 @@ namespace NFinance.Domain.Interfaces.Services
         Task<ConsultarGanhoViewModel.Response> ConsultarGanho(Guid id);
         Task<ConsultarGanhosViewModel.Response> ConsultarGanhos(Guid idCliente);
         Task<ExcluirGanhoViewModel.Response> ExcluirGanho(ExcluirGanhoViewModel.Request request);
-        Task<ListarGanhosViewModel.Response> ListarGanhos();
     }
 }

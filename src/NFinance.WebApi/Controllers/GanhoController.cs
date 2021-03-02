@@ -22,25 +22,6 @@ namespace NFinance.WebApi.Controllers
             _ganhoService = ganhoService;
         }
 
-        [HttpGet("/api/Ganhos/Listar")]
-        [Authorize]
-        [ProducesResponseType(typeof(ListarGanhosViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ListarGanhos()
-        {
-            try
-            {
-                var response = await _ganhoService.ListarGanhos();
-                _logger.LogInformation("Ganhos Listados Com Sucesso!");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex, "Falha ao listar ganhos");
-                return BadRequest(ex);
-            }
-        }
-
         [HttpGet("/api/Ganho/Consultar{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ConsultarGanhoViewModel.Response), (int)HttpStatusCode.OK)]

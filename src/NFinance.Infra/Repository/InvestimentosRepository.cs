@@ -35,17 +35,6 @@ namespace NFinance.Infra.Repository
             return investimento;
         }
 
-
-        public async Task<List<Investimentos>> ListarInvestimentos()
-        {
-            var investList = await _context.Investimentos.ToListAsync();
-            List<Investimentos> listaInvestimentos = new List<Investimentos>();
-            foreach (var investimentos in investList)
-                listaInvestimentos.Add(investimentos);
-
-            return listaInvestimentos;
-        }
-
         public async Task<Investimentos> RealizarInvestimento(Investimentos investimentos)
         {
             await _context.Investimentos.AddAsync(investimentos);

@@ -168,39 +168,6 @@ namespace NFinance.Tests.WebApi
         }
 
         [Fact]
-        public void GastosController_ListarGastos_ComSucesso()
-        {
-            //Arrange
-            var id = Guid.NewGuid();
-            var nomeGasto = "Cartao De Credito";
-            decimal valorTotal = 1238.12M;
-            var dataGasto = DateTime.Today;
-            var parcelas = 64;
-            var idCliente = Guid.NewGuid();
-            var listaGasto = new List<Gastos>();
-            var gasto = new Gastos() { Id = id, NomeGasto = nomeGasto, QuantidadeParcelas = parcelas, DataDoGasto = dataGasto, ValorTotal = valorTotal, IdCliente = idCliente };
-            listaGasto.Add(gasto);
-            var listarGastos = new ListarGastosViewModel.Response(listaGasto);
-            _gastosService.ListarGastos().Returns(listarGastos);
-            var controller = InicializarGastosController();
-
-            //Act
-            var teste = controller.ListarGastos();
-            var okResult = teste.Result as ObjectResult;
-            var cadastrarGastoViewModel = Assert.IsType<ListarGastosViewModel.Response>(okResult.Value);
-
-            //Assert
-            Assert.NotNull(teste);
-            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, cadastrarGastoViewModel.Find(g => g.Id == id).Id);
-            Assert.Equal(nomeGasto, cadastrarGastoViewModel.Find(g => g.Id == id).NomeGasto);
-            Assert.Equal(parcelas, cadastrarGastoViewModel.Find(g => g.Id == id).QuantidadeParcelas);
-            Assert.Equal(dataGasto, cadastrarGastoViewModel.Find(g => g.Id == id).DataDoGasto);
-            Assert.Equal(valorTotal, cadastrarGastoViewModel.Find(g => g.Id == id).ValorTotal);
-            Assert.Equal(idCliente, cadastrarGastoViewModel.Find(g => g.Id == id).IdCliente);
-        }
-
-        [Fact]
         public void GastosController_ExcluirGasto_ComSucesso()
         {
             //Arrange

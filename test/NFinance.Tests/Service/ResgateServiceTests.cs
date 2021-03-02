@@ -258,46 +258,6 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async Task ResgateService_ListarResgates_ComSucesso()
-        {
-            //Arrange
-            var id = Guid.NewGuid();
-            var idCliente = Guid.NewGuid();
-            var idInvestimento = Guid.NewGuid();
-            var motivo = "Teste@Sucesso";
-            decimal valor = 21245.215M;
-            var data = DateTime.Today;
-            var listaResgates = new List<Resgate>();
-            var listaInvestimentos = new List<Investimentos>();
-            var resgate = new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            listaResgates.Add(resgate);
-            var investimento = new Investimentos() { Id = idInvestimento, DataAplicacao = DateTime.Today.AddDays(-5), IdCliente = idCliente, NomeInvestimento = "Investimento JOSDaSDA", Valor = valor };
-            listaInvestimentos.Add(investimento);
-            var investimentoResponse = new ListarInvestimentosViewModel.Response(listaInvestimentos);
-            _resgateRepository.ListarResgates().Returns(new List<Resgate>(listaResgates));
-            _investimentosService.ListarInvestimentos().Returns(investimentoResponse);
-            var services = InicializaServico();
-
-            //Act
-            
-            var response = await services.ListarResgates();
-
-            //Assert
-            Assert.NotNull(response.Find(r => r.Id == id).MotivoResgate);
-            Assert.NotEqual("00/00/00", response.Find(r => r.Id == id).DataResgate.ToString());
-            Assert.NotEqual(0, response.Find(r => r.Id == id).Valor);
-            Assert.NotEqual(Guid.Empty, response.Find(r => r.Id == id).Id);
-            Assert.NotEqual(Guid.Empty, response.Find(r => r.Id == id).IdCliente);
-            Assert.NotEqual(Guid.Empty, response.Find(r => r.Id == id).IdInvestimento);
-            Assert.Equal(id, response.Find(r => r.Id == id).Id);
-            Assert.Equal(motivo, response.Find(r => r.Id == id).MotivoResgate);
-            Assert.Equal(valor, response.Find(r => r.Id == id).Valor);
-            Assert.Equal(data, response.Find(r => r.Id == id).DataResgate);
-            Assert.Equal(idInvestimento, response.Find(r => r.Id == id).IdInvestimento);
-            Assert.Equal(idCliente, response.Find(r => r.Id == id).IdCliente);
-        }
-
-        [Fact]
         public async Task ResgateService_ConsultarResgates_ComSucesso()
         {
             //Arrage

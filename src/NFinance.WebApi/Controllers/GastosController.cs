@@ -22,25 +22,6 @@ namespace NFinance.WebApi.Controllers
             _gastosService = gastosService;
         }
 
-        [HttpGet("/api/Gastos/Listar")]
-        [Authorize]
-        [ProducesResponseType(typeof(ListarGastosViewModel.Response), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ListarGastos()
-        {
-            try
-            {
-                var response = await _gastosService.ListarGastos();
-                _logger.LogInformation("Gasto Listados Com Sucesso!");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex,"Falha ao listar gasto");
-                return BadRequest(ex);
-            }
-        }
-
         [HttpGet("/api/Gasto/Consultar/{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ConsultarGastoViewModel.Response), (int) HttpStatusCode.OK)]

@@ -23,25 +23,6 @@ namespace NFinance.WebApi.Controllers
             _investimentosService = investimentosService;
         }
 
-        [HttpGet("/api/Investimentos/Listar")]
-        [Authorize]
-        [ProducesResponseType(typeof(ListarInvestimentosViewModel.Response), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ListarInvestimentos()
-        {
-            try
-            {
-                var response = await _investimentosService.ListarInvestimentos();
-                _logger.LogInformation("Investimentos Listados Com Sucesso!");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex,"Falha ao listar investimentos");
-                return BadRequest(ex);
-            }
-        }
-
         [HttpGet("/api/Investimento/Consultar/{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ConsultarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]

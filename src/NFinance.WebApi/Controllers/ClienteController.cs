@@ -23,25 +23,6 @@ namespace NFinance.WebApi.Controllers
             _clienteService = clienteService;
         }
 
-        [HttpGet("/api/Clientes/Listar")]
-        [ProducesResponseType(typeof(ListarClientesViewModel.Response), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
-        [Authorize]
-        public async Task<IActionResult> ListarClientes()
-        {
-            try
-            {
-                var response = await _clienteService.ListarClientes();
-                _logger.LogInformation("Clientes Listados Com Sucesso!");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex,"Falha ao listar clientes");
-                return BadRequest(ex);
-            }
-        }
-
         [HttpGet("/api/Cliente/Consultar/{id}")]
         [ProducesResponseType(typeof(ConsultarClienteViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]

@@ -4,10 +4,15 @@ namespace NFinance.Domain.ViewModel.GanhoViewModel
 {
     public class ConsultarGanhosViewModel
     {
-        public class Response : ListarGanhosViewModel.Response
+        public class Response : List<GanhoViewModel>
         {
-            public Response(List<Ganho> ganhos) : base(ganhos)
+            public Response(List<Ganho> ganhos)
             {
+                foreach (var ganho in ganhos)
+                {
+                    var ganhoVm = new GanhoViewModel(ganho);
+                    Add(ganhoVm);
+                }
             }
         }
     }
