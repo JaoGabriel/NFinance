@@ -23,6 +23,7 @@ namespace NFinance.Domain.Services
             if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("ID cliente invalido");
             if (string.IsNullOrWhiteSpace(request.NomeGanho)) throw new NomeGanhoException("Nome nao deve ser vazio,branco ou nulo");
             if (request.Valor <= 0) throw new ValorGanhoException("Valor deve ser maior que zero");
+            if (request.DataDoGanho > DateTime.MaxValue.AddYears(-7899) || request.DataDoGanho < DateTime.MinValue.AddYears(1949)) throw new DataGanhoException();
 
             var ganho = new Ganho(request);
             var cadastroGanho = await _ganhoRepository.CadastrarGanho(ganho);
@@ -30,13 +31,13 @@ namespace NFinance.Domain.Services
             return response;
         }
 
-        public async Task<AtualizarGanhoViewModel.Response> AtualizarGanho(Guid id,
-            AtualizarGanhoViewModel.Request request)
+        public async Task<AtualizarGanhoViewModel.Response> AtualizarGanho(Guid id, AtualizarGanhoViewModel.Request request)
         {
             if (Guid.Empty.Equals(id)) throw new IdException("Id invalido");
             if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("Id cliente invalido");
             if (string.IsNullOrWhiteSpace(request.NomeGanho)) throw new NomeGanhoException("Nome nao deve ser vazio,branco ou nulo");
             if (request.Valor <= 0) throw new ValorGanhoException("Valor deve ser maior que zero");
+            if (request.DataDoGanho > DateTime.MaxValue.AddYears(-7899) || request.DataDoGanho < DateTime.MinValue.AddYears(1949)) throw new DataGanhoException();
 
             var ganho = new Ganho(id,request);
             var atualizarGanho = await _ganhoRepository.AtualizarGanho(id, ganho);

@@ -27,6 +27,10 @@ namespace NFinance.Domain
         [Required] 
         public bool Recorrente { get; set; }
 
+        [Required]
+        [Range(typeof(DateTime), "01/01/1950", "12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
+        public DateTime DataDoGanho { get; set; }
+
         public Ganho() {}
 
         public Ganho(CadastrarGanhoViewModel.Request request)
@@ -36,6 +40,7 @@ namespace NFinance.Domain
             NomeGanho = request.NomeGanho;
             Valor = request.Valor;
             Recorrente = request.Recorrente;
+            DataDoGanho = request.DataDoGanho;
         }
 
         public Ganho(Guid id,AtualizarGanhoViewModel.Request request)
@@ -45,6 +50,7 @@ namespace NFinance.Domain
             NomeGanho = request.NomeGanho;
             Valor = request.Valor;
             Recorrente = request.Recorrente;
+            DataDoGanho = request.DataDoGanho;
         }
     }
 }

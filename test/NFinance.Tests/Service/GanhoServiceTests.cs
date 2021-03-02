@@ -35,10 +35,9 @@ namespace NFinance.Tests.Service
             var idCliente = Guid.NewGuid();
             var valor = 120245.21M;
             var nomeGanho = "TEsteee";
-            var ganho = new Ganho
-                {Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
-            var ganhoRequest = new CadastrarGanhoViewModel.Request
-                {IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
+            var dataGanho = DateTime.Today;
+            var ganho = new Ganho {Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = dataGanho };
+            var ganhoRequest = new CadastrarGanhoViewModel.Request {IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = dataGanho };
             _ganhoRepository.CadastrarGanho(Arg.Any<Ganho>()).Returns(ganho);
             var services = InicializaServico();
             //Act
@@ -50,11 +49,13 @@ namespace NFinance.Tests.Service
             Assert.NotEqual(0, response.Valor);
             Assert.NotEqual(Guid.Empty, response.Id);
             Assert.NotEqual(Guid.Empty, response.IdCliente);
+            Assert.NotEqual("00/00/00", response.DataDoGanho.ToString());
             Assert.Equal(id, response.Id);
             Assert.Equal(idCliente, response.IdCliente);
             Assert.Equal(nomeGanho, response.NomeGanho);
             Assert.Equal(valor, response.Valor);
             Assert.True(response.Recorrente);
+            Assert.Equal(dataGanho, response.DataDoGanho);
         }
 
         [Fact]
@@ -165,6 +166,42 @@ namespace NFinance.Tests.Service
 
             //Assert
             await Assert.ThrowsAsync<ValorGanhoException>(() => /*Act*/ services.CadastrarGanho(ganhoRequest));
+        }
+
+        [Fact]
+        public async Task GanhoService_CadastrarGanho_ComDataAplicacao_Invalido_Maior_Permitido()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var idCliente = Guid.NewGuid();
+            var valor = 293128.123M;
+            var nomeGanho = "dsuhahusdsuha";
+            var data = DateTime.Today.AddYears(120);
+            var ganho = new Ganho { Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = data };
+            var ganhoRequest = new CadastrarGanhoViewModel.Request { IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = data };
+            _ganhoRepository.CadastrarGanho(Arg.Any<Ganho>()).Returns(ganho);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<DataGanhoException>(() => /*Act*/ services.CadastrarGanho(ganhoRequest));
+        }
+
+        [Fact]
+        public async Task GanhoService_CadastrarGanho_ComDataAplicacao_Invalido_Menor_Permitido()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var idCliente = Guid.NewGuid();
+            var valor = 293128.123M;
+            var nomeGanho = "dsuhahusdsuha";
+            var data = DateTime.Today.AddYears(-120);
+            var ganho = new Ganho { Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = data };
+            var ganhoRequest = new CadastrarGanhoViewModel.Request { IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = data };
+            _ganhoRepository.CadastrarGanho(Arg.Any<Ganho>()).Returns(ganho);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<DataGanhoException>(() => /*Act*/ services.CadastrarGanho(ganhoRequest));
         }
 
         [Fact]
@@ -315,15 +352,49 @@ namespace NFinance.Tests.Service
             var idCliente = Guid.NewGuid();
             var valor = 0;
             var nomeGanho = "dsuhahusdsuha";
-            var ganho = new Ganho
-                {Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
-            var ganhoRequest = new AtualizarGanhoViewModel.Request
-                { IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
+            var ganho = new Ganho {Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
+            var ganhoRequest = new AtualizarGanhoViewModel.Request { IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
             _ganhoRepository.AtualizarGanho(Arg.Any<Guid>(), Arg.Any<Ganho>()).Returns(ganho);
             var services = InicializaServico();
 
             //Assert
             await Assert.ThrowsAsync<ValorGanhoException>(() => /*Act*/ services.AtualizarGanho(id, ganhoRequest));
+        }
+
+        [Fact]
+        public async Task GanhoService_AtualizarGanho_ComDataAplicacao_Invalido_Maior_Permitido()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var idCliente = Guid.NewGuid();
+            var valor = 293128.123M;
+            var data = DateTime.Today.AddYears(120);
+            var nomeGanho = "dsuhahusdsuha";
+            var ganho = new Ganho { Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = data };
+            var ganhoRequest = new AtualizarGanhoViewModel.Request { IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true };
+            _ganhoRepository.AtualizarGanho(Arg.Any<Guid>(), Arg.Any<Ganho>()).Returns(ganho);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<DataGanhoException>(() => /*Act*/ services.AtualizarGanho(id,ganhoRequest));
+        }
+
+        [Fact]
+        public async Task GanhoService_AtualizarGanho_ComDataAplicacao_Invalido_Menor_Permitido()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var idCliente = Guid.NewGuid();
+            var valor = 293128.123M;
+            var nomeGanho = "dsuhahusdsuha";
+            var data = DateTime.Today.AddYears(-120);
+            var ganho = new Ganho { Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = data };
+            var ganhoRequest = new AtualizarGanhoViewModel.Request { IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = data };
+            _ganhoRepository.AtualizarGanho(Arg.Any<Guid>(), Arg.Any<Ganho>()).Returns(ganho);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<DataGanhoException>(() => /*Act*/ services.AtualizarGanho(id,ganhoRequest));
         }
 
         [Fact]

@@ -14,6 +14,8 @@ namespace NFinance.Domain.ViewModel.GanhoViewModel
 
         public bool Recorrente { get; set; }
 
+        public DateTime DataDoGanho { get; set; }
+
         public GanhoViewModel() { }
 
         public GanhoViewModel(Ganho ganho)
@@ -23,6 +25,7 @@ namespace NFinance.Domain.ViewModel.GanhoViewModel
             NomeGanho = ganho.NomeGanho;
             Valor = ganho.Valor;
             Recorrente = ganho.Recorrente;
+            DataDoGanho = ganho.DataDoGanho;
         }
     }
 }
