@@ -21,6 +21,7 @@ namespace NFinance.Domain.Services
             if (string.IsNullOrWhiteSpace(clienteRequest.Nome)) throw new NomeClienteException();
             if (string.IsNullOrWhiteSpace(clienteRequest.Cpf)) throw new CpfClienteException();
             if (string.IsNullOrWhiteSpace(clienteRequest.Email)) throw new EmailClienteException();
+            if (string.IsNullOrWhiteSpace(clienteRequest.Senha)) throw new SenhaClienteException();
 
             var cliente = new Cliente(id, clienteRequest);
             var atualizado = await _clienteRepository.AtualizarCliente(id, cliente);
@@ -33,6 +34,7 @@ namespace NFinance.Domain.Services
             if (string.IsNullOrWhiteSpace(clienteRequest.Nome)) throw new NomeClienteException();
             if (string.IsNullOrWhiteSpace(clienteRequest.Cpf)) throw new CpfClienteException();
             if (string.IsNullOrWhiteSpace(clienteRequest.Email)) throw new EmailClienteException();
+            if (string.IsNullOrWhiteSpace(clienteRequest.Senha)) throw new SenhaClienteException();
 
             var cliente = new Cliente(clienteRequest);
             var novoCliente = await _clienteRepository.CadastrarCliente(cliente);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
@@ -23,6 +24,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Resgates/Listar")]
+        [Authorize]
         [ProducesResponseType(typeof(ListarResgatesViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarResgates()
@@ -41,6 +43,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Resgate/Consultar/{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarResgate(Guid id)
@@ -59,6 +62,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Resgates/Consultar/{idCliente}")]
+        [Authorize]
         [ProducesResponseType(typeof(ConsultarResgatesViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarResgates(Guid idCliente)
@@ -77,6 +81,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Resgate/Resgatar")]
+        [Authorize]
         [ProducesResponseType(typeof(RealizarResgateViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> RealizarResgate([FromBody] RealizarResgateViewModel.Request resgateRequest)

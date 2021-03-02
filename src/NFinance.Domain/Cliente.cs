@@ -22,6 +22,10 @@ namespace NFinance.Domain
         [StringLength(120,MinimumLength = 15)]
         public string Email { get; set; }
 
+        [Required]
+        [StringLength(120, MinimumLength = 10)]
+        public string Senha { get; set; }
+
         public Cliente() { }
 
         public Cliente(CadastrarClienteViewModel.Request clienteRequest)
@@ -30,6 +34,7 @@ namespace NFinance.Domain
             Nome = clienteRequest.Nome;
             CPF = clienteRequest.Cpf;
             Email = clienteRequest.Email;
+            Senha = clienteRequest.Senha;
         }
 
         public Cliente(Guid id,AtualizarClienteViewModel.Request request)
@@ -38,6 +43,7 @@ namespace NFinance.Domain
             Nome = request.Nome;
             CPF = request.Cpf;
             Email = request.Email;
+            Senha = request.Senha;
         }
     }
 }

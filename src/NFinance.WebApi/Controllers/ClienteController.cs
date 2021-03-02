@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain.Interfaces.Services;
@@ -25,6 +26,7 @@ namespace NFinance.WebApi.Controllers
         [HttpGet("/api/Clientes/Listar")]
         [ProducesResponseType(typeof(ListarClientesViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ListarClientes()
         {
             try
@@ -43,6 +45,7 @@ namespace NFinance.WebApi.Controllers
         [HttpGet("/api/Cliente/Consultar/{id}")]
         [ProducesResponseType(typeof(ConsultarClienteViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ConsultarCliente(Guid id)
         {
             try
@@ -61,6 +64,7 @@ namespace NFinance.WebApi.Controllers
         [HttpPost("/api/Cliente/Cadastrar")]
         [ProducesResponseType(typeof(CadastrarClienteViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [AllowAnonymous]
         public async Task<IActionResult> CadastrarCliente([FromBody] CadastrarClienteViewModel.Request request)
         {
             try
@@ -79,6 +83,7 @@ namespace NFinance.WebApi.Controllers
         [HttpPut("/api/Clientes/Atualizar/{id}")]
         [ProducesResponseType(typeof(AtualizarClienteViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> AtualizarCliente(Guid id, [FromBody] AtualizarClienteViewModel.Request request)
         {
             try

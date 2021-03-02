@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NFinance.Domain.Interfaces;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Services;
 
@@ -22,6 +24,7 @@ namespace NFinance.Domain
             services.AddTransient<IGanhoService, GanhoService>();
             services.AddTransient<IResgateService, ResgateService>();
             services.AddTransient<IInvestimentosService, InvestimentosService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }

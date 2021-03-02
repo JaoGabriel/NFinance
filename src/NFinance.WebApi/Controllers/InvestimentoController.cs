@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain.Interfaces.Services;
@@ -23,6 +24,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Investimentos/Listar")]
+        [Authorize]
         [ProducesResponseType(typeof(ListarInvestimentosViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarInvestimentos()
@@ -41,6 +43,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Investimento/Consultar/{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(ConsultarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarInvestimento(Guid id)
@@ -59,6 +62,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Investimentos/Consultar/{idCliente}")]
+        [Authorize]
         [ProducesResponseType(typeof(ConsultarInvestimentosViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarInvestimentos(Guid idCliente)
@@ -77,6 +81,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Investimento/Investir")]
+        [Authorize]
         [ProducesResponseType(typeof(RealizarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> RealizarInvestimento(
@@ -96,6 +101,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPut("/api/Investimento/Atualizar/{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(AtualizarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> AtualizarInvestimento(Guid id,

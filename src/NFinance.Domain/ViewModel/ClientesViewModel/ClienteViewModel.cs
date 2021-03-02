@@ -12,6 +12,8 @@ namespace NFinance.Domain.ViewModel.ClientesViewModel
         
         public string Email { get; set; }
 
+        public string Senha { get; set; }
+
         public ClienteViewModel() { }
 
         public ClienteViewModel(Cliente cliente)
@@ -20,16 +22,28 @@ namespace NFinance.Domain.ViewModel.ClientesViewModel
             Nome = cliente.Nome;
             Cpf = cliente.CPF;
             Email = cliente.Email;
+            Senha = cliente.Senha;
         }
 
         public class Response
         {
             public Guid Id { get; set; }
+
             public string Nome { get; set; }
             
             public string Cpf { get; set; }
         
             public string Email { get; set; }
+
+            public Response() { }
+
+            public Response(Cliente cliente)
+            {
+                Id = cliente.Id;
+                Nome = cliente.Nome;
+                Cpf = cliente.CPF;
+                Email = cliente.Email;
+            }
         }
     }
 }

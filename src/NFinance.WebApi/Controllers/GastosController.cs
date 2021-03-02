@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain.Interfaces.Services;
@@ -22,6 +23,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Gastos/Listar")]
+        [Authorize]
         [ProducesResponseType(typeof(ListarGastosViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ListarGastos()
@@ -40,6 +42,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Gasto/Consultar/{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(ConsultarGastoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarGasto(Guid id)
@@ -58,6 +61,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpGet("/api/Gastos/Consultar/{idCliente}")]
+        [Authorize]
         [ProducesResponseType(typeof(ConsultarGastosViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ConsultarGastos(Guid idCliente)
@@ -76,6 +80,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPost("/api/Gasto/Cadastar")]
+        [Authorize]
         [ProducesResponseType(typeof(CadastrarGastoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CadastrarGasto([FromBody] CadastrarGastoViewModel.Request gastosRequest)
@@ -94,6 +99,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPut("/api/Gasto/Atualizar/{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(AtualizarGastoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> AtualizarGasto(Guid id,
@@ -113,6 +119,7 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpDelete("/api/Gasto/Excluir")]
+        [Authorize]
         [ProducesResponseType(typeof(ExcluirGastoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ExcluirGasto([FromBody] ExcluirGastoViewModel.Request request)

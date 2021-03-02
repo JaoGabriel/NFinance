@@ -9,8 +9,10 @@
             public string Cpf { get; set; }
             
             public string Email { get; set; }
+
+            public string Senha { get; set; }
         }
 
-        public class Response : ClienteViewModel { };
+        public class Response : ClienteViewModel.Response { };
     }
 }

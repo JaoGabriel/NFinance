@@ -35,7 +35,7 @@ namespace NFinance.Tests.Service
             var cpf = "123.654.987-96";
             var email = "teste@teste.com";
             var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome, Cpf = cpf,Email = email};
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = nome, CPF = cpf,Email = email });
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = nome, CPF = cpf,Email = email});
             var services = InicializaServico();
 
             //Act
