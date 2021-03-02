@@ -61,7 +61,7 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPut("/api/Clientes/Atualizar/{id}")]
+        [HttpPut("/api/Cliente/Atualizar/{id}")]
         [ProducesResponseType(typeof(AtualizarClienteViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         [Authorize]
