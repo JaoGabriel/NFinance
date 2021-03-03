@@ -7,7 +7,7 @@ namespace NFinance.Model.InvestimentosViewModel
     {
         public class Response : List<InvestimentoViewModel.Response>
         {
-            public Response(List<Investimentos> investimentos)
+            public Response(List<Investimento> investimentos)
             {
                 foreach (var item in investimentos)
                 {

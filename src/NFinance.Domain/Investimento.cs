@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NFinance.Domain
 {
-    public class Investimentos
+    public class Investimento
     {
         [Key]
         [Required]
@@ -27,9 +27,9 @@ namespace NFinance.Domain
         [Range(typeof(DateTime),"01/01/1950","12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataAplicacao { get; set; }
 
-        public Investimentos() { }
+        public Investimento() { }
 
-        public Investimentos(Investimentos investimentos)
+        public Investimento(Investimento investimentos)
         {
             Id = Guid.NewGuid();
             IdCliente = investimentos.IdCliente;
@@ -38,7 +38,7 @@ namespace NFinance.Domain
             DataAplicacao = investimentos.DataAplicacao;
         }
 
-        public Investimentos(RealizarInvestimentoViewModel.Request request)
+        public Investimento(RealizarInvestimentoViewModel.Request request)
         {
             Id = Guid.NewGuid();
             IdCliente = request.IdCliente;
@@ -47,7 +47,7 @@ namespace NFinance.Domain
             DataAplicacao = request.DataAplicacao;
         }
 
-        public Investimentos(Guid id, AtualizarInvestimentoViewModel.Request request)
+        public Investimento(Guid id, AtualizarInvestimentoViewModel.Request request)
         {
             Id = id;
             IdCliente = request.IdCliente;

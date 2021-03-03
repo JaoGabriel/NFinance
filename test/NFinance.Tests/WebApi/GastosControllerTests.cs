@@ -15,11 +15,11 @@ namespace NFinance.Tests.WebApi
 {
     public class GastosControllerTests
     {
-        private readonly IGastosService _gastosService;
+        private readonly IGastoService _gastosService;
         private readonly ILogger<GastosController> _logger;
         public GastosControllerTests()
         {
-            _gastosService = Substitute.For<IGastosService>();
+            _gastosService = Substitute.For<IGastoService>();
             _logger = Substitute.For<ILogger<GastosController>>();
         }
 
@@ -47,7 +47,7 @@ namespace NFinance.Tests.WebApi
                     NomeGasto = nomeGasto,
                     QuantidadeParcelas = parcelas,
                     DataDoGasto = dataGasto,
-                    ValorTotal = valorTotal,
+                    Valor = valorTotal,
                     Cliente = cliente
                 });
             var controller = InicializarGastosController();
@@ -56,7 +56,7 @@ namespace NFinance.Tests.WebApi
                 NomeGasto = nomeGasto,
                 QuantidadeParcelas = parcelas,
                 DataDoGasto = dataGasto,
-                ValorTotal = valorTotal,
+                Valor = valorTotal,
                 IdCliente = idCliente
             };
 
@@ -72,7 +72,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(nomeGasto, cadastrarGastoViewModel.NomeGasto);
             Assert.Equal(parcelas, cadastrarGastoViewModel.QuantidadeParcelas);
             Assert.Equal(dataGasto, cadastrarGastoViewModel.DataDoGasto);
-            Assert.Equal(valorTotal, cadastrarGastoViewModel.ValorTotal);
+            Assert.Equal(valorTotal, cadastrarGastoViewModel.Valor);
             Assert.Equal(idCliente, cadastrarGastoViewModel.Cliente.Id);
             Assert.Equal(nomeCliente, cadastrarGastoViewModel.Cliente.Nome);
         }
@@ -96,7 +96,7 @@ namespace NFinance.Tests.WebApi
                     NomeGasto = nomeGasto,
                     QuantidadeParcelas = parcelas,
                     DataDoGasto = dataGasto,
-                    ValorTotal = valorTotal,
+                    Valor = valorTotal,
                     Cliente = cliente
                 });
             var controller = InicializarGastosController();
@@ -105,7 +105,7 @@ namespace NFinance.Tests.WebApi
                 NomeGasto = nomeGasto,
                 QuantidadeParcelas = parcelas,
                 DataDoGasto = dataGasto,
-                ValorTotal = valorTotal,
+                Valor = valorTotal,
                 IdCliente = idCliente
             };
 
@@ -121,7 +121,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(nomeGasto, atualizarGastoViewModel.NomeGasto);
             Assert.Equal(parcelas, atualizarGastoViewModel.QuantidadeParcelas);
             Assert.Equal(dataGasto, atualizarGastoViewModel.DataDoGasto);
-            Assert.Equal(valorTotal, atualizarGastoViewModel.ValorTotal);
+            Assert.Equal(valorTotal, atualizarGastoViewModel.Valor);
             Assert.Equal(idCliente, atualizarGastoViewModel.Cliente.Id);
             Assert.Equal(nomeCliente, atualizarGastoViewModel.Cliente.Nome);
         }
@@ -145,7 +145,7 @@ namespace NFinance.Tests.WebApi
                     NomeGasto = nomeGasto,
                     QuantidadeParcelas = parcelas,
                     DataDoGasto = dataGasto,
-                    ValorTotal = valorTotal,
+                    Valor = valorTotal,
                     Cliente = cliente
                 });
             var controller = InicializarGastosController();
@@ -162,7 +162,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(nomeGasto, consultarGastoViewModel.NomeGasto);
             Assert.Equal(parcelas, consultarGastoViewModel.QuantidadeParcelas);
             Assert.Equal(dataGasto, consultarGastoViewModel.DataDoGasto);
-            Assert.Equal(valorTotal, consultarGastoViewModel.ValorTotal);
+            Assert.Equal(valorTotal, consultarGastoViewModel.Valor);
             Assert.Equal(idCliente, consultarGastoViewModel.Cliente.Id);
             Assert.Equal(nomeCliente, consultarGastoViewModel.Cliente.Nome);
         }
@@ -212,22 +212,22 @@ namespace NFinance.Tests.WebApi
             var nomeGasto = "uasduhasha";
             var valor = 1238.12M;
             var dataGasto = DateTime.Today;
-            var listaGasto = new List<Gastos>();
-            var gasto = new Gastos
+            var listaGasto = new List<Gasto>();
+            var gasto = new Gasto
             {
                 Id = id,
                 IdCliente = idCliente,
                 NomeGasto = nomeGasto,
-                ValorTotal = valor,
+                Valor = valor,
                 QuantidadeParcelas = 5,
                 DataDoGasto = dataGasto
             };
-            var gasto1 = new Gastos
+            var gasto1 = new Gasto
             {
                 Id = id1,
                 IdCliente = idCliente,
                 NomeGasto = nomeGasto,
-                ValorTotal = valor,
+                Valor = valor,
                 QuantidadeParcelas = 5,
                 DataDoGasto = dataGasto
             };
@@ -250,7 +250,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(id, gastoTest.Id);
             Assert.Equal(idCliente, gastoTest.IdCliente);
             Assert.Equal(nomeGasto, gastoTest.NomeGasto);
-            Assert.Equal(valor, gastoTest.ValorTotal);
+            Assert.Equal(valor, gastoTest.Valor);
             Assert.Equal(5, gastoTest.QuantidadeParcelas);
             Assert.Equal(dataGasto, gastoTest.DataDoGasto);
             //verificar o gasto1
@@ -258,7 +258,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(id1, gastoTest1.Id);
             Assert.Equal(idCliente, gastoTest1.IdCliente);
             Assert.Equal(nomeGasto, gastoTest1.NomeGasto);
-            Assert.Equal(valor, gastoTest1.ValorTotal);
+            Assert.Equal(valor, gastoTest1.Valor);
             Assert.Equal(5, gastoTest1.QuantidadeParcelas);
             Assert.Equal(dataGasto, gastoTest1.DataDoGasto);
         }

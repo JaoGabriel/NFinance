@@ -19,12 +19,12 @@ namespace NFinance.Tests.Service
     public class ResgateServiceTests
     {
         private readonly IResgateRepository _resgateRepository;
-        private readonly IInvestimentosService _investimentosService;
+        private readonly IInvestimentoService _investimentosService;
 
         public ResgateServiceTests()
         {
             _resgateRepository = Substitute.For<IResgateRepository>();
-            _investimentosService = Substitute.For<IInvestimentosService>();
+            _investimentosService = Substitute.For<IInvestimentoService>();
         }
 
         public ResgateService InicializaServico()

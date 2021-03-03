@@ -13,11 +13,11 @@ namespace NFinance.WebApi.Controllers
     [Route("[controller]")]
     public class InvestimentoController : ControllerBase
     {
-        private readonly IInvestimentosService _investimentosService;
+        private readonly IInvestimentoService _investimentosService;
         private readonly ILogger<InvestimentoController> _logger;
 
         public InvestimentoController(ILogger<InvestimentoController> logger,
-            IInvestimentosService investimentosService)
+            IInvestimentoService investimentosService)
         {
             _logger = logger;
             _investimentosService = investimentosService;

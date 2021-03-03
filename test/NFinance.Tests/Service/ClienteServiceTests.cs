@@ -5,7 +5,6 @@ using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Services;
 using NSubstitute;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;

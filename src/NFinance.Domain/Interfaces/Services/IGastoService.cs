@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NFinance.Domain.Interfaces.Services
 {
-    public interface IGastosService
+    public interface IGastoService
     {
         Task<CadastrarGastoViewModel.Response> CadastrarGasto(CadastrarGastoViewModel.Request request);
         Task<AtualizarGastoViewModel.Response> AtualizarGasto(Guid id, AtualizarGastoViewModel.Request request);

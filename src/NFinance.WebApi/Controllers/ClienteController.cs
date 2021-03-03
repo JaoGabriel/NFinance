@@ -38,7 +38,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex,"Falha ao consultar cliente");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -57,7 +57,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex,"Falha ao cadastrar cliente");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -76,7 +76,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex,"Falha ao atualizar cliente");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
     }

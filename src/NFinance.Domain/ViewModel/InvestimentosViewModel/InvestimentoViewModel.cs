@@ -32,7 +32,7 @@ namespace NFinance.Model.InvestimentosViewModel
 
             public Response() { }
 
-            public Response(Investimentos investimentos)
+            public Response(Investimento investimentos)
             {
                 Id = investimentos.Id;
                 IdCliente =  investimentos.IdCliente;

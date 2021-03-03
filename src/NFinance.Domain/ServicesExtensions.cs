@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NFinance.Domain.Interfaces;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Services;
 
@@ -20,10 +19,11 @@ namespace NFinance.Domain
         private static void RegisterServices(this IServiceCollection services)
         {
             services.AddTransient<IClienteService, ClienteService>();
-            services.AddTransient<IGastosService, GastosService>();
+            services.AddTransient<IGastoService, GastoService>();
             services.AddTransient<IGanhoService, GanhoService>();
             services.AddTransient<IResgateService, ResgateService>();
-            services.AddTransient<IInvestimentosService, InvestimentosService>();
+            services.AddTransient<IInvestimentoService, InvestimentoService>();
+            services.AddTransient<ITelaInicialService, TelaInicialService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }

@@ -37,7 +37,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex, "Falha ao consultar ganho");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -56,7 +56,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex, "Falha ao consultar");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -75,7 +75,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex, "Falha ao cadastrar ganho");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -94,7 +94,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex, "Falha ao atualizar ganho");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -113,7 +113,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex, "Falha ao excluir ganho");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
     }

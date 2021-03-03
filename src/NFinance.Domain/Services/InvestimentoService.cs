@@ -9,12 +9,12 @@ using NFinance.Domain.ViewModel.ClientesViewModel;
 
 namespace NFinance.Domain.Services
 {
-    public class InvestimentosService : IInvestimentosService
+    public class InvestimentoService : IInvestimentoService
     {
-        private readonly IInvestimentosRepository _investimentosRepository;
+        private readonly IInvestimentoRepository _investimentosRepository;
         private readonly IClienteService _clienteService;
 
-        public InvestimentosService(IInvestimentosRepository investimentosRepository, IClienteService clienteService)
+        public InvestimentoService(IInvestimentoRepository investimentosRepository, IClienteService clienteService)
         {
             _investimentosRepository = investimentosRepository;
             _clienteService = clienteService;
@@ -28,7 +28,7 @@ namespace NFinance.Domain.Services
             if (request.Valor <= 0) throw new ValorInvestimentoException("Valor nao pode ser menor que zero");
             if (request.DataAplicacao > DateTime.MaxValue.AddYears(-7899) || request.DataAplicacao < DateTime.MinValue.AddYears(1949)) throw new DataInvestimentoException();
 
-            var investimento = new Investimentos(id,request);
+            var investimento = new Investimento(id,request);
             var cliente = await _clienteService.ConsultarCliente(request.IdCliente);
             var atualizado = await _investimentosRepository.AtualizarInvestimento(id, investimento);
             var response = new AtualizarInvestimentoViewModel.Response() {Id = atualizado.Id, NomeInvestimento = atualizado.NomeInvestimento, Valor = atualizado.Valor, DataAplicacao = atualizado.DataAplicacao, Cliente = new ClienteViewModel.Response() {Id = cliente.Id, Nome = cliente.Nome } };
@@ -61,7 +61,7 @@ namespace NFinance.Domain.Services
             if (request.Valor <= 0) throw new ValorInvestimentoException("Valor nao pode ser menor que zero");
             if (request.DataAplicacao > DateTime.MaxValue.AddYears(-7899) || request.DataAplicacao < DateTime.MinValue.AddYears(1949)) throw new DataInvestimentoException();
 
-            var investimento = new Investimentos(request);
+            var investimento = new Investimento(request);
             var cliente = await _clienteService.ConsultarCliente(request.IdCliente);
             var investido = await _investimentosRepository.RealizarInvestimento(investimento);
             var response = new RealizarInvestimentoViewModel.Response() { Id = investido.Id, NomeInvestimento = investido.NomeInvestimento, Valor = investido.Valor, DataAplicacao = investido.DataAplicacao, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome } };

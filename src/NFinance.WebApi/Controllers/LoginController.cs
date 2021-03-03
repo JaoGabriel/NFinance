@@ -42,7 +42,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex, "Falha ao efetuar login!");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
     }

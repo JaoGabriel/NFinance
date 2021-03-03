@@ -2,6 +2,6 @@
 {
     public class ConsultarClienteViewModel
     {
-        public class Response : ClienteViewModel { }
+        public class Response : ClienteViewModel.Response { }
     }
 }

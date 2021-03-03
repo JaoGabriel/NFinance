@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace NFinance.Infra.Repository
 {
-    public class GastosRepository : IGastosRepository
+    public class GastoRepository : IGastoRepository
     {
         private readonly BaseDadosContext _context;
         public IUnitOfWork UnitOfWork => _context;
 
-        public GastosRepository(BaseDadosContext context)
+        public GastoRepository(BaseDadosContext context)
         {
             _context = context;
         }
@@ -23,31 +23,31 @@ namespace NFinance.Infra.Repository
         }
 
 
-        public async Task<Gastos> AtualizarGasto(Guid id, Gastos gastos)
+        public async Task<Gasto> AtualizarGasto(Guid id, Gasto gastos)
         {
-            var gastoAtualizar = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
+            var gastoAtualizar = await _context.Gasto.FirstOrDefaultAsync(i => i.Id == id);
             _context.Entry(gastoAtualizar).CurrentValues.SetValues(gastos);
             await UnitOfWork.Commit();
             return gastos;
         }
 
-        public async Task<Gastos> CadastrarGasto(Gastos gastos)
+        public async Task<Gasto> CadastrarGasto(Gasto gastos)
         {
-            await _context.Gastos.AddAsync(gastos);
+            await _context.Gasto.AddAsync(gastos);
             await UnitOfWork.Commit();
             return gastos;
         }
 
-        public async Task<Gastos> ConsultarGasto(Guid id)
+        public async Task<Gasto> ConsultarGasto(Guid id)
         {
-            var gasto = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
+            var gasto = await _context.Gasto.FirstOrDefaultAsync(i => i.Id == id);
             return gasto;
         }
 
-        public async Task<List<Gastos>> ConsultarGastos(Guid idCliente)
+        public async Task<List<Gasto>> ConsultarGastos(Guid idCliente)
         {
-            var gastos = await _context.Gastos.ToListAsync();
-            var listResponse = new List<Gastos>();
+            var gastos = await _context.Gasto.ToListAsync();
+            var listResponse = new List<Gasto>();
 
             foreach (var gasto in gastos)
                 if (gasto.IdCliente.Equals(idCliente))
@@ -58,8 +58,8 @@ namespace NFinance.Infra.Repository
 
         public async Task<bool> ExcluirGasto(Guid id)
         {
-            var gasto = await _context.Gastos.FirstOrDefaultAsync(i => i.Id == id);
-            _context.Gastos.Remove(gasto);
+            var gasto = await _context.Gasto.FirstOrDefaultAsync(i => i.Id == id);
+            _context.Gasto.Remove(gasto);
             await UnitOfWork.Commit();
             return true;
         }

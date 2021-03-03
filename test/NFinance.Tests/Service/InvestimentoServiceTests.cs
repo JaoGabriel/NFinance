@@ -17,18 +17,18 @@ namespace NFinance.Tests.Service
 {
     public class InvestimentoServiceTests
     {
-        private readonly IInvestimentosRepository _investimentosRepository;
+        private readonly IInvestimentoRepository _investimentosRepository;
         private readonly IClienteService _clienteService;
 
         public InvestimentoServiceTests()
         {
             _clienteService = Substitute.For<IClienteService>();
-            _investimentosRepository = Substitute.For<IInvestimentosRepository>();
+            _investimentosRepository = Substitute.For<IInvestimentoRepository>();
         }
 
-        public InvestimentosService InicializaServico()
+        public InvestimentoService InicializaServico()
         {
-            return new InvestimentosService(_investimentosRepository, _clienteService);
+            return new InvestimentoService(_investimentosRepository, _clienteService);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new RealizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -76,7 +76,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(),Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(),Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -110,7 +110,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new RealizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -129,7 +129,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new RealizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -148,7 +148,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new RealizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -166,7 +166,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new RealizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = null, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = null, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = null, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -185,7 +185,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 0;
             var data = DateTime.Today;
             var investimentoRequest = new RealizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -204,7 +204,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 1548421.18454M;
             var data = DateTime.Today.AddYears(120);
             var investimentoRequest = new RealizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -223,7 +223,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 1548421.18454M;
             var data = DateTime.Today.AddYears(-120);
             var investimentoRequest = new RealizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -244,7 +244,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -263,7 +263,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -281,7 +281,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = null, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = null, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = null, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -300,7 +300,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -319,7 +319,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -338,7 +338,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 0;
             var data = DateTime.Today;
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -357,7 +357,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 12354561.2131M;
             var data = DateTime.Today.AddYears(-110);
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -376,7 +376,7 @@ namespace NFinance.Tests.Service
             decimal valorInvestido = 12354561.2131M;
             var data = DateTime.Today.AddYears(110);
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request() { IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data };
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimentos>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.AtualizarInvestimento(Arg.Any<Guid>(), Arg.Any<Investimento>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -394,7 +394,7 @@ namespace NFinance.Tests.Service
             var nomeCliente = "Jorge Nunes";
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
-            _investimentosRepository.ConsultarInvestimento(Arg.Any<Guid>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.ConsultarInvestimento(Arg.Any<Guid>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -427,7 +427,7 @@ namespace NFinance.Tests.Service
             var nomeCliente = "Jorge Nunes";
             decimal valorInvestido = 553484.215M;
             var data = DateTime.Today;
-            _investimentosRepository.ConsultarInvestimento(Arg.Any<Guid>()).Returns(new Investimentos() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
+            _investimentosRepository.ConsultarInvestimento(Arg.Any<Guid>()).Returns(new Investimento() { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestido, DataAplicacao = data });
             _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
@@ -447,11 +447,11 @@ namespace NFinance.Tests.Service
             var valor = 120245.21M;
             var nomeInvestimento = "TEsteee";
             var dataAplicacao = DateTime.Today;
-            var investimento = new Investimentos { Id = id, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
-            var investimento1 = new Investimentos { Id = id1, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
-            var investimento2 = new Investimentos { Id = id2, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
-            var investimento3 = new Investimentos { Id = id3, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
-            var listInvestimentos = new List<Investimentos> { investimento, investimento1, investimento2, investimento3 };
+            var investimento = new Investimento { Id = id, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento1 = new Investimento { Id = id1, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento2 = new Investimento { Id = id2, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento3 = new Investimento { Id = id3, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var listInvestimentos = new List<Investimento> { investimento, investimento1, investimento2, investimento3 };
             _investimentosRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimentos);
             var services = InicializaServico();
 
@@ -512,11 +512,11 @@ namespace NFinance.Tests.Service
             var valor = 120245.21M;
             var nomeInvestimento = "TEsteee";
             var dataAplicacao = DateTime.Today;
-            var investimento = new Investimentos { Id = id, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
-            var investimento1 = new Investimentos { Id = id1, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
-            var investimento2 = new Investimentos { Id = id2, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
-            var investimento3 = new Investimentos { Id = id3, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
-            var listInvestimentos = new List<Investimentos> { investimento, investimento1, investimento2, investimento3 };
+            var investimento = new Investimento { Id = id, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento1 = new Investimento { Id = id1, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento2 = new Investimento { Id = id2, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var investimento3 = new Investimento { Id = id3, IdCliente = idCliente, Valor = valor, NomeInvestimento = nomeInvestimento, DataAplicacao = dataAplicacao };
+            var listInvestimentos = new List<Investimento> { investimento, investimento1, investimento2, investimento3 };
             _investimentosRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimentos);
             var services = InicializaServico();
 

@@ -12,7 +12,7 @@ namespace NFinance.Model.GastosViewModel
         
         public string NomeGasto { get; set; }
 
-        public decimal ValorTotal { get; set; }
+        public decimal Valor { get; set; }
         
         public int QuantidadeParcelas { get; set; }
         
@@ -20,11 +20,11 @@ namespace NFinance.Model.GastosViewModel
 
         public GastoViewModel() { }
 
-        public GastoViewModel(Gastos gastos)
+        public GastoViewModel(Gasto gastos)
         {
             Id = gastos.Id;
             NomeGasto = gastos.NomeGasto;
-            ValorTotal = gastos.ValorTotal;
+            Valor = gastos.Valor;
             QuantidadeParcelas = gastos.QuantidadeParcelas;
             DataDoGasto = gastos.DataDoGasto;
             Cliente.Id = gastos.IdCliente;
@@ -38,7 +38,7 @@ namespace NFinance.Model.GastosViewModel
 
             public string NomeGasto { get; set; }
 
-            public decimal ValorTotal { get; set; }
+            public decimal Valor { get; set; }
 
             public int QuantidadeParcelas { get; set; }
 
@@ -46,11 +46,11 @@ namespace NFinance.Model.GastosViewModel
 
             public Response() { }
 
-            public Response(Gastos gastos)
+            public Response(Gasto gastos)
             {
                 Id = gastos.Id;
                 NomeGasto = gastos.NomeGasto;
-                ValorTotal = gastos.ValorTotal;
+                Valor = gastos.Valor;
                 QuantidadeParcelas = gastos.QuantidadeParcelas;
                 DataDoGasto = gastos.DataDoGasto;
                 IdCliente = gastos.IdCliente;

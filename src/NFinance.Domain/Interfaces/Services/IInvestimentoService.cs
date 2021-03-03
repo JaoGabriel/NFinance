@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NFinance.Domain.Interfaces.Services
 {
-    public interface IInvestimentosService
+    public interface IInvestimentoService
     {
         Task<RealizarInvestimentoViewModel.Response> RealizarInvestimento(RealizarInvestimentoViewModel.Request request);
         Task<ConsultarInvestimentoViewModel.Response> ConsultarInvestimento(Guid id);

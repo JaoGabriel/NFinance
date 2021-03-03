@@ -10,7 +10,7 @@ namespace NFinance.Model.GastosViewModel
         
             public string NomeGasto { get; set; }
 
-            public decimal ValorTotal { get; set; }
+            public decimal Valor { get; set; }
         
             public int QuantidadeParcelas { get; set; }
         

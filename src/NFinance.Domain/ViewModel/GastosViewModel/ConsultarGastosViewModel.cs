@@ -7,7 +7,7 @@ namespace NFinance.Model.GastosViewModel
     {
         public class Response : List<GastoViewModel.Response>
         {
-            public Response(List<Gastos> gastos)
+            public Response(List<Gasto> gastos)
             {
                 foreach (var item in gastos)
                 {

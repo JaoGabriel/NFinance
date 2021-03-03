@@ -17,9 +17,9 @@ namespace NFinance.Infra
 
             services.AddTransient<IClienteRepository, ClienteRepository>();
             services.AddTransient<IGanhoRepository, GanhoRepository>();
-            services.AddTransient<IInvestimentosRepository, InvestimentosRepository>();
+            services.AddTransient<IInvestimentoRepository, InvestimentoRepository>();
             services.AddTransient<IResgateRepository, ResgateRepository>();
-            services.AddTransient<IGastosRepository, GastosRepository>();
+            services.AddTransient<IGastoRepository, GastoRepository>();
             services.AddScoped<BaseDadosContext, BaseDadosContext>();
         }
     }

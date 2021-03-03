@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NFinance.Domain.Exceptions;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Model.GastosViewModel;
 
@@ -13,10 +15,10 @@ namespace NFinance.WebApi.Controllers
     [Route("[controller]")]
     public class GastosController : ControllerBase
     {
-        private readonly IGastosService _gastosService;
+        private readonly IGastoService _gastosService;
         private readonly ILogger<GastosController> _logger;
 
-        public GastosController(ILogger<GastosController> logger, IGastosService gastosService)
+        public GastosController(ILogger<GastosController> logger, IGastoService gastosService)
         {
             _logger = logger;
             _gastosService = gastosService;
@@ -37,7 +39,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex,"Falha ao consultar gasto");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -56,7 +58,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex, "Falha ao consultar");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -74,8 +76,8 @@ namespace NFinance.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex,"Falha ao cadastrar gasto");
-                return BadRequest(ex);
+                _logger.LogInformation(ex, "Falha ao cadastrar gasto");
+                return BadRequest(ex.Message);
             }
         }
 
@@ -83,8 +85,7 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(AtualizarGastoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> AtualizarGasto(Guid id,
-            [FromBody] AtualizarGastoViewModel.Request gastosRequest)
+        public async Task<IActionResult> AtualizarGasto(Guid id, [FromBody] AtualizarGastoViewModel.Request gastosRequest)
         {
             try
             {
@@ -95,7 +96,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex,"Falha ao atualizar gasto");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -114,7 +115,7 @@ namespace NFinance.WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex,"Falha ao atualizar gasto");
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
     }

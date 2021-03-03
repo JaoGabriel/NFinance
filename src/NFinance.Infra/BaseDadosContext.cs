@@ -11,10 +11,10 @@ namespace NFinance.Infra
         public BaseDadosContext(DbContextOptions<BaseDadosContext> options) : base(options){}
 
         public DbSet<Cliente> Cliente { get; set; }
-        public DbSet<Gastos> Gastos { get; set; }
-        public DbSet<Investimentos> Investimentos { get; set; }
+        public DbSet<Gasto> Gasto { get; set; }
+        public DbSet<Investimento> Investimento { get; set; }
         public DbSet<Resgate> Resgate { get; set; }
-        public DbSet<Ganho> Ganhos { get; set; }
+        public DbSet<Ganho> Ganho { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

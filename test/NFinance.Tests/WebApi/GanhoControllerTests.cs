@@ -25,7 +25,7 @@ namespace NFinance.Tests.WebApi
 
         private GanhoController InicializarGanhoController()
         {
-            return new(_logger, _ganhoService);
+            return new GanhoController(_logger, _ganhoService);
         }
 
         [Fact]

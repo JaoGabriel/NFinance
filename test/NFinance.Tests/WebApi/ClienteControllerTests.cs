@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.WebApi.Controllers;
 using NSubstitute;
 using System;
-using System.Collections.Generic;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
 

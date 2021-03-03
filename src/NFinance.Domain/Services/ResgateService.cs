@@ -11,9 +11,9 @@ namespace NFinance.Domain.Services
     public class ResgateService : IResgateService
     {
         private readonly IResgateRepository _resgateRepository;
-        private readonly IInvestimentosService _investimentosService;
+        private readonly IInvestimentoService _investimentosService;
 
-        public ResgateService(IResgateRepository resgateRepository, IInvestimentosService investimentosService)
+        public ResgateService(IResgateRepository resgateRepository, IInvestimentoService investimentosService)
         {
             _resgateRepository = resgateRepository;
             _investimentosService = investimentosService;

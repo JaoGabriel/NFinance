@@ -15,11 +15,11 @@ namespace NFinance.Tests.WebApi
 {
     public class InvestimentosControllerTests
     {
-        private readonly IInvestimentosService _investimentoService;
+        private readonly IInvestimentoService _investimentoService;
         private readonly ILogger<InvestimentoController> _logger;
         public InvestimentosControllerTests()
         {
-            _investimentoService = Substitute.For<IInvestimentosService>();
+            _investimentoService = Substitute.For<IInvestimentoService>();
             _logger = Substitute.For<ILogger<InvestimentoController>>();
         }
 
@@ -166,8 +166,8 @@ namespace NFinance.Tests.WebApi
             var nomeInvestimento = "uasduhasha";
             var valor = 1238.12M;
             var dataAplicacao = DateTime.Today;
-            var listaInvestimento = new List<Investimentos>();
-            var investimento = new Investimentos
+            var listaInvestimento = new List<Investimento>();
+            var investimento = new Investimento
             {
                 Id = id,
                 IdCliente = idCliente,
@@ -175,7 +175,7 @@ namespace NFinance.Tests.WebApi
                 Valor = valor,
                 DataAplicacao = dataAplicacao
             };
-            var investimento1 = new Investimentos
+            var investimento1 = new Investimento
             {
                 Id = id1,
                 IdCliente = idCliente,
