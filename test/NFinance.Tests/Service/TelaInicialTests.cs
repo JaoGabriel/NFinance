@@ -1,4 +1,5 @@
 ﻿using NFinance.Domain;
+using NFinance.Domain.Exceptions;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Services;
@@ -34,11 +35,11 @@ namespace NFinance.Tests.Service
 
         public TelaInicialService InicializaServico()
         {
-            return new TelaInicialService(_ganhoRepository, _investimentoRepository, _gastoRepository, _resgateRepository, _clienteService );
+            return new TelaInicialService(_ganhoRepository, _investimentoRepository, _gastoRepository, _resgateRepository, _clienteService);
         }
 
         [Fact]
-        public async Task TelaInicialService_ExibirDados_ComSucesso()
+        public async Task TelaInicialService_TelaInicial_ComSucesso()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -166,5 +167,369 @@ namespace NFinance.Tests.Service
             Assert.Equal(valorInvestimento, resgateTest.Valor);
             Assert.Equal(dataAplicacao, resgateTest.DataResgate);
         }
+
+        [Fact]
+        public async Task TelaInicialService_TelaInicial_ComIdCliente_Incorreto()
+        {
+            //Arrange
+            var idCliente = Guid.Empty;
+            var idInvestimento = Guid.NewGuid();
+            var idInvestimento1 = Guid.NewGuid();
+            var idGasto = Guid.NewGuid();
+            var idGasto1 = Guid.NewGuid();
+            var idGanho1 = Guid.NewGuid();
+            var idGanho2 = Guid.NewGuid();
+            var idResgate = Guid.NewGuid();
+            var idGanho = Guid.NewGuid();
+            var nomeCliente = "Teste@Sucesso";
+            var cpfCliente = "123.654.987-96";
+            var emailCliente = "teste@teste.com";
+            var valorGanho = 5000M;
+            var dataGanho = DateTime.Today;
+            var dataGanho1 = DateTime.Today.AddMonths(3);
+            var dataGanho2 = DateTime.Today.AddMonths(-3);
+            var nomeGanho = "Salario";
+            var recorrente = false;
+            var recorrente1 = true;
+            var valorGasto = 1000M;
+            var dataGasto = DateTime.Today.AddDays(3);
+            var dataGasto1 = DateTime.Today.AddDays(5);
+            var nomeGasto = "CAixas";
+            var qtdParcelas = 3;
+            var qtdParcelas1 = 6;
+            var valorInvestimento = 10000M;
+            var nomeInvestimento = "CDB";
+            var dataAplicacao = DateTime.Today;
+            var dataAplicacao1 = DateTime.Today.AddDays(-1);
+            var dataResgate = DateTime.Today.AddDays(-2);
+            var motivoResgate = "Necessidade";
+            var listInvestimento = new List<Investimento>();
+            var listResgate = new List<Resgate>();
+            var listGanho = new List<Ganho>();
+            var listGasto = new List<Gasto>();
+            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
+            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var ganho2 = new Ganho { Id = idGanho2, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho2, Recorrente = recorrente };
+            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
+            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
+            var investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataAplicacao };
+            var investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataAplicacao1 };
+            var resgate = new Resgate { Id = idResgate, IdCliente = idCliente, IdInvestimento = idInvestimento, Valor = valorInvestimento, DataResgate = dataResgate, MotivoResgate = motivoResgate };
+            var clienteResponse = new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente, Cpf = cpfCliente, Email = emailCliente };
+            listGanho.Add(ganho);
+            listGanho.Add(ganho1);
+            listGanho.Add(ganho2);
+            listGasto.Add(gasto);
+            listGasto.Add(gasto1);
+            listInvestimento.Add(investimento);
+            listInvestimento.Add(investimento1);
+            listResgate.Add(resgate);
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(clienteResponse);
+            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            var services = InicializaServico();
+
+            //Act
+            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.TelaInicial(idCliente));
+        }
+
+        [Fact]
+        public async Task TelaInicialService_GanhoMensal_ComSucesso()
+        {
+            //Arrange
+            var idCliente = Guid.NewGuid();
+            var idGanho = Guid.NewGuid();
+            var idGanho1 = Guid.NewGuid();
+            var valorGanho = 6000M;
+            var valorGanho1 = 3000M;
+            var nomeGanho = "Ganho";
+            var nomeGanho1 = "Ganho1";
+            var dataGanho = DateTime.Today;
+            var dataGanho1 = DateTime.Today.AddDays(5);
+            var recorrente = false;
+            var recorrente1 = true;
+            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
+            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var listGanho = new List<Ganho>();
+            listGanho.Add(ganho);
+            listGanho.Add(ganho1);
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            var services = InicializaServico();
+            
+            //Act
+            var response = await services.GanhoMensal(idCliente);
+
+            //Assert
+            Assert.Equal(9000,response.SaldoMensal);
+            //Ganho
+            var ganhoTest = response.Ganhos.FirstOrDefault(g => g.Id == idGanho);
+            Assert.Equal(idGanho, ganhoTest.Id);
+            Assert.Equal(idCliente, ganhoTest.IdCliente);
+            Assert.Equal(nomeGanho, ganhoTest.NomeGanho);
+            Assert.Equal(valorGanho, ganhoTest.Valor);
+            Assert.Equal(recorrente, ganhoTest.Recorrente);
+            Assert.Equal(dataGanho, ganhoTest.DataDoGanho);
+            //Ganho 1
+            var ganhoTest1 = response.Ganhos.FirstOrDefault(g => g.Id == idGanho1);
+            Assert.Equal(idGanho1, ganhoTest1.Id);
+            Assert.Equal(idCliente, ganhoTest1.IdCliente);
+            Assert.Equal(nomeGanho1, ganhoTest1.NomeGanho);
+            Assert.Equal(valorGanho1, ganhoTest1.Valor);
+            Assert.Equal(recorrente1, ganhoTest1.Recorrente);
+            Assert.Equal(dataGanho1, ganhoTest1.DataDoGanho);
+        }
+
+        [Fact]
+        public async Task TelaInicialService_GanhoMensal_ComGanhos_Futuros()
+        {
+            //Arrange
+            var idCliente = Guid.NewGuid();
+            var idGanho = Guid.NewGuid();
+            var idGanho1 = Guid.NewGuid();
+            var valorGanho = 6000M;
+            var valorGanho1 = 3000M;
+            var nomeGanho = "Ganho";
+            var nomeGanho1 = "Ganho1";
+            var dataGanho = DateTime.Today.AddMonths(5);
+            var dataGanho1 = DateTime.Today.AddMonths(3);
+            var recorrente = false;
+            var recorrente1 = true;
+            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
+            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var listGanho = new List<Ganho>();
+            listGanho.Add(ganho);
+            listGanho.Add(ganho1);
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.GanhoMensal(idCliente);
+
+            //Assert
+            Assert.Empty(response.Ganhos);
+            Assert.Equal(0, response.SaldoMensal);
+        }
+
+        [Fact]
+        public async Task TelaInicialService_GanhoMensal_ComGanhos_Passados()
+        {
+            //Arrange
+            var idCliente = Guid.NewGuid();
+            var idGanho = Guid.NewGuid();
+            var idGanho1 = Guid.NewGuid();
+            var valorGanho = 6000M;
+            var valorGanho1 = 3000M;
+            var nomeGanho = "Ganho";
+            var nomeGanho1 = "Ganho1";
+            var dataGanho = DateTime.Today.AddMonths(-5);
+            var dataGanho1 = DateTime.Today.AddMonths(-3);
+            var recorrente = false;
+            var recorrente1 = true;
+            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
+            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var listGanho = new List<Ganho>();
+            listGanho.Add(ganho);
+            listGanho.Add(ganho1);
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.GanhoMensal(idCliente);
+
+            //Assert
+            Assert.Empty(response.Ganhos);
+            Assert.Equal(0, response.SaldoMensal);
+        }
+
+        [Fact]
+        public async Task TelaInicialService_GanhoMensal_Com_GanhoFuturoRecorrente_E_GanhoNaoRecorrente()
+        {
+            //Arrange
+            var idCliente = Guid.NewGuid();
+            var idGanho = Guid.NewGuid();
+            var idGanho1 = Guid.NewGuid();
+            var valorGanho = 6000M;
+            var valorGanho1 = 3000M;
+            var nomeGanho = "Ganho";
+            var nomeGanho1 = "Ganho1";
+            var dataGanho = DateTime.Today;
+            var dataGanho1 = DateTime.Today.AddMonths(5);
+            var recorrente = false;
+            var recorrente1 = true;
+            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
+            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var listGanho = new List<Ganho>();
+            listGanho.Add(ganho);
+            listGanho.Add(ganho1);
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.GanhoMensal(idCliente);
+
+            //Assert
+            Assert.Equal(6000, response.SaldoMensal);
+            //Ganho
+            var ganhoTest = response.Ganhos.FirstOrDefault(g => g.Id == idGanho);
+            Assert.Equal(idGanho, ganhoTest.Id);
+            Assert.Equal(idCliente, ganhoTest.IdCliente);
+            Assert.Equal(nomeGanho, ganhoTest.NomeGanho);
+            Assert.Equal(valorGanho, ganhoTest.Valor);
+            Assert.Equal(recorrente, ganhoTest.Recorrente);
+            Assert.Equal(dataGanho, ganhoTest.DataDoGanho);
+        }
+
+        [Fact]
+        public async Task TelaInicialService_GastoMensal_ComSucesso()
+        {
+            //Arrange
+            var idCliente = Guid.NewGuid();
+            var idGasto = Guid.NewGuid();
+            var idGasto1 = Guid.NewGuid();
+            var valorGasto = 6000M;
+            var valorGasto1 = 3000M;
+            var nomeGasto = "Gasto";
+            var nomeGasto1 = "Gasto1";
+            var dataGasto1 = DateTime.Today.AddDays(5);
+            var dataGasto = DateTime.Today.AddDays(10);
+            var qtdParcelas = 0;
+            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
+            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
+            var listGasto = new List<Gasto>();
+            listGasto.Add(gasto);
+            listGasto.Add(gasto1);
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.GastoMensal(idCliente);
+
+            //Assert
+            Assert.Equal(2,response.Gastos.Count);
+            Assert.Equal(9000, response.SaldoMensal);
+            //Assert Gasto
+            var gastoTest = response.Gastos.FirstOrDefault(g => g.Id == idGasto);
+            Assert.Equal(idGasto, gastoTest.Id);
+            Assert.Equal(idCliente, gastoTest.IdCliente);
+            Assert.Equal(nomeGasto, gastoTest.NomeGasto);
+            Assert.Equal(valorGasto, gastoTest.Valor);
+            Assert.Equal(qtdParcelas, gastoTest.QuantidadeParcelas);
+            Assert.Equal(dataGasto, gastoTest.DataDoGasto);
+            //Assert Gasto
+            var gastoTest1 = response.Gastos.FirstOrDefault(g => g.Id == idGasto1);
+            Assert.Equal(idGasto1, gastoTest1.Id);
+            Assert.Equal(idCliente, gastoTest1.IdCliente);
+            Assert.Equal(nomeGasto1, gastoTest1.NomeGasto);
+            Assert.Equal(valorGasto1, gastoTest1.Valor);
+            Assert.Equal(qtdParcelas, gastoTest1.QuantidadeParcelas);
+            Assert.Equal(dataGasto1, gastoTest1.DataDoGasto);
+        }
+
+        [Fact]
+        public async Task TelaInicialService_GastoMensal_Com_DataGasto_Futura()
+        {
+            //Arrange
+            var idCliente = Guid.NewGuid();
+            var idGasto = Guid.NewGuid();
+            var idGasto1 = Guid.NewGuid();
+            var valorGasto = 6000M;
+            var valorGasto1 = 3000M;
+            var nomeGasto = "Gasto";
+            var nomeGasto1 = "Gasto1";
+            var dataGasto1 = DateTime.Today.AddMonths(5);
+            var dataGasto = DateTime.Today.AddMonths(10);
+            var qtdParcelas = 0;
+            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
+            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
+            var listGasto = new List<Gasto>();
+            listGasto.Add(gasto);
+            listGasto.Add(gasto1);
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.GastoMensal(idCliente);
+
+            //Assert
+            Assert.Empty(response.Gastos);
+            Assert.Equal(0,response.SaldoMensal);
+        }
+
+
+        [Fact]
+        public async Task TelaInicialService_GastoMensal_Com_DataGasto_Futura_E_QuantidadeParcelas6()
+        {
+            //Arrange
+            var idCliente = Guid.NewGuid();
+            var idGasto = Guid.NewGuid();
+            var idGasto1 = Guid.NewGuid();
+            var valorGasto = 6000M;
+            var valorGasto1 = 3000M;
+            var nomeGasto = "Gasto";
+            var nomeGasto1 = "Gasto1";
+            var dataGasto1 = DateTime.Today.AddMonths(5);
+            var dataGasto = DateTime.Today.AddMonths(9);
+            var qtdParcelas = 6;
+            var qtdParcelas1 = 0;
+            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
+            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
+            var listGasto = new List<Gasto>();
+            listGasto.Add(gasto);
+            listGasto.Add(gasto1);
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.GastoMensal(idCliente);
+
+            //Assert
+            Assert.Empty(response.Gastos);
+            Assert.Equal(0, response.SaldoMensal);
+        }
+
+        [Fact]
+        public async Task TelaInicialService_GastoMensal_Com_DataGasto_Passado_E_DataAtual_Com_QuantidadeParcelas6()
+        {
+            //Arrange
+            var idCliente = Guid.NewGuid();
+            var idGasto = Guid.NewGuid();
+            var idGasto1 = Guid.NewGuid();
+            var valorGasto = 6000M;
+            var valorGasto1 = 3000M;
+            var nomeGasto = "Gasto";
+            var nomeGasto1 = "Gasto1";
+            var dataGasto1 = DateTime.Today.AddMonths(-5);
+            var dataGasto = DateTime.Today;
+            var qtdParcelas = 6;
+            var qtdParcelas1 = 0;
+            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
+            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
+            var gastoResponse = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = 1000, DataDoGasto = dataGasto, QuantidadeParcelas = 5 };
+            var listGasto = new List<Gasto>();
+            listGasto.Add(gasto);
+            listGasto.Add(gasto1);
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            _gastoRepository.AtualizarGasto(Arg.Any<Guid>(),Arg.Any<Gasto>()).Returns(gastoResponse);
+            var services = InicializaServico();
+
+            //Act
+            var response = await services.GastoMensal(idCliente);
+
+            //Assert
+            Assert.Single(response.Gastos);
+            Assert.Equal(1000, response.SaldoMensal);
+            //Assert Gasto
+            var gastoTest = response.Gastos.FirstOrDefault(g => g.Id == idGasto);
+            Assert.Equal(idGasto, gastoTest.Id);
+            Assert.Equal(idCliente, gastoTest.IdCliente);
+            Assert.Equal(nomeGasto, gastoTest.NomeGasto);
+            Assert.Equal(1000, gastoTest.Valor);
+            Assert.Equal(qtdParcelas, gastoTest.QuantidadeParcelas);
+            Assert.Equal(dataGasto, gastoTest.DataDoGasto);
+        }
+        //ToDo -> Investimento, Resgate
+
     }
 }

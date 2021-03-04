@@ -1,4 +1,5 @@
-﻿using NFinance.Domain.Exceptions;
+﻿using Cronos;
+using NFinance.Domain.Exceptions;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.ViewModel.GanhoViewModel;
@@ -76,15 +77,22 @@ namespace NFinance.Domain.Services
         {
             var gastos = await _gastoRepository.ConsultarGastos(idCliente);
             var listGastos = new List<GastoViewModel.Response>();
-
+            
             foreach (var gasto in gastos)
                 if (gasto.DataDoGasto.Month.Equals(DateTime.Today.Month))
                     if (gasto.DataDoGasto.AddMonths(gasto.QuantidadeParcelas).Month >= DateTime.Today.Month)
                     {
                         var vm = new GastoViewModel.Response(gasto);
+                        if (gasto.QuantidadeParcelas > 0)
+                        {
+                            gasto.Valor = gasto.Valor / gasto.QuantidadeParcelas;
+                            if (ValidaProximoMes(DateTime.Today))
+                                gasto.QuantidadeParcelas -= 1;
+                            await _gastoRepository.AtualizarGasto(gasto.Id, gasto);
+                            vm.Valor = gasto.Valor;
+                            vm.QuantidadeParcelas = gasto.QuantidadeParcelas;
+                        }
                         listGastos.Add(vm);
-                        var gastoAtt = new Gasto { Id = gasto.Id, IdCliente = gasto.IdCliente, NomeGasto = gasto.NomeGasto, Valor = gasto.Valor, DataDoGasto = gasto.DataDoGasto, QuantidadeParcelas = gasto.QuantidadeParcelas - 1 };
-                        await _gastoRepository.AtualizarGasto(gasto.Id, gastoAtt);
                     }
 
             var response = new GastoMensalViewModel(listGastos);
@@ -124,6 +132,17 @@ namespace NFinance.Domain.Services
             var response = new ResgateMensalViewModel(listResgates);
 
             return response;
+        }
+
+        private bool ValidaProximoMes(DateTime date)
+        {
+            var cron = CronExpression.Parse("* * 1 * *");
+            var proxOcorrencia = cron.GetNextOccurrence(DateTime.UtcNow);
+
+            if (proxOcorrencia?.Month == date.Month)
+                return true;
+            else
+                return false;
         }
 
 
