@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NFinance.Domain.Exceptions;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Model.GastosViewModel;
 

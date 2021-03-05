@@ -54,6 +54,5 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(nome, autenticarViewModel.Nome);
             Assert.NotNull(autenticarViewModel.Token);
         }
-
     }
 }

@@ -434,7 +434,7 @@ namespace NFinance.Tests.Service
             var nomeGasto = "Teste@Sucesso";
             var nomeCliente = "Claudemir Salbisn";
             decimal valorTotal = 1354851.144M;
-            var qtdParcelas = 0;
+            var qtdParcelas = -1;
             var data = DateTime.Today;
             var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
             _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });

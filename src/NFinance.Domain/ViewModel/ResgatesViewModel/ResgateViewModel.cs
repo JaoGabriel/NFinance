@@ -44,6 +44,8 @@ namespace NFinance.Model.ResgatesViewModel
 
             public DateTime DataResgate { get; set; }
 
+            public Response() { }
+
             public Response(Resgate resgate)
             {
                 Id = resgate.Id;

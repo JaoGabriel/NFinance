@@ -33,7 +33,8 @@ namespace NFinance.Tests.Service
             var nome = "Teste@Sucesso";
             var cpf = "123.654.987-96";
             var email = "teste@teste.com";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome, Cpf = cpf,Email = email};
+            var senha = "dahusdhuasuh";
+            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome, Cpf = cpf,Email = email, Senha = senha};
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = nome, CPF = cpf,Email = email});
             var services = InicializaServico();
 
@@ -334,7 +335,8 @@ namespace NFinance.Tests.Service
             var nome = "AtualizaTeste@Sucesso";
             var cpf = "123.654.987-96";
             var email = "carlistes@teste.com";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome, Cpf = cpf,Email = email };
+            var senha = "hufahusdhua";
+            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome, Cpf = cpf,Email = email, Senha = senha };
             _clienteRepository.AtualizarCliente(Arg.Any<Guid>(),Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = nome, CPF = cpf,Email = email });
             var services = InicializaServico();
             

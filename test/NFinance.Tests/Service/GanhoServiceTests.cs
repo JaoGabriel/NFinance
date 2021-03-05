@@ -212,8 +212,9 @@ namespace NFinance.Tests.Service
             var idCliente = Guid.NewGuid();
             var valor = 120245.21M;
             var nomeGanho = "TEsteee";
-            var ganho = new Ganho {Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
-            var ganhoRequest = new AtualizarGanhoViewModel.Request { IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true};
+            var dataGanho = DateTime.Today;
+            var ganho = new Ganho {Id = id, IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = dataGanho };
+            var ganhoRequest = new AtualizarGanhoViewModel.Request { IdCliente = idCliente, Valor = valor, NomeGanho = nomeGanho, Recorrente = true, DataDoGanho = dataGanho };
             _ganhoRepository.AtualizarGanho(Arg.Any<Guid>(), Arg.Any<Ganho>()).Returns(ganho);
             var services = InicializaServico();
             //Act
@@ -225,6 +226,7 @@ namespace NFinance.Tests.Service
             Assert.NotEqual(0, response.Valor);
             Assert.NotEqual(Guid.Empty, response.Id);
             Assert.NotEqual(Guid.Empty, response.IdCliente);
+            Assert.Equal(dataGanho, response.DataDoGanho);
             Assert.Equal(id, response.Id);
             Assert.Equal(idCliente, response.IdCliente);
             Assert.Equal(nomeGanho, response.NomeGanho);
