@@ -42,9 +42,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             //Act
@@ -80,9 +80,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -100,9 +100,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -119,9 +119,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = null, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = null, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = null, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = null, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -139,9 +139,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -159,9 +159,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 0;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -179,9 +179,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 1354851.144M;
             var qtdParcelas = 1004684;
             var data = DateTime.Today;
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -199,9 +199,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 1354851.144M;
             var qtdParcelas = 0;
             var data = DateTime.Today;
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -219,9 +219,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 1354851.144M;
             var qtdParcelas = 15;
             var data = DateTime.Today.AddYears(-120);
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -239,9 +239,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 1354851.144M;
             var qtdParcelas = 15;
             var data = DateTime.Today.AddYears(+120);
-            var gastoRequest = new CadastrarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new CadastrarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -259,9 +259,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(),Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(),Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             //Act
@@ -297,9 +297,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -317,9 +317,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -337,9 +337,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -356,9 +356,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = null, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = null, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = null, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = null, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -376,9 +376,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -396,9 +396,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 0;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -416,9 +416,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 1354851.144M;
             var qtdParcelas = 1004684;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -436,9 +436,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 1354851.144M;
             var qtdParcelas = -1;
             var data = DateTime.Today;
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -456,9 +456,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 1354851.144M;
             var qtdParcelas = 15;
             var data = DateTime.Today.AddYears(-120);
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -476,9 +476,9 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 1354851.144M;
             var qtdParcelas = 15;
             var data = DateTime.Today.AddYears(+120);
-            var gastoRequest = new AtualizarGastoViewModel.Request() { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
-            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            var gastoRequest = new AtualizarGastoViewModel.Request { IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data };
+            _gastosRepository.AtualizarGasto(Arg.Any<Guid>(), Arg.Any<Gasto>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert
@@ -492,7 +492,7 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var idCliente = Guid.NewGuid();
             var motivoExclusao = "Teste@Sucesso";
-            var gastoRequest = new ExcluirGastoViewModel.Request() { IdCliente = idCliente, IdGasto = id , MotivoExclusao = motivoExclusao };
+            var gastoRequest = new ExcluirGastoViewModel.Request { IdCliente = idCliente, IdGasto = id , MotivoExclusao = motivoExclusao };
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
@@ -513,7 +513,7 @@ namespace NFinance.Tests.Service
             var id = Guid.Empty;
             var idCliente = Guid.NewGuid();
             var motivoExclusao = "Teste@Sucesso";
-            var gastoRequest = new ExcluirGastoViewModel.Request() { IdCliente = idCliente, IdGasto = id, MotivoExclusao = motivoExclusao };
+            var gastoRequest = new ExcluirGastoViewModel.Request { IdCliente = idCliente, IdGasto = id, MotivoExclusao = motivoExclusao };
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
@@ -528,7 +528,7 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var idCliente = Guid.Empty;
             var motivoExclusao = "Teste@Sucesso";
-            var gastoRequest = new ExcluirGastoViewModel.Request() { IdCliente = idCliente, IdGasto = id, MotivoExclusao = motivoExclusao };
+            var gastoRequest = new ExcluirGastoViewModel.Request { IdCliente = idCliente, IdGasto = id, MotivoExclusao = motivoExclusao };
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
@@ -543,7 +543,7 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var idCliente = Guid.NewGuid();
             var motivoExclusao = "";
-            var gastoRequest = new ExcluirGastoViewModel.Request() { IdCliente = idCliente, IdGasto = id, MotivoExclusao = motivoExclusao };
+            var gastoRequest = new ExcluirGastoViewModel.Request { IdCliente = idCliente, IdGasto = id, MotivoExclusao = motivoExclusao };
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
@@ -557,7 +557,7 @@ namespace NFinance.Tests.Service
             //Arrange
             var id = Guid.NewGuid();
             var idCliente = Guid.NewGuid();
-            var gastoRequest = new ExcluirGastoViewModel.Request() { IdCliente = idCliente, IdGasto = id, MotivoExclusao = null };
+            var gastoRequest = new ExcluirGastoViewModel.Request { IdCliente = idCliente, IdGasto = id, MotivoExclusao = null };
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
@@ -572,7 +572,7 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var idCliente = Guid.NewGuid();
             var motivoExclusao = "  ";
-            var gastoRequest = new ExcluirGastoViewModel.Request() { IdCliente = idCliente, IdGasto = id, MotivoExclusao = motivoExclusao };
+            var gastoRequest = new ExcluirGastoViewModel.Request { IdCliente = idCliente, IdGasto = id, MotivoExclusao = motivoExclusao };
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
@@ -591,8 +591,8 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            _gastosRepository.ConsultarGasto(Arg.Any<Guid>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            _gastosRepository.ConsultarGasto(Arg.Any<Guid>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             //Act
@@ -628,8 +628,8 @@ namespace NFinance.Tests.Service
             decimal valorTotal = 123871239.21M;
             var qtdParcelas = 15;
             var data = DateTime.Today;
-            _gastosRepository.ConsultarGasto(Arg.Any<Guid>()).Returns(new Gasto() { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente });
+            _gastosRepository.ConsultarGasto(Arg.Any<Guid>()).Returns(new Gasto { Id = id, IdCliente = idCliente, NomeGasto = nomeGasto, QuantidadeParcelas = qtdParcelas, Valor = valorTotal, DataDoGasto = data });
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente });
             var services = InicializaServico();
 
             ///Assert

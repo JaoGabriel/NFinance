@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NFinance.Domain;
 using NFinance.Infra;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 
 namespace NFinance.WebApi
 {
@@ -28,8 +31,20 @@ namespace NFinance.WebApi
             services.AddMvc();
             services.AddCors();
 
-            services.AddOpenApiDocument(c => c.Title = "Nfinance.WebApi");
+            services.AddOpenApiDocument(c =>
+            {
+                c.Title = "Nfinance.WebApi";
+                c.DocumentName = "Nfinance.WebApi";
+                c.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
+                });
 
+                c.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            });
             services.AddInfraDataSqlServices(Configuration);
             services.AddDomainServices(Configuration);
             services.AddMemoryCache();

@@ -41,10 +41,10 @@ namespace NFinance.Tests.Service
             var motivo = "Teste@Sucesso";
             decimal valor = 21245.215M;
             var data = DateTime.Today;
-            var cliente = new ClienteViewModel.Response() { Id = Guid.NewGuid(), Nome = "Claudemir Tester" };
-            var investimentoResponse = new ConsultarInvestimentoViewModel.Response() { Id = idInvestimento, DataAplicacao = DateTime.Today.AddDays(-5), Cliente = cliente, NomeInvestimento = "Investimento JOSDaSDA", Valor = valor };
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento , MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = cliente.Id };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() {Id = id , IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = cliente.Id });
+            var cliente = new ClienteViewModel.Response { Id = Guid.NewGuid(), Nome = "Claudemir Tester" };
+            var investimentoResponse = new ConsultarInvestimentoViewModel.Response { Id = idInvestimento, DataAplicacao = DateTime.Today.AddDays(-5), Cliente = cliente, NomeInvestimento = "Investimento JOSDaSDA", Valor = valor };
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento , MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = cliente.Id };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate {Id = id , IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = cliente.Id });
             _investimentosService.ConsultarInvestimento(Arg.Any<Guid>()).Returns(investimentoResponse);
             var services = InicializaServico();
 
@@ -74,8 +74,8 @@ namespace NFinance.Tests.Service
             var motivo = "Teste@Sucesso";
             decimal valor = 21245.215M;
             var data = DateTime.Today;
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert
@@ -92,8 +92,8 @@ namespace NFinance.Tests.Service
             var motivo = "";
             decimal valor = 21245.215M;
             var data = DateTime.Today;
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert
@@ -110,8 +110,8 @@ namespace NFinance.Tests.Service
             var motivo = "  ";
             decimal valor = 21245.215M;
             var data = DateTime.Today;
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert
@@ -127,8 +127,8 @@ namespace NFinance.Tests.Service
             var idInvestimento = Guid.NewGuid();
             decimal valor = 21245.215M;
             var data = DateTime.Today;
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento, MotivoResgate = null, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = null, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento, MotivoResgate = null, Valor = valor, DataResgate = data, IdCliente = idCliente };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = null, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert
@@ -145,8 +145,8 @@ namespace NFinance.Tests.Service
             var motivo = "Teste@Sucesso";
             decimal valor = 0;
             var data = DateTime.Today;
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert
@@ -163,8 +163,8 @@ namespace NFinance.Tests.Service
             var motivo = "Teste@Sucesso";
             decimal valor = 13546547.215M;
             var data = DateTime.Today.AddYears(-100);
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert
@@ -181,8 +181,8 @@ namespace NFinance.Tests.Service
             var motivo = "Teste@Sucesso";
             decimal valor = 13546547.215M;
             var data = DateTime.Today.AddYears(100);
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert
@@ -199,8 +199,8 @@ namespace NFinance.Tests.Service
             var motivo = "Teste@Sucesso";
             decimal valor = 13546547.215M;
             var data = DateTime.Today;
-            var resgateRequest = new RealizarResgateViewModel.Request() { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            var resgateRequest = new RealizarResgateViewModel.Request { IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert
@@ -218,7 +218,7 @@ namespace NFinance.Tests.Service
             decimal valor = 21245.215M;
             var data = DateTime.Today;
             var resgate = new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente };
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = "Claudemir Tester" };
+            var cliente = new ClienteViewModel.Response { Id = idCliente, Nome = "Claudemir Tester" };
             var investimentoResponse = new ConsultarInvestimentoViewModel.Response { Id = idInvestimento, DataAplicacao = DateTime.Today.AddDays(-5), Cliente = cliente, NomeInvestimento = "Investimento JOSDaSDA", Valor = valor };
             _resgateRepository.ConsultarResgate(Arg.Any<Guid>()).Returns(resgate);
             _investimentosService.ConsultarInvestimento(Arg.Any<Guid>()).Returns(investimentoResponse);
@@ -250,7 +250,7 @@ namespace NFinance.Tests.Service
             var motivo = "Teste@Sucesso";
             decimal valor = 21245.215M;
             var data = DateTime.Today;
-            _resgateRepository.ConsultarResgate(Arg.Any<Guid>()).Returns(new Resgate() { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
+            _resgateRepository.ConsultarResgate(Arg.Any<Guid>()).Returns(new Resgate { Id = id, IdInvestimento = idInvestimento, MotivoResgate = motivo, Valor = valor, DataResgate = data, IdCliente = idCliente });
             var services = InicializaServico();
 
             //Assert

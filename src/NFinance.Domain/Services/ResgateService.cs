@@ -49,7 +49,7 @@ namespace NFinance.Domain.Services
             var resgateRequest = new Resgate(request);
             var investimento = await _investimentosService.ConsultarInvestimento(resgateRequest.IdInvestimento);
             var resgate = await _resgateRepository.RealizarResgate(resgateRequest);
-            var response = new RealizarResgateViewModel.Response() { Id = resgate.Id, Valor = resgate.Valor, DataResgate = resgate.DataResgate, MotivoResgate = resgate.MotivoResgate, Investimento = investimento, IdCliente = resgate.IdCliente };
+            var response = new RealizarResgateViewModel.Response { Id = resgate.Id, Valor = resgate.Valor, DataResgate = resgate.DataResgate, MotivoResgate = resgate.MotivoResgate, Investimento = investimento, IdCliente = resgate.IdCliente };
             return response;
         }
     }

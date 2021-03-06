@@ -31,7 +31,7 @@ namespace NFinance.Domain.Services
             var gasto = new Gasto(id,request);
             var cliente = await _clienteService.ConsultarCliente(request.IdCliente);
             var atualizado = await _gastosRepository.AtualizarGasto(id, gasto);
-            var response = new AtualizarGastoViewModel.Response() {Id = atualizado.Id, Cliente = new ClienteViewModel.Response() {Id = cliente.Id,Nome = cliente.Nome } , NomeGasto = atualizado.NomeGasto,DataDoGasto = atualizado.DataDoGasto, QuantidadeParcelas = atualizado.QuantidadeParcelas,Valor = atualizado.Valor };
+            var response = new AtualizarGastoViewModel.Response {Id = atualizado.Id, Cliente = new ClienteViewModel.Response() {Id = cliente.Id,Nome = cliente.Nome } , NomeGasto = atualizado.NomeGasto,DataDoGasto = atualizado.DataDoGasto, QuantidadeParcelas = atualizado.QuantidadeParcelas,Valor = atualizado.Valor };
             return response;
         }
 
@@ -46,7 +46,7 @@ namespace NFinance.Domain.Services
             var gasto = new Gasto(request);
             var cliente = await _clienteService.ConsultarCliente(request.IdCliente);
             var cadastro = await _gastosRepository.CadastrarGasto(gasto);
-            var response = new CadastrarGastoViewModel.Response() { Id = cadastro.Id, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome }, NomeGasto = cadastro.NomeGasto, DataDoGasto = cadastro.DataDoGasto, QuantidadeParcelas = cadastro.QuantidadeParcelas, Valor = cadastro.Valor };
+            var response = new CadastrarGastoViewModel.Response { Id = cadastro.Id, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome }, NomeGasto = cadastro.NomeGasto, DataDoGasto = cadastro.DataDoGasto, QuantidadeParcelas = cadastro.QuantidadeParcelas, Valor = cadastro.Valor };
             return response;
         }
 
@@ -56,7 +56,7 @@ namespace NFinance.Domain.Services
 
             var gasto = await _gastosRepository.ConsultarGasto(id);
             var cliente = await _clienteService.ConsultarCliente(gasto.IdCliente);
-            var response = new ConsultarGastoViewModel.Response() { Id = gasto.Id, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome }, NomeGasto = gasto.NomeGasto, DataDoGasto = gasto.DataDoGasto, QuantidadeParcelas = gasto.QuantidadeParcelas, Valor = gasto.Valor };
+            var response = new ConsultarGastoViewModel.Response { Id = gasto.Id, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome }, NomeGasto = gasto.NomeGasto, DataDoGasto = gasto.DataDoGasto, QuantidadeParcelas = gasto.QuantidadeParcelas, Valor = gasto.Valor };
             return response;
         }
 
@@ -77,9 +77,9 @@ namespace NFinance.Domain.Services
 
             var excluir = await _gastosRepository.ExcluirGasto(request.IdGasto);
             if(excluir)
-                return new ExcluirGastoViewModel.Response() { StatusCode = 200, DataExclusao = DateTime.UtcNow, Mensagem = "Excluido Com Sucesso" };
+                return new ExcluirGastoViewModel.Response { StatusCode = 200, DataExclusao = DateTime.UtcNow, Mensagem = "Excluido Com Sucesso" };
              else
-                return new ExcluirGastoViewModel.Response() { StatusCode = 400, DataExclusao = DateTime.UtcNow, Mensagem = "Ocorreu um erro ao Excluir" };
+                return new ExcluirGastoViewModel.Response { StatusCode = 400, DataExclusao = DateTime.UtcNow, Mensagem = "Ocorreu um erro ao Excluir" };
         }
     }
 }

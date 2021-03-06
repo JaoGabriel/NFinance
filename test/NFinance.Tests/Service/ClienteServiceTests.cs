@@ -34,8 +34,8 @@ namespace NFinance.Tests.Service
             var cpf = "123.654.987-96";
             var email = "teste@teste.com";
             var senha = "dahusdhuasuh";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome, Cpf = cpf,Email = email, Senha = senha};
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = nome, CPF = cpf,Email = email});
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = nome, Cpf = cpf,Email = email, Senha = senha};
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = nome, CPF = cpf,Email = email});
             var services = InicializaServico();
 
             //Act
@@ -59,8 +59,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var cpf = "123.654.987-96";
             var email = "teste@teste.com";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = null, Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = null, CPF = cpf,Email = email });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = null, Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = null, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -73,8 +73,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var cpf = "123.654.987-96";
             var email = "teste@teste.com";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = "", Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = "", CPF = cpf,Email = email });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = "", Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = "", CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -87,8 +87,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var cpf = "123.654.987-96";
             var email = "teste@teste.com";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = " ", Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = " ", CPF = cpf,Email = email });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = " ", Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = " ", CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -102,8 +102,8 @@ namespace NFinance.Tests.Service
             var nome = "Jubileu da silva";
             var cpf = "";
             var email = "teste@teste.com";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = email });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -117,8 +117,8 @@ namespace NFinance.Tests.Service
             var nome = "Jubileu da silva";
             var cpf = "  ";
             var email = "teste@teste.com";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = email });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -131,8 +131,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var nome = "Jubileu da silva";
             var email = "teste@teste.com";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome,  Cpf = null,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = null,Email = email });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = nome,  Cpf = null,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = null,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -146,8 +146,8 @@ namespace NFinance.Tests.Service
             var nome = "Jubileu da silva";
             var cpf = "123.654.987-96";
             var email = "";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = email });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -160,8 +160,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var nome = "Jubileu da silva";
             var cpf = "123.654.987-96";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = null };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = null });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = null };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = null });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -175,8 +175,8 @@ namespace NFinance.Tests.Service
             var nome = "Jubileu da silva";
             var cpf = "123.654.987-96";
             var email = "  ";
-            var clienteRequest = new CadastrarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = email });
+            var clienteRequest = new CadastrarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.CadastrarCliente(clienteRequest));
@@ -189,8 +189,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var cpf = "123.654.987-96";
             var email = "josevaldo@teste.com";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = "  ", Cpf = cpf,Email = email };
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = "  ", CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = "  ", Cpf = cpf,Email = email };
+            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = "  ", CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.AtualizarCliente(id,clienteRequest));
@@ -203,8 +203,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var cpf = "123.654.987-96";
             var email = "josevaldo@teste.com";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = null, Cpf = cpf,Email = email };
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = null, CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = null, Cpf = cpf,Email = email };
+            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = null, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.AtualizarCliente(id, clienteRequest));
@@ -217,8 +217,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var cpf = "123.654.987-96";
             var email = "josevaldo@teste.com";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = "", Cpf = cpf,Email = email };
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = "", CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = "", Cpf = cpf,Email = email };
+            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = "", CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.AtualizarCliente(id, clienteRequest));
@@ -232,8 +232,8 @@ namespace NFinance.Tests.Service
             var nome = "AtualizaTeste";
             var cpf = "123.654.987-96";
             var email = "josevaldo@teste.com";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome, Cpf = cpf,Email = email };
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = nome, CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = nome, Cpf = cpf,Email = email };
+            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = nome, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.AtualizarCliente(id,clienteRequest));
@@ -247,8 +247,8 @@ namespace NFinance.Tests.Service
             var nome = "Jubileu da silva";
             var cpf = "";
             var email = "teste@teste.com";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.AtualizarCliente(id,clienteRequest));
@@ -262,8 +262,8 @@ namespace NFinance.Tests.Service
             var nome = "Jubileu da silva";
             var cpf = "  ";
             var email = "teste@teste.com";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.AtualizarCliente(id,clienteRequest));
@@ -276,8 +276,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var nome = "Jubileu da silva";
             var email = "teste@teste.com";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome,  Cpf = null,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = null,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = nome,  Cpf = null,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = null,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.AtualizarCliente(id,clienteRequest));
@@ -291,8 +291,8 @@ namespace NFinance.Tests.Service
             var nome = "Jubileu da silva";
             var cpf = "123.654.987-96";
             var email = "";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(id,clienteRequest));
@@ -305,8 +305,8 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var nome = "Jubileu da silva";
             var cpf = "123.654.987-96";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = null };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = null });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = null };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = null });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(id,clienteRequest));
@@ -320,8 +320,8 @@ namespace NFinance.Tests.Service
             var nome = "Jubileu da silva";
             var cpf = "123.654.987-96";
             var email = "  ";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome,  Cpf = cpf,Email = email };
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = nome,  Cpf = cpf,Email = email };
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(new Cliente { Id = id, CPF = cpf,Email = email });
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(id,clienteRequest));
@@ -336,8 +336,8 @@ namespace NFinance.Tests.Service
             var cpf = "123.654.987-96";
             var email = "carlistes@teste.com";
             var senha = "hufahusdhua";
-            var clienteRequest = new AtualizarClienteViewModel.Request() { Nome = nome, Cpf = cpf,Email = email, Senha = senha };
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(),Arg.Any<Cliente>()).Returns(new Cliente() { Id = id, Nome = nome, CPF = cpf,Email = email });
+            var clienteRequest = new AtualizarClienteViewModel.Request { Nome = nome, Cpf = cpf,Email = email, Senha = senha };
+            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(),Arg.Any<Cliente>()).Returns(new Cliente { Id = id, Nome = nome, CPF = cpf,Email = email });
             var services = InicializaServico();
             
             //Act
@@ -361,7 +361,7 @@ namespace NFinance.Tests.Service
             var id = Guid.NewGuid();
             var cpf = "123.123.123.11";
             var email = "claudisney@teste.com";
-            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente() { Id = id, Nome = "ConsultaTeste@Sucesso", CPF = cpf, Email = email});
+            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente { Id = id, Nome = "ConsultaTeste@Sucesso", CPF = cpf, Email = email});
             var services = InicializaServico();
 
             //Act
@@ -384,7 +384,7 @@ namespace NFinance.Tests.Service
             var id = Guid.Empty;
             var cpf = "123.123.123.11";
             var email = "claudisney@teste.com";
-            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente() { Id = id, Nome = "ConsultaCliente", CPF = cpf, Email = email });
+            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente { Id = id, Nome = "ConsultaCliente", CPF = cpf, Email = email });
             var services = InicializaServico();
             
             //Assert

@@ -31,7 +31,7 @@ namespace NFinance.Domain.Services
             var investimento = new Investimento(id,request);
             var cliente = await _clienteService.ConsultarCliente(request.IdCliente);
             var atualizado = await _investimentosRepository.AtualizarInvestimento(id, investimento);
-            var response = new AtualizarInvestimentoViewModel.Response() {Id = atualizado.Id, NomeInvestimento = atualizado.NomeInvestimento, Valor = atualizado.Valor, DataAplicacao = atualizado.DataAplicacao, Cliente = new ClienteViewModel.Response() {Id = cliente.Id, Nome = cliente.Nome } };
+            var response = new AtualizarInvestimentoViewModel.Response {Id = atualizado.Id, NomeInvestimento = atualizado.NomeInvestimento, Valor = atualizado.Valor, DataAplicacao = atualizado.DataAplicacao, Cliente = new ClienteViewModel.Response() {Id = cliente.Id, Nome = cliente.Nome } };
             return response;
         }
 
@@ -41,7 +41,7 @@ namespace NFinance.Domain.Services
 
             var consulta = await _investimentosRepository.ConsultarInvestimento(id);
             var cliente = await _clienteService.ConsultarCliente(consulta.IdCliente);
-            var response = new ConsultarInvestimentoViewModel.Response() { Id = consulta.Id, NomeInvestimento = consulta.NomeInvestimento, Valor = consulta.Valor, DataAplicacao = consulta.DataAplicacao, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome } };
+            var response = new ConsultarInvestimentoViewModel.Response { Id = consulta.Id, NomeInvestimento = consulta.NomeInvestimento, Valor = consulta.Valor, DataAplicacao = consulta.DataAplicacao, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome } };
             return response;
         }
 
@@ -64,7 +64,7 @@ namespace NFinance.Domain.Services
             var investimento = new Investimento(request);
             var cliente = await _clienteService.ConsultarCliente(request.IdCliente);
             var investido = await _investimentosRepository.RealizarInvestimento(investimento);
-            var response = new RealizarInvestimentoViewModel.Response() { Id = investido.Id, NomeInvestimento = investido.NomeInvestimento, Valor = investido.Valor, DataAplicacao = investido.DataAplicacao, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome } };
+            var response = new RealizarInvestimentoViewModel.Response { Id = investido.Id, NomeInvestimento = investido.NomeInvestimento, Valor = investido.Valor, DataAplicacao = investido.DataAplicacao, Cliente = new ClienteViewModel.Response() { Id = cliente.Id, Nome = cliente.Nome } };
             return response;
         }
     }

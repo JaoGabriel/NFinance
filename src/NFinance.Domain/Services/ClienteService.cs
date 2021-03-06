@@ -25,7 +25,7 @@ namespace NFinance.Domain.Services
 
             var cliente = new Cliente(id, clienteRequest);
             var atualizado = await _clienteRepository.AtualizarCliente(id, cliente);
-            var response = new AtualizarClienteViewModel.Response() {Id = atualizado.Id,Nome = atualizado.Nome, Cpf = atualizado.CPF,Email = atualizado.Email};
+            var response = new AtualizarClienteViewModel.Response {Id = atualizado.Id,Nome = atualizado.Nome, Cpf = atualizado.CPF,Email = atualizado.Email};
             return response;
         }
 
@@ -38,7 +38,7 @@ namespace NFinance.Domain.Services
 
             var cliente = new Cliente(clienteRequest);
             var novoCliente = await _clienteRepository.CadastrarCliente(cliente);
-            var response = new CadastrarClienteViewModel.Response() {Id = novoCliente.Id,Nome = novoCliente.Nome,Cpf = novoCliente.CPF, Email = novoCliente.Email};
+            var response = new CadastrarClienteViewModel.Response {Id = novoCliente.Id,Nome = novoCliente.Nome,Cpf = novoCliente.CPF, Email = novoCliente.Email};
             return response;
         }
 
@@ -47,7 +47,7 @@ namespace NFinance.Domain.Services
             if (Guid.Empty.Equals(id)) throw new IdException("Id cliente invalido");
             
             var clienteConsulta = await _clienteRepository.ConsultarCliente(id);
-            var response = new ConsultarClienteViewModel.Response() { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, Cpf = clienteConsulta.CPF,Email = clienteConsulta.Email};
+            var response = new ConsultarClienteViewModel.Response { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, Cpf = clienteConsulta.CPF,Email = clienteConsulta.Email};
             return response;
         }
     }
