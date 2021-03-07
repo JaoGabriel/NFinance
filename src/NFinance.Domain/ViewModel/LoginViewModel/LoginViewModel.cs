@@ -12,6 +12,8 @@ namespace NFinance.Domain.ViewModel.LoginViewModel
         {
             public Guid IdSessao { get; set; }
 
+            public Guid IdCliente { get; set; }
+
             public string Nome { get; set; }
 
             public string Token { get; set; }
@@ -21,6 +23,7 @@ namespace NFinance.Domain.ViewModel.LoginViewModel
             public Response(Cliente cliente, string token)
             {
                 IdSessao = Guid.NewGuid();
+                IdCliente = cliente.Id;
                 Nome = cliente.Nome;
                 Token = token;
             }

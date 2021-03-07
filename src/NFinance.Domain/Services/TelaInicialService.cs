@@ -53,19 +53,10 @@ namespace NFinance.Domain.Services
             var ganhos = await _ganhoRepository.ConsultarGanhos(idCliente);
             var listGanho = new List<GanhoViewModel>();
             foreach (var ganho in ganhos)
-                if (ganho.DataDoGanho.Month.Equals(DateTime.Today.Month) && ganho.Recorrente)
+                if (ganho.DataDoGanho.Month.Equals(DateTime.Today.Month) || ganho.Recorrente)
                 {
                     var vm = new GanhoViewModel(ganho);
                     listGanho.Add(vm);
-                    ganho.DataDoGanho.AddMonths(1);
-                }
-                else
-                {
-                    if (ganho.DataDoGanho.Month.Equals(DateTime.Today.Month) && !ganho.Recorrente)
-                    {
-                        var vm = new GanhoViewModel(ganho);
-                        listGanho.Add(vm);
-                    }
                 }
 
             var respose = new GanhoMensalViewModel(listGanho);
