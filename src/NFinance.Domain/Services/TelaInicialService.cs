@@ -70,21 +70,23 @@ namespace NFinance.Domain.Services
             var listGastos = new List<GastoViewModel.Response>();
             
             foreach (var gasto in gastos)
-                if (gasto.DataDoGasto.Month.Equals(DateTime.Today.Month))
-                    if (gasto.DataDoGasto.AddMonths(gasto.QuantidadeParcelas).Month >= DateTime.Today.Month)
+                if (gasto.DataDoGasto.Month.Equals(DateTime.Today.Month) || ValidaParcela(gasto.QuantidadeParcelas,gasto.DataDoGasto))
+                {
+                    var vm = new GastoViewModel.Response(gasto);
+                    if (gasto.QuantidadeParcelas > 0)
                     {
-                        var vm = new GastoViewModel.Response(gasto);
-                        if (gasto.QuantidadeParcelas > 0)
+                        if (ValidaProximoMes(DateTime.Today))
                         {
-                            gasto.Valor = gasto.Valor / gasto.QuantidadeParcelas;
-                            if (ValidaProximoMes(DateTime.Today))
-                                gasto.QuantidadeParcelas -= 1;
+                            gasto.QuantidadeParcelas -= 1;
+                            // sera que vale a pena salvar o valor parcela?
                             await _gastoRepository.AtualizarGasto(gasto.Id, gasto);
-                            vm.Valor = gasto.Valor;
-                            vm.QuantidadeParcelas = gasto.QuantidadeParcelas;
                         }
-                        listGastos.Add(vm);
+                        gasto.Valor = gasto.Valor / gasto.QuantidadeParcelas;
+                        vm.Valor = gasto.Valor;
+                        vm.QuantidadeParcelas = gasto.QuantidadeParcelas;
                     }
+                    listGastos.Add(vm);
+                }
 
             var response = new GastoMensalViewModel(listGastos);
 
@@ -134,6 +136,19 @@ namespace NFinance.Domain.Services
                 return true;
             else
                 return false;
+        }
+
+        private bool ValidaParcela(int quantidadeParcelas,DateTime dataGasto)
+        {
+            if (quantidadeParcelas == 1)
+                quantidadeParcelas -= 1;
+
+            var dataMax = dataGasto.AddMonths(quantidadeParcelas);
+
+            if (dataMax.Month >= DateTime.Today.Month)
+                return true;
+            
+            return false;
         }
 
 

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NFinance.Domain.Interfaces.Services;
@@ -24,7 +23,6 @@ namespace NFinance.Domain
             services.AddTransient<IResgateService, ResgateService>();
             services.AddTransient<IInvestimentoService, InvestimentoService>();
             services.AddTransient<ITelaInicialService, TelaInicialService>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }
