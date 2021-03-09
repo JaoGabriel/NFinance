@@ -1,4 +1,4 @@
-﻿using NFinance.Model.GastosViewModel;
+﻿using NFinance.ViewModel.GastosViewModel;
 using System;
 using System.Threading.Tasks;
 

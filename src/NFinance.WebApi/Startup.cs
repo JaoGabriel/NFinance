@@ -17,7 +17,6 @@ namespace NFinance.WebApi
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        private static string _secret = "d53b997993b723080a619e8e5f575abf90df5c3c3fb332bd3cf3129f5057202f";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -51,7 +50,7 @@ namespace NFinance.WebApi
 
             services.AddControllers();
 
-            var key = Encoding.ASCII.GetBytes(_secret);
+            var key = Encoding.ASCII.GetBytes(Settings.Secret);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

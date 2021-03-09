@@ -359,7 +359,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var id = Guid.NewGuid();
-            var cpf = "123.123.123.11";
+            var cpf = "123.123.123-11";
             var email = "claudisney@teste.com";
             _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente { Id = id, Nome = "ConsultaTeste@Sucesso", CPF = cpf, Email = email});
             var services = InicializaServico();
@@ -382,7 +382,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var id = Guid.Empty;
-            var cpf = "123.123.123.11";
+            var cpf = "123.123.123-11";
             var email = "claudisney@teste.com";
             _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente { Id = id, Nome = "ConsultaCliente", CPF = cpf, Email = email });
             var services = InicializaServico();

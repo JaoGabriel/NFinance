@@ -42,7 +42,7 @@ namespace NFinance.Tests.WebApi
                     Email = email
                 });
             var controller = InicializarClienteController();
-            var cliente = new CadastrarClienteViewModel.Request()
+            var cliente = new CadastrarClienteViewModel.Request
             {
                 Nome = nome,
                 Cpf = cpf,

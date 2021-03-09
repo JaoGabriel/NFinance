@@ -2,7 +2,7 @@
 using NFinance.Domain.Exceptions.Resgate;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Model.ResgatesViewModel;
+using NFinance.ViewModel.ResgatesViewModel;
 using System;
 using System.Threading.Tasks;
 

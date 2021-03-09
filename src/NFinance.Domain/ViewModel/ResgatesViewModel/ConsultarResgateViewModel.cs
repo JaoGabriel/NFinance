@@ -1,4 +1,4 @@
-﻿namespace NFinance.Model.ResgatesViewModel
+﻿namespace NFinance.ViewModel.ResgatesViewModel
 {
     public class ConsultarResgateViewModel
     {

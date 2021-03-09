@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Model.GastosViewModel;
+using NFinance.ViewModel.GastosViewModel;
 using NFinance.WebApi.Controllers;
 using NSubstitute;
 using System;
@@ -39,7 +39,7 @@ namespace NFinance.Tests.WebApi
             var parcelas = 64;
             var idCliente = Guid.NewGuid();
             var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente };
+            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
             _gastosService.CadastrarGasto(Arg.Any<CadastrarGastoViewModel.Request>())
                 .Returns(new CadastrarGastoViewModel.Response
                 {
@@ -51,7 +51,7 @@ namespace NFinance.Tests.WebApi
                     Cliente = cliente
                 });
             var controller = InicializarGastosController();
-            var gasto = new CadastrarGastoViewModel.Request()
+            var gasto = new CadastrarGastoViewModel.Request
             {
                 NomeGasto = nomeGasto,
                 QuantidadeParcelas = parcelas,
@@ -88,7 +88,7 @@ namespace NFinance.Tests.WebApi
             var parcelas = 64;
             var idCliente = Guid.NewGuid();
             var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente };
+            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
             _gastosService.AtualizarGasto(Arg.Any<Guid>(),Arg.Any<AtualizarGastoViewModel.Request>())
                 .Returns(new AtualizarGastoViewModel.Response
                 {
@@ -100,7 +100,7 @@ namespace NFinance.Tests.WebApi
                     Cliente = cliente
                 });
             var controller = InicializarGastosController();
-            var gasto = new AtualizarGastoViewModel.Request()
+            var gasto = new AtualizarGastoViewModel.Request
             {
                 NomeGasto = nomeGasto,
                 QuantidadeParcelas = parcelas,
@@ -137,7 +137,7 @@ namespace NFinance.Tests.WebApi
             var parcelas = 64;
             var idCliente = Guid.NewGuid();
             var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente };
+            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
             _gastosService.ConsultarGasto(Arg.Any<Guid>())
                 .Returns(new ConsultarGastoViewModel.Response
                 {
@@ -182,7 +182,7 @@ namespace NFinance.Tests.WebApi
                     DataExclusao = dataExclusao
                 });
             var controller = InicializarGastosController();
-            var gasto = new ExcluirGastoViewModel.Request()
+            var gasto = new ExcluirGastoViewModel.Request
             {
                 IdGasto = id,
                 MotivoExclusao = "Finalizado Pagamento",

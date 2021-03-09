@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NFinance.Model.GastosViewModel
+namespace NFinance.ViewModel.GastosViewModel
 {
     public class AtualizarGastoViewModel
     {

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain.Services;
 using NFinance.Domain.ViewModel.LoginViewModel;
+using NFinance.WebApi.Token;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -34,7 +34,7 @@ namespace NFinance.WebApi.Controllers
             {
                 _logger.LogInformation("Iniciando Login!");
                 var usuario = await _clienteRepository.CredenciaisLogin(request.Email, request.Senha);
-                var token = TokenService.GerarToken(usuario);
+                var token =  TokenService.GerarToken(usuario);
                 var response = new LoginViewModel.Response(usuario,token);
                 _logger.LogInformation("Login Realizado Com Sucesso!");
                 return Ok(response);

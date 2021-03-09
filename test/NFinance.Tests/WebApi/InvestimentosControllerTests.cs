@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Model.InvestimentosViewModel;
+using NFinance.ViewModel.InvestimentosViewModel;
 using NFinance.WebApi.Controllers;
 using NSubstitute;
 using System;
@@ -38,7 +38,7 @@ namespace NFinance.Tests.WebApi
             var dataAplicacao = DateTime.Today;
             var idCliente = Guid.NewGuid();
             var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente };
+            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
             _investimentoService.RealizarInvestimento(Arg.Any<RealizarInvestimentoViewModel.Request>())
                 .Returns(new RealizarInvestimentoViewModel.Response
                 {
@@ -49,7 +49,7 @@ namespace NFinance.Tests.WebApi
                     Cliente = cliente
                 });
             var controller = InicializarInvestimentoController();
-            var investimento = new RealizarInvestimentoViewModel.Request()
+            var investimento = new RealizarInvestimentoViewModel.Request
             {
                 DataAplicacao = dataAplicacao,
                 NomeInvestimento = nomeInvestimento,
@@ -83,7 +83,7 @@ namespace NFinance.Tests.WebApi
             var dataAplicacao = DateTime.Today;
             var idCliente = Guid.NewGuid();
             var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente };
+            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
             _investimentoService.AtualizarInvestimento(Arg.Any<Guid>(),Arg.Any<AtualizarInvestimentoViewModel.Request>())
                 .Returns(new AtualizarInvestimentoViewModel.Response
                 {
@@ -94,7 +94,7 @@ namespace NFinance.Tests.WebApi
                     Cliente = cliente
                 });
             var controller = InicializarInvestimentoController();
-            var investimento = new AtualizarInvestimentoViewModel.Request()
+            var investimento = new AtualizarInvestimentoViewModel.Request
             {
                 DataAplicacao = dataAplicacao,
                 NomeInvestimento = nomeInvestimento,
@@ -128,7 +128,7 @@ namespace NFinance.Tests.WebApi
             var dataAplicacao = DateTime.Today;
             var idCliente = Guid.NewGuid();
             var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente };
+            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
             _investimentoService.ConsultarInvestimento(Arg.Any<Guid>())
                 .Returns(new ConsultarInvestimentoViewModel.Response
                 {

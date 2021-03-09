@@ -1,8 +1,8 @@
 ﻿using System;
 using NFinance.Domain;
-using NFinance.Model.InvestimentosViewModel;
+using NFinance.ViewModel.InvestimentosViewModel;
 
-namespace NFinance.Model.ResgatesViewModel
+namespace NFinance.ViewModel.ResgatesViewModel
 {
     public class ResgateViewModel
     {

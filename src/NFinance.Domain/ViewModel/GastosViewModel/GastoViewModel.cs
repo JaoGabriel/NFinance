@@ -2,13 +2,13 @@
 using NFinance.Domain;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 
-namespace NFinance.Model.GastosViewModel
+namespace NFinance.ViewModel.GastosViewModel
 {
     public class GastoViewModel
     {
         public Guid Id { get; set; }
         
-        public ClienteViewModel.Response Cliente { get; set; }
+        public ClienteViewModel.SimpleResponse Cliente { get; set; }
         
         public string NomeGasto { get; set; }
 

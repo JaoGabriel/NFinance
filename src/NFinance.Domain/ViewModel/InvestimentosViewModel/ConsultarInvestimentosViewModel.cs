@@ -1,7 +1,7 @@
 ﻿using NFinance.Domain;
 using System.Collections.Generic;
 
-namespace NFinance.Model.InvestimentosViewModel
+namespace NFinance.ViewModel.InvestimentosViewModel
 {
     public class ConsultarInvestimentosViewModel
     {

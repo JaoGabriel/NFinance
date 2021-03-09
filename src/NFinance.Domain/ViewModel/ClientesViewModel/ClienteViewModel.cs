@@ -45,5 +45,20 @@ namespace NFinance.Domain.ViewModel.ClientesViewModel
                 Email = cliente.Email;
             }
         }
+
+        public class SimpleResponse
+        {
+            public Guid Id { get; set; }
+
+            public string Nome { get; set; }
+
+            public SimpleResponse() { }
+
+            public SimpleResponse(Cliente cliente)
+            {
+                Id = cliente.Id;
+                Nome = cliente.Nome;
+            }
+        }
     }
 }

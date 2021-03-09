@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Model.ResgatesViewModel;
+using NFinance.ViewModel.ResgatesViewModel;
 
 namespace NFinance.WebApi.Controllers
 {

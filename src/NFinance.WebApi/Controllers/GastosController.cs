@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Model.GastosViewModel;
+using NFinance.ViewModel.GastosViewModel;
 
 namespace NFinance.WebApi.Controllers
 {

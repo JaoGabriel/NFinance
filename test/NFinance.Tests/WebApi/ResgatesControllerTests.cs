@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Model.InvestimentosViewModel;
-using NFinance.Model.ResgatesViewModel;
+using NFinance.ViewModel.InvestimentosViewModel;
+using NFinance.ViewModel.ResgatesViewModel;
 using NFinance.WebApi.Controllers;
 using NSubstitute;
 using System;
@@ -36,8 +36,8 @@ namespace NFinance.Tests.WebApi
             var id = Guid.NewGuid();
             var idInvestimento = Guid.NewGuid();
             var idCliente = Guid.NewGuid();
-            var cliente = new ClienteViewModel.Response() {Id = idCliente, Nome = "Joao Testes"};
-            var investimento = new InvestimentoViewModel() { Id = idInvestimento, DataAplicacao = DateTime.Today.AddMonths(-4), NomeInvestimento = "Investimento ABC", Valor = 418371623812.23M, Cliente = cliente };
+            var cliente = new ClienteViewModel.SimpleResponse {Id = idCliente, Nome = "Joao Testes"};
+            var investimento = new InvestimentoViewModel { Id = idInvestimento, DataAplicacao = DateTime.Today.AddMonths(-4), NomeInvestimento = "Investimento ABC", Valor = 418371623812.23M, Cliente = cliente };
             _resgateService.RealizarResgate(Arg.Any<RealizarResgateViewModel.Request>())
                 .Returns(new RealizarResgateViewModel.Response
                 {
@@ -48,7 +48,7 @@ namespace NFinance.Tests.WebApi
                     DataResgate = DateTime.Today
                 });
             var controller = InicializarResgateController();
-            var resgate = new RealizarResgateViewModel.Request()
+            var resgate = new RealizarResgateViewModel.Request
             {
                 IdInvestimento = idInvestimento,
                 MotivoResgate = "Pagamento Faculdade",
@@ -81,8 +81,8 @@ namespace NFinance.Tests.WebApi
             var id = Guid.NewGuid();
             var idInvestimento = Guid.NewGuid();
             var idCliente = Guid.NewGuid();
-            var cliente = new ClienteViewModel.Response() { Id = idCliente, Nome = "Joao Testes" };
-            var investimento = new InvestimentoViewModel() { Id = idInvestimento, DataAplicacao = DateTime.Today.AddMonths(-4), NomeInvestimento = "Investimento ABC", Valor = 418371623812.23M, Cliente = cliente };
+            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = "Joao Testes" };
+            var investimento = new InvestimentoViewModel { Id = idInvestimento, DataAplicacao = DateTime.Today.AddMonths(-4), NomeInvestimento = "Investimento ABC", Valor = 418371623812.23M, Cliente = cliente };
             _resgateService.ConsultarResgate(Arg.Any<Guid>())
                 .Returns(new ConsultarResgateViewModel.Response
                 {

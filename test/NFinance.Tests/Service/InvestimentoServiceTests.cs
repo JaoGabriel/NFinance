@@ -4,7 +4,7 @@ using NFinance.Domain.Exceptions.Investimento;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Services;
-using NFinance.Model.InvestimentosViewModel;
+using NFinance.ViewModel.InvestimentosViewModel;
 using NSubstitute;
 using System;
 using System.Collections.Generic;

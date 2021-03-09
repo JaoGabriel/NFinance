@@ -1,4 +1,4 @@
-﻿namespace NFinance.Model.GastosViewModel
+﻿namespace NFinance.ViewModel.GastosViewModel
 {
     public class ConsultarGastoViewModel
     {

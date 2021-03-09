@@ -1,4 +1,4 @@
-﻿using NFinance.Model.ResgatesViewModel;
+﻿using NFinance.ViewModel.ResgatesViewModel;
 using System.Collections.Generic;
 using System.Linq;
 

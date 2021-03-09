@@ -4,7 +4,7 @@ using NFinance.Domain.Exceptions.Gasto;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Services;
-using NFinance.Model.GastosViewModel;
+using NFinance.ViewModel.GastosViewModel;
 using NSubstitute;
 using System;
 using System.Collections.Generic;

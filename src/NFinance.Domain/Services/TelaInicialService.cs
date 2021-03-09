@@ -4,9 +4,9 @@ using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.ViewModel.GanhoViewModel;
 using NFinance.Domain.ViewModel.TelaInicialViewModel;
-using NFinance.Model.GastosViewModel;
-using NFinance.Model.InvestimentosViewModel;
-using NFinance.Model.ResgatesViewModel;
+using NFinance.ViewModel.GastosViewModel;
+using NFinance.ViewModel.InvestimentosViewModel;
+using NFinance.ViewModel.ResgatesViewModel;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -53,7 +53,7 @@ namespace NFinance.Domain.Services
             var ganhos = await _ganhoRepository.ConsultarGanhos(idCliente);
             var listGanho = new List<GanhoViewModel>();
             foreach (var ganho in ganhos)
-                if (ganho.DataDoGanho.Month.Equals(DateTime.Today.Month) || ganho.Recorrente)
+                if (ValidaGanho(ganho))
                 {
                     var vm = new GanhoViewModel(ganho);
                     listGanho.Add(vm);
@@ -70,7 +70,7 @@ namespace NFinance.Domain.Services
             var listGastos = new List<GastoViewModel.Response>();
             
             foreach (var gasto in gastos)
-                if (gasto.DataDoGasto.Month.Equals(DateTime.Today.Month) || ValidaParcela(gasto.QuantidadeParcelas,gasto.DataDoGasto))
+                if (ValidaGasto(gasto))
                 {
                     var vm = new GastoViewModel.Response(gasto);
                     if (gasto.QuantidadeParcelas > 0)
@@ -138,12 +138,15 @@ namespace NFinance.Domain.Services
                 return false;
         }
 
-        private bool ValidaParcela(int quantidadeParcelas,DateTime dataGasto)
+        private bool ValidaGasto(Gasto gasto)
         {
-            if (quantidadeParcelas == 1)
-                quantidadeParcelas -= 1;
+            if (gasto.DataDoGasto.Month > DateTime.Today.Month || gasto.DataDoGasto.Year > DateTime.Today.Year)
+                return false;
 
-            var dataMax = dataGasto.AddMonths(quantidadeParcelas);
+            if (gasto.QuantidadeParcelas == 1)
+                gasto.QuantidadeParcelas -= 1;
+
+            var dataMax = gasto.DataDoGasto.AddMonths(gasto.QuantidadeParcelas);
 
             if (dataMax.Month >= DateTime.Today.Month)
                 return true;
@@ -151,6 +154,16 @@ namespace NFinance.Domain.Services
             return false;
         }
 
+        private bool ValidaGanho(Ganho ganho)
+        {
+            if (DateTime.Today.Month.Equals(ganho.DataDoGanho.Month))
+                return true;
+            else
+                if (ganho.Recorrente && DateTime.Today.Month.Equals(ganho.DataDoGanho.Month))
+                    return true;
+
+            return false;
+        }
 
     }
 }
