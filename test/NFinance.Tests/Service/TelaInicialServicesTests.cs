@@ -212,7 +212,7 @@ namespace NFinance.Tests.Service
             var investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataAplicacao };
             var investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataAplicacao1 };
             var resgate = new Resgate { Id = idResgate, IdCliente = idCliente, IdInvestimento = idInvestimento, Valor = valorInvestimento, DataResgate = dataResgate, MotivoResgate = motivoResgate };
-            var clienteResponse = new ConsultarClienteViewModel.Response() { Id = idCliente, Nome = nomeCliente, Cpf = cpfCliente, Email = emailCliente };
+            var clienteResponse = new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente, Cpf = cpfCliente, Email = emailCliente };
             listGanho.Add(ganho);
             listGanho.Add(ganho1);
             listGanho.Add(ganho2);

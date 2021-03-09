@@ -13,7 +13,7 @@ namespace NFinance.WebApi.Token
     {
         public static string GerarToken(Cliente cliente)
         {
-            if (cliente == null) throw new Exception("Usuario ou Senha Invalidos!");
+            if (cliente == null) throw new ArgumentException("Usuario ou Senha Invalidos!");
             
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
