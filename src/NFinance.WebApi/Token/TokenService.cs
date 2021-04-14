@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using NFinance.Domain;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -9,14 +10,20 @@ using System.Text;
 namespace NFinance.WebApi.Token
 {
     [ExcludeFromCodeCoverage]
-    public static class TokenService
+    public class TokenService
     {
-        public static string GerarToken(Cliente cliente)
+        private readonly IConfiguration Configuration;
+        public TokenService(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public string GerarToken(Cliente cliente)
         {
             if (cliente == null) throw new ArgumentException("Usuario ou Senha Invalidos!");
             
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("TokenSettings").Value);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

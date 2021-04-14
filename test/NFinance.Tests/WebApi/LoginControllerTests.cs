@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain.ViewModel.LoginViewModel;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.ViewModel.AutenticacaoViewModel;
 using NFinance.WebApi.Controllers;
 using NSubstitute;
 using System;
@@ -14,18 +15,18 @@ namespace NFinance.Tests.WebApi
 {
     public class LoginControllerTests
     {
-        private readonly IClienteRepository _clienteRepository;
+        private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<LoginController> _logger;
 
         public LoginControllerTests()
         {
             _logger = Substitute.For<ILogger<LoginController>>();
-            _clienteRepository = Substitute.For<IClienteRepository>();
+            _autenticacaoService = Substitute.For<IAutenticacaoService>();
         }
 
         private LoginController InicializarLoginController()
         {
-            return new LoginController(_logger, _clienteRepository);
+            return new LoginController(_logger, _autenticacaoService);
         }
 
         [Fact]
@@ -33,17 +34,18 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var id = Guid.NewGuid();
+            var idSessao = Guid.NewGuid();
             var nome = "Jorgin da Lages";
-            var cpf = "123.123.123-11";
             var email = "aloha@teste.com";
             var senha = "123456";
-            var cliente = new Cliente { Id = id, Nome = nome, CPF = cpf, Email = email, Senha = senha};
+            var token = "dgyagdyaygsdyaguadarqiuwhasdaweuhqiuahsdjkahsduahsdl";
+            var response = new LoginViewModel.Response { IdSessao = idSessao, IdCliente = id, Nome = nome, Token = token, Autenticado = true, Erro = null };
             var loginViewModel = new LoginViewModel { Email = email, Senha = senha};
             var controller = InicializarLoginController();
-            _clienteRepository.CredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
+            _autenticacaoService.RealizarLogin(Arg.Any<LoginViewModel>()).Returns(response);
 
             //Act
-            var teste = await controller.Autenticar(loginViewModel);
+            var teste = controller.Autenticar(loginViewModel);
             var okResult = teste.Result as ObjectResult;
             var autenticarViewModel = Assert.IsType<LoginViewModel.Response>(okResult.Value);
 
