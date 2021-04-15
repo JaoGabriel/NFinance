@@ -6,6 +6,6 @@ namespace NFinance.Domain.Interfaces.Services
     public interface IAutenticacaoService
     {
         Task<LoginViewModel.Response> RealizarLogin(LoginViewModel request);
-        Task<LogoutViewModel> RealizarLogut();
+        Task<LogoutViewModel.Response> RealizarLogut(LogoutViewModel request);
     }
 }

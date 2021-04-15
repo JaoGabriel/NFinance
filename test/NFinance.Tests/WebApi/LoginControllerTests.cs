@@ -16,17 +16,17 @@ namespace NFinance.Tests.WebApi
     public class LoginControllerTests
     {
         private readonly IAutenticacaoService _autenticacaoService;
-        private readonly ILogger<LoginController> _logger;
+        private readonly ILogger<AutenticacaoController> _logger;
 
         public LoginControllerTests()
         {
-            _logger = Substitute.For<ILogger<LoginController>>();
+            _logger = Substitute.For<ILogger<AutenticacaoController>>();
             _autenticacaoService = Substitute.For<IAutenticacaoService>();
         }
 
-        private LoginController InicializarLoginController()
+        private AutenticacaoController InicializarLoginController()
         {
-            return new LoginController(_logger, _autenticacaoService);
+            return new AutenticacaoController(_logger, _autenticacaoService);
         }
 
         [Fact]

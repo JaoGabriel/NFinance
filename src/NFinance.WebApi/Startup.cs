@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -47,7 +48,6 @@ namespace NFinance.WebApi
             });
             services.AddInfraDataSqlServices(Configuration);
             services.AddDomainServices(Configuration);
-            services.AddMemoryCache();
 
             services.AddControllers();
 

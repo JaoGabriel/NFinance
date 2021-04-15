@@ -11,13 +11,12 @@ namespace NFinance.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LoginController : ControllerBase
+    public class AutenticacaoController : ControllerBase
     {
         private readonly IAutenticacaoService _autenticacaoService;
+        private readonly ILogger<AutenticacaoController> _logger;
 
-        private readonly ILogger<LoginController> _logger;
-
-        public LoginController(ILogger<LoginController> logger, IAutenticacaoService autenticacaoService)
+        public AutenticacaoController(ILogger<AutenticacaoController> logger, IAutenticacaoService autenticacaoService)
         {
             _logger = logger;
             _autenticacaoService = autenticacaoService;
@@ -45,6 +44,26 @@ namespace NFinance.WebApi.Controllers
             // TODO
             // Incluir Redis para token de sessao, cada chamada incluir validacao de token de sessao
             // caso seja necessario, atualizar a classe cliente, adicionando uma prop de Token ou Autenticado
+        }
+
+        [HttpPost("/api/Logout")]
+        [ProducesResponseType(typeof(LogoutViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> Deslogar([FromBody] LogoutViewModel request)
+        {
+            try
+            {
+                _logger.LogInformation("Iniciando Logout!");
+                var response = await _autenticacaoService.RealizarLogut(request);
+                _logger.LogInformation("Logot Realizado Com Sucesso!");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex, "Falha ao efetuar logout!");
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

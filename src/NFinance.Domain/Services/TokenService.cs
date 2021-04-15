@@ -10,20 +10,20 @@ namespace NFinance.Domain.Services
     [ExcludeFromCodeCoverage]
     public static class TokenService
     {
-        private static string _secret = "d53b997993b723080a619e8e5f575abf90df5c3c3fb332bd3cf3129f5057202f";
-
+        private readonly static string _key = "d53b997993b723080a619e8e5f575abf90df5c3c3fb332bd3cf3129f5057202f";
         public static string GerarToken(Cliente cliente)
         {
             if (cliente == null) throw new ArgumentException("Usuario ou Senha Invalidos!");
-            
+
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_secret);
+            var key = Encoding.ASCII.GetBytes(_key);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Email, cliente.Email),
-                    new Claim(ClaimTypes.Name, cliente.Nome)
+                    new Claim(ClaimTypes.Hash, cliente.Id.ToString()),
+                    new Claim(ClaimTypes.Name, cliente.Nome),
+                    new Claim(ClaimTypes.Email, cliente.Email)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

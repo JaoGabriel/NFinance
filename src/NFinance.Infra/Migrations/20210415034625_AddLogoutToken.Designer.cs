@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NFinance.Infra;
 
 namespace NFinance.Infra.Migrations
 {
     [DbContext(typeof(BaseDadosContext))]
-    partial class BaseDadosContextModelSnapshot : ModelSnapshot
+    [Migration("20210415034625_AddLogoutToken")]
+    partial class AddLogoutToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
