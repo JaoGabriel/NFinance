@@ -9,8 +9,8 @@ namespace NFinance.Infra.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "LogoutToken",
                 table: "Cliente",
-                type: "nvarchar(250)",
-                maxLength: 250,
+                type: "nvarchar(400)",
+                maxLength: 400,
                 nullable: true);
         }
 

@@ -10,7 +10,7 @@ using NFinance.Infra;
 namespace NFinance.Infra.Migrations
 {
     [DbContext(typeof(BaseDadosContext))]
-    [Migration("20210415034625_AddLogoutToken")]
+    [Migration("20210416040457_AddLogoutToken")]
     partial class AddLogoutToken
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,8 +38,8 @@ namespace NFinance.Infra.Migrations
                         .HasColumnType("nvarchar(120)");
 
                     b.Property<string>("LogoutToken")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Nome")
                         .IsRequired()

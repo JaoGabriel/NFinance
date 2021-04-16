@@ -36,8 +36,8 @@ namespace NFinance.Infra.Migrations
                         .HasColumnType("nvarchar(120)");
 
                     b.Property<string>("LogoutToken")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Nome")
                         .IsRequired()

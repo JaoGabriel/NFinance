@@ -27,7 +27,7 @@ namespace NFinance.Domain
         [StringLength(120, MinimumLength = 10)]
         public string Senha { get; set; }
 
-        [StringLength(250)]
+        [StringLength(400)]
         public string LogoutToken { get; set; }
 
         public Cliente() { }
@@ -50,7 +50,16 @@ namespace NFinance.Domain
             Senha = request.Senha;
         }
 
-        public Cliente(ConsultarClienteViewModel.Response cliente,string token)
+        public Cliente(Cliente cliente, string token)
+        {
+            Id = cliente.Id;
+            Nome = cliente.Nome;
+            CPF = cliente.CPF;
+            Email = cliente.Email;
+            LogoutToken = token;
+        }
+
+        public Cliente(ConsultarClienteViewModel.Response cliente, string token)
         {
             Id = cliente.Id;
             Nome = cliente.Nome;

@@ -12,14 +12,13 @@
 
             public string Senha { get; set; }
 
-            public string Token { get; set; }
+            public Request() { }
 
-            public Request(ConsultarClienteViewModel.Response response,string token)
+            public Request(ConsultarClienteViewModel.Response response)
             {
                 Nome = response.Nome;
                 Cpf = response.Cpf;
-                Email = response.Cpf;
-                Token = token;
+                Email = response.Email;
             }
 
         }

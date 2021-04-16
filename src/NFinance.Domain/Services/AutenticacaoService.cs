@@ -36,26 +36,16 @@ namespace NFinance.Domain.Services
 
         public async Task<LogoutViewModel.Response> RealizarLogut(LogoutViewModel request)
         {
-            var redis = new LoginViewModel.Response();
+            var response = new LogoutViewModel.Response();
             using (var redisClient = new RedisClient(Configuration.GetConnectionString("Redis")))
             {
-                redis = redisClient.Get<LoginViewModel.Response>(request.IdSessao.ToString());
+                var redis = redisClient.Get<LoginViewModel.Response>(request.IdSessao.ToString());
+                var cliente = await _clienteService.ConsultarCliente(redis.IdCliente);
+                response = await _clienteService.CadastrarLogoutToken(cliente, redis.Token);
+                redisClient.Remove(request.IdSessao.ToString());
             }
-
-            var cliente = await _clienteService.ConsultarCliente(redis.IdCliente);
-            //Criar um viewModel para cadastrar logout token na base, remover alteracoes no atualizar cliente viewmodel
-            var clienteAtt = new AtualizarClienteViewModel.Request(cliente, redis.Token);
-            var atualizado = await _clienteService.AtualizarCliente(redis.IdCliente,clienteAtt);
-
-            //Criar um servico para cadastrar logou token no banco de dados
-
-            if(atualizado != null)
-            {
-                var response = new LogoutViewModel.Response("Deslogado com sucesso!");
-                return response;
-            }
-
-            return null;
+            
+            return response;
         }
     } 
 }

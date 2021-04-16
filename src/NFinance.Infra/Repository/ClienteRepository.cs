@@ -58,6 +58,16 @@ namespace NFinance.Infra.Repository
             return response;
         }
 
+        public async Task<Cliente> CadastrarLogoutToken(Cliente clienteRequest)
+        {
+            var cliente = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == clienteRequest.Id);
+            clienteRequest.Senha = cliente.Senha;
+            _context.Entry(cliente).CurrentValues.SetValues(clienteRequest);
+            await UnitOfWork.Commit();
+            
+            return clienteRequest;
+        }
+
         static string HashValue(string value)
         {
             UnicodeEncoding encoding = new UnicodeEncoding();

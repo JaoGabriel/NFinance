@@ -46,6 +46,25 @@ namespace NFinance.Domain.Services
             return response;
         }
 
+        public async Task<LogoutViewModel.Response> CadastrarLogoutToken(ConsultarClienteViewModel.Response request, string token)
+        {
+            if (request == null) throw new ArgumentException("Ocorreu um erro, Tente novamente em instantes!");
+
+            var cliente = new Cliente(request, token);
+            var clienteLogoutToken = await _clienteRepository.CadastrarLogoutToken(cliente);
+            
+            if (clienteLogoutToken != null)
+            {
+                var response = new LogoutViewModel.Response("Logout relizado com sucesso!",true);
+                return response;
+            }
+            else
+            {
+                var response = new LogoutViewModel.Response("Ocorreu um erro, Tente novamente em instantes!", false);
+                return response;
+            }
+        }
+
         public async Task<ConsultarClienteViewModel.Response> ConsultarCliente(Guid id)
         {
             if (Guid.Empty.Equals(id)) throw new IdException("Id cliente invalido");
@@ -69,5 +88,7 @@ namespace NFinance.Domain.Services
                 return new LoginViewModel.Response(new ErroViewModel(1572, "Cliente não cadastrado!"), false, credenciaisCliente);
             }
         }
+
+
     }
 }

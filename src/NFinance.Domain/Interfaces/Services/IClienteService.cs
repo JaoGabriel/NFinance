@@ -11,5 +11,6 @@ namespace NFinance.Domain.Interfaces.Services
         Task<CadastrarClienteViewModel.Response> CadastrarCliente(CadastrarClienteViewModel.Request clienteRequest);
         Task<AtualizarClienteViewModel.Response> AtualizarCliente(Guid id, AtualizarClienteViewModel.Request clienteRequest);
         Task<LoginViewModel.Response> ConsultarCredenciaisLogin(LoginViewModel request);
+        Task<LogoutViewModel.Response> CadastrarLogoutToken(ConsultarClienteViewModel.Response request,string token);
     }
 }

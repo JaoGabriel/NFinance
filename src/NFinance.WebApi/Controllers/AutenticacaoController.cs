@@ -42,8 +42,7 @@ namespace NFinance.WebApi.Controllers
             }
 
             // TODO
-            // Incluir Redis para token de sessao, cada chamada incluir validacao de token de sessao
-            // caso seja necessario, atualizar a classe cliente, adicionando uma prop de Token ou Autenticado
+            // Criar uma validacao de token antes de cada chamada
         }
 
         [HttpPost("/api/Logout")]
