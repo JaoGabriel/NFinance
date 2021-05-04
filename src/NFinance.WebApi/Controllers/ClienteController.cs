@@ -14,23 +14,27 @@ namespace NFinance.WebApi.Controllers
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;
-
+        private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<ClienteController> _logger;
 
-        public ClienteController(ILogger<ClienteController> logger, IClienteService clienteService)
+        public ClienteController(ILogger<ClienteController> logger, IClienteService clienteService, IAutenticacaoService autenticacaoService)
         {
             _logger = logger;
             _clienteService = clienteService;
+            _autenticacaoService = autenticacaoService;
         }
 
         [HttpGet("/api/Cliente/Consultar/{id}")]
         [ProducesResponseType(typeof(ConsultarClienteViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         [Authorize]
-        public async Task<IActionResult> ConsultarCliente(Guid id)
+        public async Task<IActionResult> ConsultarCliente(Guid id,[FromHeader]string authorization)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var cliente = await _clienteService.ConsultarCliente(id);
                 _logger.LogInformation("Clientes Encontrado Com Sucesso!");
                 return Ok(cliente);
@@ -46,7 +50,7 @@ namespace NFinance.WebApi.Controllers
         [ProducesResponseType(typeof(CadastrarClienteViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
         [AllowAnonymous]
-        public async Task<IActionResult> CadastrarCliente([FromBody] CadastrarClienteViewModel.Request request)
+        public async Task<IActionResult> CadastrarCliente(CadastrarClienteViewModel.Request request)
         {
             try
             {
@@ -62,13 +66,16 @@ namespace NFinance.WebApi.Controllers
         }
 
         [HttpPut("/api/Cliente/Atualizar/{id}")]
-        [ProducesResponseType(typeof(AtualizarClienteViewModel.Response), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(AtualizarClienteViewModel.Response), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         [Authorize]
-        public async Task<IActionResult> AtualizarCliente(Guid id, [FromBody] AtualizarClienteViewModel.Request request)
+        public async Task<IActionResult> AtualizarCliente([FromHeader]string authorization, Guid id, AtualizarClienteViewModel.Request request)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var response = await _clienteService.AtualizarCliente(id, request);
                 _logger.LogInformation("Cliente Atualizado Com Sucesso!");
                 return Ok(response);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NFinance.Domain.ViewModel.ClientesViewModel;
+using NFinance.Domain.ViewModel.AutenticacaoViewModel;
 
 namespace NFinance.Domain.Interfaces.Services
 {
@@ -9,5 +10,7 @@ namespace NFinance.Domain.Interfaces.Services
         Task<ConsultarClienteViewModel.Response> ConsultarCliente(Guid id);
         Task<CadastrarClienteViewModel.Response> CadastrarCliente(CadastrarClienteViewModel.Request clienteRequest);
         Task<AtualizarClienteViewModel.Response> AtualizarCliente(Guid id, AtualizarClienteViewModel.Request clienteRequest);
+        Task<LoginViewModel.Response> ConsultarCredenciaisLogin(LoginViewModel request);
+        Task<LogoutViewModel.Response> CadastrarLogoutToken(ConsultarClienteViewModel.Response request,string token);
     }
 }

@@ -53,9 +53,19 @@ namespace NFinance.Infra.Repository
         {
             var users = await _context.Cliente.ToListAsync();
             var senhaCriptografada = HashValue(senha);
-            var response = users.Where(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senhaCriptografada).FirstOrDefault();
+            var response = users.FirstOrDefault(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senhaCriptografada);
 
             return response;
+        }
+
+        public async Task<Cliente> CadastrarLogoutToken(Cliente clienteRequest)
+        {
+            var cliente = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == clienteRequest.Id);
+            clienteRequest.Senha = cliente.Senha;
+            _context.Entry(cliente).CurrentValues.SetValues(clienteRequest);
+            await UnitOfWork.Commit();
+            
+            return clienteRequest;
         }
 
         static string HashValue(string value)

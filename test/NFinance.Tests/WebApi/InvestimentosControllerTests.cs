@@ -10,22 +10,25 @@ using System;
 using System.Collections.Generic;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
+using NFinance.Domain.Services;
 
 namespace NFinance.Tests.WebApi
 {
     public class InvestimentosControllerTests
     {
         private readonly IInvestimentoService _investimentoService;
+        private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<InvestimentoController> _logger;
         public InvestimentosControllerTests()
         {
             _investimentoService = Substitute.For<IInvestimentoService>();
+            _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<InvestimentoController>>();
         }
 
         private InvestimentoController InicializarInvestimentoController()
         {
-            return new InvestimentoController(_logger, _investimentoService);
+            return new InvestimentoController(_logger, _investimentoService,_autenticacaoService);
         }
 
         [Fact]
@@ -56,9 +59,10 @@ namespace NFinance.Tests.WebApi
                 Valor = valorInvestimento,
                 IdCliente = idCliente
             };
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.RealizarInvestimento(investimento);
+            var teste = controller.RealizarInvestimento(token,investimento);
             var okResult = teste.Result as ObjectResult;
             var realizarInvesitimentoViewModel = Assert.IsType<RealizarInvestimentoViewModel.Response>(okResult.Value);
 
@@ -101,9 +105,10 @@ namespace NFinance.Tests.WebApi
                 Valor = valorInvestimento,
                 IdCliente = idCliente
             };
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.AtualizarInvestimento(id,investimento);
+            var teste = controller.AtualizarInvestimento(token,id,investimento);
             var okResult = teste.Result as ObjectResult;
             var atualizarInvesitimentoViewModel = Assert.IsType<AtualizarInvestimentoViewModel.Response>(okResult.Value);
 
@@ -139,9 +144,10 @@ namespace NFinance.Tests.WebApi
                     Cliente = cliente
                 });
             var controller = InicializarInvestimentoController();
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.ConsultarInvestimento(id);
+            var teste = controller.ConsultarInvestimento(token,id);
             var okResult = teste.Result as ObjectResult;
             var consultarInvesitimentoViewModel = Assert.IsType<ConsultarInvestimentoViewModel.Response>(okResult.Value);
 
@@ -190,7 +196,8 @@ namespace NFinance.Tests.WebApi
             var controller = InicializarInvestimentoController();
 
             //Act
-            var teste = controller.ConsultarInvestimentos(idCliente);
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var teste = controller.ConsultarInvestimentos(token,idCliente);
             var okResult = teste.Result as ObjectResult;
             var consultarInvestimentosViewModel = Assert.IsType<ConsultarInvestimentosViewModel.Response>(okResult.Value);
 

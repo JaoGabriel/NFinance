@@ -26,6 +26,9 @@ namespace NFinance.Domain
         [StringLength(120, MinimumLength = 10)]
         public string Senha { get; set; }
 
+        [StringLength(400)]
+        public string LogoutToken { get; set; }
+
         public Cliente() { }
 
         public Cliente(CadastrarClienteViewModel.Request clienteRequest)
@@ -44,6 +47,24 @@ namespace NFinance.Domain
             CPF = request.Cpf;
             Email = request.Email;
             Senha = request.Senha;
+        }
+
+        public Cliente(Cliente cliente, string token)
+        {
+            Id = cliente.Id;
+            Nome = cliente.Nome;
+            CPF = cliente.CPF;
+            Email = cliente.Email;
+            LogoutToken = token;
+        }
+
+        public Cliente(ConsultarClienteViewModel.Response cliente, string token)
+        {
+            Id = cliente.Id;
+            Nome = cliente.Nome;
+            CPF = cliente.Cpf;
+            Email = cliente.Email;
+            LogoutToken = token;
         }
     }
 }

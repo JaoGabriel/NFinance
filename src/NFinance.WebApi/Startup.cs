@@ -46,11 +46,10 @@ namespace NFinance.WebApi
             });
             services.AddInfraDataSqlServices(Configuration);
             services.AddDomainServices(Configuration);
-            services.AddMemoryCache();
 
             services.AddControllers();
 
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("TokenSettings").Value);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

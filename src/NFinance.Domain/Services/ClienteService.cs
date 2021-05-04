@@ -1,10 +1,13 @@
-﻿using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.Interfaces.Repository;
+﻿using System;
 using System.Threading.Tasks;
-using System;
-using NFinance.Domain.Exceptions.Cliente;
 using NFinance.Domain.Exceptions;
+using NFinance.Domain.Exceptions.Cliente;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.ViewModel.ClientesViewModel;
+using NFinance.Domain.ViewModel.AutenticacaoViewModel;
+using NFinance.Domain.Exceptions.Autenticacao;
+using NFinance.Domain.ViewModel;
 
 namespace NFinance.Domain.Services
 {
@@ -15,6 +18,7 @@ namespace NFinance.Domain.Services
         {
             _clienteRepository = clienteRepository;
         }
+
         public async Task<AtualizarClienteViewModel.Response> AtualizarCliente(Guid id, AtualizarClienteViewModel.Request clienteRequest)
         {
             if (Guid.Empty.Equals(id)) throw new IdException("Id cliente invalido");
@@ -25,7 +29,7 @@ namespace NFinance.Domain.Services
 
             var cliente = new Cliente(id, clienteRequest);
             var atualizado = await _clienteRepository.AtualizarCliente(id, cliente);
-            var response = new AtualizarClienteViewModel.Response {Id = atualizado.Id,Nome = atualizado.Nome, Cpf = atualizado.CPF,Email = atualizado.Email};
+            var response = new AtualizarClienteViewModel.Response { Id = atualizado.Id,Nome = atualizado.Nome, Cpf = atualizado.CPF, Email = atualizado.Email};
             return response;
         }
 
@@ -38,8 +42,27 @@ namespace NFinance.Domain.Services
 
             var cliente = new Cliente(clienteRequest);
             var novoCliente = await _clienteRepository.CadastrarCliente(cliente);
-            var response = new CadastrarClienteViewModel.Response {Id = novoCliente.Id,Nome = novoCliente.Nome,Cpf = novoCliente.CPF, Email = novoCliente.Email};
+            var response = new CadastrarClienteViewModel.Response { Id = novoCliente.Id,Nome = novoCliente.Nome,Cpf = novoCliente.CPF, Email = novoCliente.Email};
             return response;
+        }
+
+        public async Task<LogoutViewModel.Response> CadastrarLogoutToken(ConsultarClienteViewModel.Response request, string token)
+        {
+            if (request == null) throw new ArgumentException("Ocorreu um erro, Tente novamente em instantes!");
+
+            var cliente = new Cliente(request, token);
+            var clienteLogoutToken = await _clienteRepository.CadastrarLogoutToken(cliente);
+            
+            if (clienteLogoutToken != null)
+            {
+                var response = new LogoutViewModel.Response("Logout relizado com sucesso!",true);
+                return response;
+            }
+            else
+            {
+                var response = new LogoutViewModel.Response("Ocorreu um erro, Tente novamente em instantes!", false);
+                return response;
+            }
         }
 
         public async Task<ConsultarClienteViewModel.Response> ConsultarCliente(Guid id)
@@ -47,8 +70,25 @@ namespace NFinance.Domain.Services
             if (Guid.Empty.Equals(id)) throw new IdException("Id cliente invalido");
             
             var clienteConsulta = await _clienteRepository.ConsultarCliente(id);
-            var response = new ConsultarClienteViewModel.Response { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, Cpf = clienteConsulta.CPF,Email = clienteConsulta.Email};
+            var response = new ConsultarClienteViewModel.Response { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, Cpf = clienteConsulta.CPF,Email = clienteConsulta.Email, BlackListToken = clienteConsulta.LogoutToken};
             return response;
         }
+
+        public async Task<LoginViewModel.Response> ConsultarCredenciaisLogin(LoginViewModel request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Senha)) throw new LoginException("Login ou senha inválidos!");
+            
+            var credenciaisCliente =  await _clienteRepository.CredenciaisLogin(request.Email, request.Senha);
+            
+            if (credenciaisCliente != null){
+                var token = TokenService.GerarToken(credenciaisCliente);
+                var response = new LoginViewModel.Response(credenciaisCliente,token,true);
+                return response;
+            }else{
+                return new LoginViewModel.Response(new ErroViewModel(1572, "Cliente não cadastrado!"), false, credenciaisCliente);
+            }
+        }
+
+
     }
 }

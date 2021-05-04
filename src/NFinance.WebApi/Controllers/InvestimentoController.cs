@@ -13,13 +13,14 @@ namespace NFinance.WebApi.Controllers
     [Route("[controller]")]
     public class InvestimentoController : ControllerBase
     {
-        private readonly IInvestimentoService _investimentosService;
         private readonly ILogger<InvestimentoController> _logger;
+        private readonly IInvestimentoService _investimentosService;
+        private readonly IAutenticacaoService _autenticacaoService;
 
-        public InvestimentoController(ILogger<InvestimentoController> logger,
-            IInvestimentoService investimentosService)
+        public InvestimentoController(ILogger<InvestimentoController> logger, IInvestimentoService investimentosService, IAutenticacaoService autenticacaoService)
         {
             _logger = logger;
+            _autenticacaoService = autenticacaoService;
             _investimentosService = investimentosService;
         }
 
@@ -27,10 +28,13 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ConsultarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ConsultarInvestimento(Guid id)
+        public async Task<IActionResult> ConsultarInvestimento([FromHeader]string authorization, Guid id)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var investimento = await _investimentosService.ConsultarInvestimento(id);
                 _logger.LogInformation("Investimento Encontrado Com Sucesso!");
                 return Ok(investimento);
@@ -46,10 +50,13 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ConsultarInvestimentosViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ConsultarInvestimentos(Guid idCliente)
+        public async Task<IActionResult> ConsultarInvestimentos([FromHeader]string authorization, Guid idCliente)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var investimentos = await _investimentosService.ConsultarInvestimentos(idCliente);
                 _logger.LogInformation("Investimentos Encontrados Com Sucesso!");
                 return Ok(investimentos);
@@ -65,11 +72,13 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(RealizarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> RealizarInvestimento(
-            [FromBody] RealizarInvestimentoViewModel.Request investimentosRequest)
+        public async Task<IActionResult> RealizarInvestimento([FromHeader]string authorization, RealizarInvestimentoViewModel.Request investimentosRequest)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var investimentoResponse = await _investimentosService.RealizarInvestimento(investimentosRequest);
                 _logger.LogInformation("Investimento Realizado Com Sucesso!");
                 return Ok(investimentoResponse);
@@ -85,11 +94,13 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(AtualizarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> AtualizarInvestimento(Guid id,
-            [FromBody] AtualizarInvestimentoViewModel.Request investimentosRequest)
+        public async Task<IActionResult> AtualizarInvestimento([FromHeader]string authorization, Guid id, AtualizarInvestimentoViewModel.Request investimentosRequest)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var investimentoResponse = await _investimentosService.AtualizarInvestimento(id, investimentosRequest);
                 _logger.LogInformation("Investimento Atualizado Com Sucesso!");
                 return Ok(investimentoResponse);

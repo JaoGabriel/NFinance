@@ -10,22 +10,25 @@ using System;
 using System.Collections.Generic;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
+using NFinance.Domain.Services;
 
 namespace NFinance.Tests.WebApi
 {
     public class GastosControllerTests
     {
         private readonly IGastoService _gastosService;
+        private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<GastosController> _logger;
         public GastosControllerTests()
         {
             _gastosService = Substitute.For<IGastoService>();
+            _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<GastosController>>();
         }
 
         private GastosController InicializarGastosController()
         {
-            return new GastosController(_logger, _gastosService);
+            return new GastosController(_logger, _gastosService,_autenticacaoService);
         }
 
         [Fact]
@@ -59,9 +62,10 @@ namespace NFinance.Tests.WebApi
                 Valor = valorTotal,
                 IdCliente = idCliente
             };
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.CadastrarGasto(gasto);
+            var teste = controller.CadastrarGasto(token,gasto);
             var okResult = teste.Result as ObjectResult;
             var cadastrarGastoViewModel = Assert.IsType<CadastrarGastoViewModel.Response>(okResult.Value);
 
@@ -108,9 +112,10 @@ namespace NFinance.Tests.WebApi
                 Valor = valorTotal,
                 IdCliente = idCliente
             };
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.AtualizarGasto(id,gasto);
+            var teste = controller.AtualizarGasto(token,id,gasto);
             var okResult = teste.Result as ObjectResult;
             var atualizarGastoViewModel = Assert.IsType<AtualizarGastoViewModel.Response>(okResult.Value);
 
@@ -149,9 +154,10 @@ namespace NFinance.Tests.WebApi
                     Cliente = cliente
                 });
             var controller = InicializarGastosController();
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.ConsultarGasto(id);
+            var teste = controller.ConsultarGasto(token,id);
             var okResult = teste.Result as ObjectResult;
             var consultarGastoViewModel = Assert.IsType<ConsultarGastoViewModel.Response>(okResult.Value);
 
@@ -188,9 +194,10 @@ namespace NFinance.Tests.WebApi
                 MotivoExclusao = "Finalizado Pagamento",
                 IdCliente = idCliente
             };
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.ExcluirGasto(gasto);
+            var teste = controller.ExcluirGasto(token,gasto);
             var okResult = teste.Result as ObjectResult;
             var excluirGastoViewModel = Assert.IsType<ExcluirGastoViewModel.Response>(okResult.Value);
 
@@ -236,9 +243,10 @@ namespace NFinance.Tests.WebApi
             var listarGastos = new ConsultarGastosViewModel.Response(listaGasto);
             _gastosService.ConsultarGastos(Arg.Any<Guid>()).Returns(listarGastos);
             var controller = InicializarGastosController();
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.ConsultarGastos(idCliente);
+            var teste = controller.ConsultarGastos(token,idCliente);
             var okResult = teste.Result as ObjectResult;
             var consultarGastosViewModel = Assert.IsType<ConsultarGastosViewModel.Response>(okResult.Value);
 

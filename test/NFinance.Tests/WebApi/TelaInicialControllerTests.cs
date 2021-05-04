@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Services;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using NFinance.Domain.ViewModel.GanhoViewModel;
 using NFinance.Domain.ViewModel.TelaInicialViewModel;
@@ -21,17 +22,19 @@ namespace NFinance.Tests.WebApi
     public class TelaInicialControllerTests
     {
         private readonly ITelaInicialService _telaInicialService;
+        private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<TelaInicialController> _logger;
 
         public TelaInicialControllerTests()
         {
             _telaInicialService = Substitute.For<ITelaInicialService>();
+            _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<TelaInicialController>>();
         }
 
         private TelaInicialController InicializarLoginController()
         {
-            return new TelaInicialController(_logger, _telaInicialService);
+            return new TelaInicialController(_logger, _telaInicialService,_autenticacaoService);
         }
 
         [Fact]
@@ -79,9 +82,10 @@ namespace NFinance.Tests.WebApi
             var telaInicialViewModelR = new TelaInicialViewModel(cliente,ganhoMensal,gastoMensal,investimentoMensal,resgateMensal,4000M);
             var controller = InicializarLoginController();
             _telaInicialService.TelaInicial(Arg.Any<Guid>()).Returns(telaInicialViewModelR);
+            var token = TokenService.GerarToken(new Domain.Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva"});
 
             //Act
-            var teste = controller.TelaInicial(idCliente);
+            var teste = controller.TelaInicial(token,idCliente);
             var okResult = teste.Result as ObjectResult;
             var telaInicialViewModel = Assert.IsType<TelaInicialViewModel>(okResult.Value);
 

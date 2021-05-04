@@ -11,6 +11,16 @@
             public string Email { get; set; }
 
             public string Senha { get; set; }
+
+            public Request() { }
+
+            public Request(ConsultarClienteViewModel.Response response)
+            {
+                Nome = response.Nome;
+                Cpf = response.Cpf;
+                Email = response.Email;
+            }
+
         }
 
         public class Response : ClienteViewModel.Response { };
