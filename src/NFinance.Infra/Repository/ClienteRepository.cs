@@ -53,7 +53,7 @@ namespace NFinance.Infra.Repository
         {
             var users = await _context.Cliente.ToListAsync();
             var senhaCriptografada = HashValue(senha);
-            var response = users.Where(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senhaCriptografada).FirstOrDefault();
+            var response = users.FirstOrDefault(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senhaCriptografada);
 
             return response;
         }

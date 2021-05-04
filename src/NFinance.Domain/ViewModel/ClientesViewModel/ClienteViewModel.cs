@@ -35,6 +35,8 @@ namespace NFinance.Domain.ViewModel.ClientesViewModel
         
             public string Email { get; set; }
 
+            public string BlackListToken { get; set; }
+
             public Response() { }
 
             public Response(Cliente cliente)
@@ -43,6 +45,7 @@ namespace NFinance.Domain.ViewModel.ClientesViewModel
                 Nome = cliente.Nome;
                 Cpf = cliente.CPF;
                 Email = cliente.Email;
+                BlackListToken = cliente.LogoutToken;
             }
         }
 

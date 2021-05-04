@@ -7,6 +7,8 @@ using NSubstitute;
 using System;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
+using NFinance.Domain.Services;
+using NFinance.Domain;
 
 namespace NFinance.Tests.WebApi
 {
@@ -14,15 +16,18 @@ namespace NFinance.Tests.WebApi
     {
         private readonly IClienteService _clienteService;
         private readonly ILogger<ClienteController> _logger;
+        private readonly IAutenticacaoService _autenticacaoService;
+
         public ClienteControllerTests()
         {
             _clienteService = Substitute.For<IClienteService>();
+            _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<ClienteController>>();
         }
 
         private ClienteController InicializarClienteController()
         {
-            return new ClienteController(_logger, _clienteService);
+            return new ClienteController(_logger, _clienteService,_autenticacaoService);
         }
 
         [Fact]
@@ -80,9 +85,10 @@ namespace NFinance.Tests.WebApi
                     Email = email
                 });
             var controller = InicializarClienteController();
+            var token = TokenService.GerarToken(new Cliente { Id = id, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.ConsultarCliente(id);
+            var teste = controller.ConsultarCliente(id,token);
             var okResult = teste.Result as ObjectResult;
             var consultarClienteViewModel = Assert.IsType<ConsultarClienteViewModel.Response>(okResult.Value);
 
@@ -94,5 +100,46 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(cpf, consultarClienteViewModel.Cpf);
             Assert.Equal(email, consultarClienteViewModel.Email);
         }
+
+        [Fact]
+        public void ClienteController_AtualizarCliente_ComSucesso()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var nome = "Jorgin da Lages";
+            var cpf = "123.123.123-11";
+            var email = "aloha@teste.com";
+            _clienteService.AtualizarCliente(Arg.Any<Guid>(),Arg.Any<AtualizarClienteViewModel.Request>())
+                .Returns(new AtualizarClienteViewModel.Response
+                {
+                    Id = id,
+                    Nome = nome,
+                    Cpf = cpf,
+                    Email = email
+                });
+            var cliente = new AtualizarClienteViewModel.Request
+            {
+                Nome = nome,
+                Cpf = cpf,
+                Email = email
+            };
+            var controller = InicializarClienteController();
+            var token = TokenService.GerarToken(new Cliente { Id = id, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+
+            //Act
+            var teste = controller.AtualizarCliente(token,id, cliente);
+            var okResult = teste.Result as ObjectResult;
+            var AtualizarClienteViewModel = Assert.IsType<AtualizarClienteViewModel.Response>(okResult.Value);
+
+            //Assert
+            Assert.NotNull(teste);
+            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+            Assert.Equal(id, AtualizarClienteViewModel.Id);
+            Assert.Equal(nome, AtualizarClienteViewModel.Nome);
+            Assert.Equal(cpf, AtualizarClienteViewModel.Cpf);
+            Assert.Equal(email, AtualizarClienteViewModel.Email);
+        }
+
+
     }
 }

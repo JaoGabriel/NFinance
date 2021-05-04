@@ -26,7 +26,7 @@ namespace NFinance.WebApi.Controllers
         [ProducesResponseType(typeof(LoginViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         [AllowAnonymous]
-        public async Task<IActionResult> Autenticar([FromBody] LoginViewModel request)
+        public async Task<IActionResult> Autenticar(LoginViewModel request)
         {
             try
             {
@@ -40,19 +40,19 @@ namespace NFinance.WebApi.Controllers
                 _logger.LogInformation(ex, "Falha ao efetuar login!");
                 return BadRequest(ex.Message);
             }
-
-            // TODO
-            // Criar uma validacao de token antes de cada chamada
         }
 
         [HttpPost("/api/Logout")]
         [ProducesResponseType(typeof(LogoutViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         [Authorize]
-        public async Task<IActionResult> Deslogar([FromBody] LogoutViewModel request)
+        public async Task<IActionResult> Deslogar([FromHeader] string authorization,LogoutViewModel request)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 _logger.LogInformation("Iniciando Logout!");
                 var response = await _autenticacaoService.RealizarLogut(request);
                 _logger.LogInformation("Logot Realizado Com Sucesso!");

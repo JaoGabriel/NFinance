@@ -24,6 +24,7 @@ namespace NFinance.Domain
             services.AddTransient<IInvestimentoService, InvestimentoService>();
             services.AddTransient<ITelaInicialService, TelaInicialService>();
             services.AddTransient<IAutenticacaoService, AutenticacaoService>();
+            services.AddTransient<IRedisService, RedisService>();
         }
     }
 }

@@ -15,21 +15,26 @@ namespace NFinance.WebApi.Controllers
     {
         private readonly IGanhoService _ganhoService;
         private readonly ILogger<GanhoController> _logger;
+        private readonly IAutenticacaoService _autenticacaoService;
 
-        public GanhoController(ILogger<GanhoController> logger, IGanhoService ganhoService)
+        public GanhoController(ILogger<GanhoController> logger, IGanhoService ganhoService, IAutenticacaoService autenticacaoService)
         {
             _logger = logger;
             _ganhoService = ganhoService;
+            _autenticacaoService = autenticacaoService;
         }
 
         [HttpGet("/api/Ganho/Consultar{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ConsultarGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ConsultarGanho(Guid id)
+        public async Task<IActionResult> ConsultarGanho([FromHeader]string authorization, Guid id)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var ganho = await _ganhoService.ConsultarGanho(id);
                 _logger.LogInformation("Ganho Encontrado Com Sucesso!");
                 return Ok(ganho);
@@ -45,10 +50,13 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ConsultarGanhosViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ConsultarGanhos(Guid idCliente)
+        public async Task<IActionResult> ConsultarGanhos([FromHeader]string authorization, Guid idCliente)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var ganhos = await _ganhoService.ConsultarGanhos(idCliente);
                 _logger.LogInformation("Ganhos Encontrados Com Sucesso!");
                 return Ok(ganhos);
@@ -64,7 +72,7 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(CadastrarGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CadastrarGanho([FromBody] CadastrarGanhoViewModel.Request ganhoRequest)
+        public async Task<IActionResult> CadastrarGanho(CadastrarGanhoViewModel.Request ganhoRequest)
         {
             try
             {
@@ -83,10 +91,13 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(AtualizarGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> AtualizarGanho(Guid id, [FromBody] AtualizarGanhoViewModel.Request ganhoRequest)
+        public async Task<IActionResult> AtualizarGanho([FromHeader]string authorization, Guid id, AtualizarGanhoViewModel.Request ganhoRequest)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var ganhoResponse = await _ganhoService.AtualizarGanho(id, ganhoRequest);
                 _logger.LogInformation("Ganho Atualizado Com Sucesso!");
                 return Ok(ganhoResponse);
@@ -102,10 +113,13 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ExcluirGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> ExcluirGanho([FromBody] ExcluirGanhoViewModel.Request request)
+        public async Task<IActionResult> ExcluirGanho([FromHeader]string authorization, ExcluirGanhoViewModel.Request request)
         {
             try
             {
+                _logger.LogInformation("Validando Bearer Token!");
+                await _autenticacaoService.ValidaTokenRequest(authorization);
+                _logger.LogInformation("Bearer Token Validado!");
                 var ganhoResponse = await _ganhoService.ExcluirGanho(request);
                 _logger.LogInformation("Ganho Excluido Com Sucesso!");
                 return Ok(ganhoResponse);

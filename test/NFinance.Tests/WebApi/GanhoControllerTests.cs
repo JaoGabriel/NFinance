@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Services;
 using NFinance.Domain.ViewModel.GanhoViewModel;
 using NFinance.WebApi.Controllers;
 using NSubstitute;
@@ -15,17 +16,19 @@ namespace NFinance.Tests.WebApi
     public class GanhoControllerTests
     {
         private readonly IGanhoService _ganhoService;
+        private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<GanhoController> _logger;
 
         public GanhoControllerTests()
         {
             _ganhoService = Substitute.For<IGanhoService>();
+            _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<GanhoController>>();
         }
 
         private GanhoController InicializarGanhoController()
         {
-            return new GanhoController(_logger, _ganhoService);
+            return new GanhoController(_logger, _ganhoService, _autenticacaoService);
         }
 
         [Fact]
@@ -96,9 +99,10 @@ namespace NFinance.Tests.WebApi
                 Valor = valor,
                 Recorrente = true
             };
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.AtualizarGanho(id,ganho);
+            var teste = controller.AtualizarGanho(token,id,ganho);
             var okResult = teste.Result as ObjectResult;
             var atualizarGanhoViewModel = Assert.IsType<AtualizarGanhoViewModel.Response>(okResult.Value);
 
@@ -132,9 +136,10 @@ namespace NFinance.Tests.WebApi
                     Recorrente = false
                 });
             var controller = InicializarGanhoController();
-
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            
             //Act
-            var teste = controller.ConsultarGanho(id);
+            var teste = controller.ConsultarGanho(token,id);
             var okResult = teste.Result as ObjectResult;
             var consultarGanhoViewModel = Assert.IsType<ConsultarGanhoViewModel.Response>(okResult.Value);
 
@@ -171,9 +176,10 @@ namespace NFinance.Tests.WebApi
                 IdGanho = idGanho,
                 MotivoExclusao = motivo
             };
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.ExcluirGanho(ganho);
+            var teste = controller.ExcluirGanho(token,ganho);
             var okResult = teste.Result as ObjectResult;
             var excluirGanhoViewModel = Assert.IsType<ExcluirGanhoViewModel.Response>(okResult.Value);
 
@@ -216,9 +222,10 @@ namespace NFinance.Tests.WebApi
             var listarGanhos = new ConsultarGanhosViewModel.Response(listaGanho);
             _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listarGanhos);
             var controller = InicializarGanhoController();
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.ConsultarGanhos(idCliente);
+            var teste = controller.ConsultarGanhos(token,idCliente);
             var okResult = teste.Result as ObjectResult;
             var consultarGanhosViewModel = Assert.IsType<ConsultarGanhosViewModel.Response>(okResult.Value);
 

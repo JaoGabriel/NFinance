@@ -1,9 +1,8 @@
-using Microsoft.Extensions.Configuration;
+using NFinance.Domain.Exceptions.Autenticacao;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.ViewModel.AutenticacaoViewModel;
-using NFinance.Domain.ViewModel.ClientesViewModel;
-using ServiceStack.Redis;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NFinance.Domain.Services
@@ -11,41 +10,45 @@ namespace NFinance.Domain.Services
     public class AutenticacaoService : IAutenticacaoService
     {
         private readonly IClienteService _clienteService;
-        private readonly IConfiguration Configuration;
+        private readonly IRedisService _redis;
 
-        public AutenticacaoService(IClienteService clienteService, IConfiguration configuration)
+        public AutenticacaoService(IClienteService clienteService,IRedisService redis)
         {
             _clienteService = clienteService;
-            Configuration = configuration;
+            _redis = redis;
         }
 
         public async Task<LoginViewModel.Response> RealizarLogin(LoginViewModel request)
         {
             var usuarioAutenticacao = await _clienteService.ConsultarCredenciaisLogin(request);
-
-            if (usuarioAutenticacao.Autenticado)
-            {
-                using (var redisClient = new RedisClient(Configuration.GetConnectionString("Redis")))
-                {
-                    redisClient.Set<LoginViewModel.Response>(usuarioAutenticacao.IdSessao.ToString(), usuarioAutenticacao);
-                }
-            }
+            _redis.IncluiValorCache(usuarioAutenticacao);
 
             return usuarioAutenticacao;
         }
 
         public async Task<LogoutViewModel.Response> RealizarLogut(LogoutViewModel request)
-        {
-            var response = new LogoutViewModel.Response();
-            using (var redisClient = new RedisClient(Configuration.GetConnectionString("Redis")))
-            {
-                var redis = redisClient.Get<LoginViewModel.Response>(request.IdSessao.ToString());
-                var cliente = await _clienteService.ConsultarCliente(redis.IdCliente);
-                response = await _clienteService.CadastrarLogoutToken(cliente, redis.Token);
-                redisClient.Remove(request.IdSessao.ToString());
-            }
+        {            
+            var valorRedis = _redis.RetornaValorPorChave(request.IdCliente.ToString());
+            var cliente = await _clienteService.ConsultarCliente(valorRedis.IdCliente);
+            var response = await _clienteService.CadastrarLogoutToken(cliente, valorRedis.Token);
+            var clienteExcluido = _redis.RemoverValorCache(request.IdCliente.ToString());
             
-            return response;
+            if(clienteExcluido)
+                return response;
+            else
+                throw new LogoutException("Aconteceu um erro! Tente novamente em instantes!");
+        }
+
+        public async Task<bool> ValidaTokenRequest(string authorization)
+        {
+            var listaToken = TokenService.LerToken(authorization);
+            var redisToken = _redis.RetornaValorPorChave(listaToken.FirstOrDefault().ToString()).Token;
+            var cliente = await _clienteService.ConsultarCliente(Guid.Parse(listaToken.FirstOrDefault().ToString()));
+
+            if (cliente.BlackListToken == listaToken.FirstOrDefault(token => token == authorization.Substring(7)) || authorization.Substring(7) != redisToken)
+                throw new TokenException();
+            else
+                return true;
         }
     } 
 }

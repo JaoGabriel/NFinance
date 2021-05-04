@@ -7,5 +7,6 @@ namespace NFinance.Domain.Interfaces.Services
     {
         Task<LoginViewModel.Response> RealizarLogin(LoginViewModel request);
         Task<LogoutViewModel.Response> RealizarLogut(LogoutViewModel request);
+        Task<bool> ValidaTokenRequest(string authorization);
     }
 }

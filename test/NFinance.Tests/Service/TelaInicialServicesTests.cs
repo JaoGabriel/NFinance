@@ -68,7 +68,7 @@ namespace NFinance.Tests.Service
             var nomeInvestimento = "CDB";
             var dataAplicacao = DateTime.Today;
             var dataAplicacao1 = DateTime.Today.AddDays(-1);
-            var dataResgate = DateTime.Today.AddDays(-2);
+            var dataResgate = DateTime.Today.AddDays(-1);
             var motivoResgate = "Necessidade";
             var listInvestimento = new List<Investimento>();
             var listResgate = new List<Resgate>();

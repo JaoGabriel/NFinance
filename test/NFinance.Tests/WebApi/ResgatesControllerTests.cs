@@ -11,22 +11,26 @@ using System;
 using System.Collections.Generic;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 using Xunit;
+using NFinance.Domain.Services;
 
 namespace NFinance.Tests.WebApi
 {
     public class ResgatesControllerTests
     {
         private readonly IResgateService _resgateService;
+        private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<ResgateController> _logger;
+
         public ResgatesControllerTests()
         {
             _resgateService = Substitute.For<IResgateService>();
+            _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<ResgateController>>();
         }
 
         private ResgateController InicializarResgateController()
         {
-            return new ResgateController(_logger, _resgateService);
+            return new ResgateController(_logger, _resgateService, _autenticacaoService);
         }
 
         [Fact]
@@ -56,7 +60,8 @@ namespace NFinance.Tests.WebApi
                 DataResgate = DateTime.Today
             };
             //Act
-            var teste = controller.RealizarResgate(resgate);
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var teste = controller.RealizarResgate(token, resgate);
             var okResult = teste.Result as ObjectResult;
             var RealizarResgateViewModel = Assert.IsType<RealizarResgateViewModel.Response>(okResult.Value);
             //Assert
@@ -95,7 +100,8 @@ namespace NFinance.Tests.WebApi
             var controller = InicializarResgateController();
 
             //Act
-            var teste = controller.ConsultarResgate(id);
+            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var teste = controller.ConsultarResgate(token,id);
             var okResult = teste.Result as ObjectResult;
             var consultarResgateViewModel = Assert.IsType<ConsultarResgateViewModel.Response>(okResult.Value);
             //Assert
@@ -145,9 +151,10 @@ namespace NFinance.Tests.WebApi
             var listarResgates = new ConsultarResgatesViewModel.Response(listaResgate);
             _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listarResgates);
             var controller = InicializarResgateController();
+            var token = TokenService.GerarToken(new Cliente { Id = Guid.NewGuid(), CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.ConsultarResgates(idInvestimento);
+            var teste = controller.ConsultarResgates(token,idInvestimento);
             var okResult = teste.Result as ObjectResult;
             var consultarResgatesViewModel = Assert.IsType<ConsultarResgatesViewModel.Response>(okResult.Value);
 

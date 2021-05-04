@@ -10,8 +10,6 @@ namespace NFinance.Domain.ViewModel.AutenticacaoViewModel
 
         public class Response
         {
-            public Guid IdSessao { get; set; }
-
             public Guid IdCliente { get; set; }
 
             public bool Autenticado { get; set; }
@@ -26,7 +24,6 @@ namespace NFinance.Domain.ViewModel.AutenticacaoViewModel
 
             public Response(Cliente cliente, string token)
             {
-                IdSessao = Guid.NewGuid();
                 IdCliente = cliente.Id;
                 Nome = cliente.Nome;
                 Token = token;
@@ -34,7 +31,6 @@ namespace NFinance.Domain.ViewModel.AutenticacaoViewModel
 
             public Response(Cliente cliente, string token,bool autenticacao)
             {
-                IdSessao = Guid.NewGuid();
                 IdCliente = cliente.Id;
                 Nome = cliente.Nome;
                 Token = token;
@@ -43,7 +39,6 @@ namespace NFinance.Domain.ViewModel.AutenticacaoViewModel
 
             public Response(ErroViewModel erro,bool estado,Cliente cliente)
             {
-                IdSessao = Guid.Empty;
                 IdCliente = cliente.Id;
                 Nome = cliente.Nome;
                 Token = null;

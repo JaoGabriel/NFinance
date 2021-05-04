@@ -4,11 +4,11 @@ namespace NFinance.Domain.ViewModel.AutenticacaoViewModel
 {
     public class LogoutViewModel
     {
-        public Guid IdSessao { get; set; }
+        public Guid IdCliente { get; set; }
 
-        public LogoutViewModel(Guid idSessao)
+        public LogoutViewModel(Guid idCliente)
         {
-            IdSessao = idSessao;
+            IdCliente = idCliente;
         }
 
         public class Response

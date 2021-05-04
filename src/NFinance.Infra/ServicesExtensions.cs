@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NFinance.Domain.Interfaces.Repository;
+using NFinance.Domain.Services;
 using NFinance.Infra.Repository;
 
 namespace NFinance.Infra
@@ -20,6 +21,7 @@ namespace NFinance.Infra
             services.AddTransient<IInvestimentoRepository, InvestimentoRepository>();
             services.AddTransient<IResgateRepository, ResgateRepository>();
             services.AddTransient<IGastoRepository, GastoRepository>();
+            services.AddTransient<IRedisRepository,RedisRepository>();
             services.AddScoped<BaseDadosContext, BaseDadosContext>();
         }
     }

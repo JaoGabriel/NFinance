@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -30,6 +31,19 @@ namespace NFinance.Domain.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public static List<string> LerToken(string authorization)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = authorization.Substring(7);
+            var payloadToken = tokenHandler.ReadJwtToken(token);
+            var tokenValues = payloadToken.Payload.Values;
+            var listaItens = new List<string>();
+            foreach (var valores in tokenValues)
+                listaItens.Add(valores.ToString());
+            listaItens.Add(token);
+            return listaItens;
         }
     }
 }

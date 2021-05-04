@@ -70,7 +70,7 @@ namespace NFinance.Domain.Services
             if (Guid.Empty.Equals(id)) throw new IdException("Id cliente invalido");
             
             var clienteConsulta = await _clienteRepository.ConsultarCliente(id);
-            var response = new ConsultarClienteViewModel.Response { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, Cpf = clienteConsulta.CPF,Email = clienteConsulta.Email};
+            var response = new ConsultarClienteViewModel.Response { Id = clienteConsulta.Id, Nome = clienteConsulta.Nome, Cpf = clienteConsulta.CPF,Email = clienteConsulta.Email, BlackListToken = clienteConsulta.LogoutToken};
             return response;
         }
 

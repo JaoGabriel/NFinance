@@ -39,7 +39,7 @@ namespace NFinance.Tests.WebApi
             var email = "aloha@teste.com";
             var senha = "123456";
             var token = "dgyagdyaygsdyaguadarqiuwhasdaweuhqiuahsdjkahsduahsdl";
-            var response = new LoginViewModel.Response { IdSessao = idSessao, IdCliente = id, Nome = nome, Token = token, Autenticado = true, Erro = null };
+            var response = new LoginViewModel.Response { IdCliente = id, Nome = nome, Token = token, Autenticado = true, Erro = null };
             var loginViewModel = new LoginViewModel { Email = email, Senha = senha};
             var controller = InicializarLoginController();
             _autenticacaoService.RealizarLogin(Arg.Any<LoginViewModel>()).Returns(response);
@@ -52,7 +52,6 @@ namespace NFinance.Tests.WebApi
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.NotEqual(Guid.Empty, autenticarViewModel.IdSessao);
             Assert.Equal(nome, autenticarViewModel.Nome);
             Assert.NotNull(autenticarViewModel.Token);
         }
