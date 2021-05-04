@@ -1,5 +1,3 @@
-using System;
-
 namespace NFinance.Domain.ViewModel
 {
     public class ErroViewModel

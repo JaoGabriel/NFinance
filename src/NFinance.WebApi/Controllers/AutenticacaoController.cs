@@ -42,11 +42,11 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPost("/api/Logout")]
+        [HttpPost("/api/Logout/{id}")]
         [ProducesResponseType(typeof(LogoutViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         [Authorize]
-        public async Task<IActionResult> Deslogar([FromHeader] string authorization,LogoutViewModel request)
+        public async Task<IActionResult> Deslogar([FromHeader] string authorization, Guid id)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace NFinance.WebApi.Controllers
                 await _autenticacaoService.ValidaTokenRequest(authorization);
                 _logger.LogInformation("Bearer Token Validado!");
                 _logger.LogInformation("Iniciando Logout!");
-                var response = await _autenticacaoService.RealizarLogut(request);
+                var response = await _autenticacaoService.RealizarLogut(id);
                 _logger.LogInformation("Logot Realizado Com Sucesso!");
                 return Ok(response);
             }

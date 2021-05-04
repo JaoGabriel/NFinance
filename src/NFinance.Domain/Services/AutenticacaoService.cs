@@ -26,12 +26,12 @@ namespace NFinance.Domain.Services
             return usuarioAutenticacao;
         }
 
-        public async Task<LogoutViewModel.Response> RealizarLogut(LogoutViewModel request)
+        public async Task<LogoutViewModel.Response> RealizarLogut(Guid id)
         {            
-            var valorRedis = _redis.RetornaValorPorChave(request.IdCliente.ToString());
+            var valorRedis = _redis.RetornaValorPorChave(id.ToString());
             var cliente = await _clienteService.ConsultarCliente(valorRedis.IdCliente);
             var response = await _clienteService.CadastrarLogoutToken(cliente, valorRedis.Token);
-            var clienteExcluido = _redis.RemoverValorCache(request.IdCliente.ToString());
+            var clienteExcluido = _redis.RemoverValorCache(id.ToString());
             
             if(clienteExcluido)
                 return response;

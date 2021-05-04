@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using NFinance.Domain.ViewModel.AutenticacaoViewModel;
 using NFinance.Domain.ViewModel.ClientesViewModel;
 
 namespace NFinance.Domain
