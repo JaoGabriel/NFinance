@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NFinance.Domain.ViewModel.ClientesViewModel;
-using NFinance.Domain.ViewModel.AutenticacaoViewModel;
 
 namespace NFinance.Domain.Interfaces.Services
 {
     public interface IClienteService
     {
-        Task<ConsultarClienteViewModel.Response> ConsultarCliente(Guid id);
-        Task<CadastrarClienteViewModel.Response> CadastrarCliente(CadastrarClienteViewModel.Request clienteRequest);
-        Task<AtualizarClienteViewModel.Response> AtualizarCliente(Guid id, AtualizarClienteViewModel.Request clienteRequest);
-        Task<LoginViewModel.Response> ConsultarCredenciaisLogin(LoginViewModel request);
-        Task<LogoutViewModel.Response> CadastrarLogoutToken(ConsultarClienteViewModel.Response request,string token);
+        Task<Cliente> ConsultarCliente(Guid id);
+        Task<Cliente> CadastrarCliente(Cliente clienteRequest);
+        Task<Cliente> AtualizarCliente(Guid id, Cliente clienteRequest);
+        Task<Cliente> ConsultarCredenciaisLogin(string email, string senha);
+        Task<Cliente> CadastrarLogoutToken(Cliente request,string token);
     }
 }

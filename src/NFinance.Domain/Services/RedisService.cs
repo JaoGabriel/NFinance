@@ -1,6 +1,6 @@
 using System;
 using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain.ViewModel.AutenticacaoViewModel;
+using NFinance.Domain.Exceptions.Autenticacao;
 
 namespace NFinance.Domain.Interfaces.Services
 {
@@ -12,12 +12,16 @@ namespace NFinance.Domain.Interfaces.Services
             _redisRepository = redisRepository;
         }
 
-        //TODO:
-        //Fazer uma valiacao em todas as chamadas para validar se o bearer token utilizado é o mesmo que o da blacklist
-
-        public LoginViewModel.Response IncluiValorCache(LoginViewModel.Response response)
+        public bool IncluiValorCache(Cliente cliente)
         {
-            return _redisRepository.IncluiValorCache(response);
+            if (cliente == null) throw new Exception($"Nao é possivel incluir {cliente}");
+
+            var resultadoInclusao = _redisRepository.IncluiValorCache(cliente);
+
+            if (!resultadoInclusao)
+                throw new LoginException("Falha ao efetuar o login, tente novamente em instantes!");
+
+            return true;
         }
 
         public bool RemoverValorCache(string chave)
@@ -27,7 +31,7 @@ namespace NFinance.Domain.Interfaces.Services
             return _redisRepository.RemoverValorCache(chave);
         }
 
-        public LoginViewModel.Response RetornaValorPorChave(string chave)
+        public Cliente RetornaValorPorChave(string chave)
         {
             if(chave == Guid.Empty.ToString()) throw new ArgumentNullException("IdCliente inválido");
 

@@ -1,9 +1,8 @@
-using NFinance.Domain.Exceptions.Autenticacao;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.ViewModel.AutenticacaoViewModel;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Exceptions.Autenticacao;
 
 namespace NFinance.Domain.Services
 {
@@ -18,15 +17,15 @@ namespace NFinance.Domain.Services
             _redis = redis;
         }
 
-        public async Task<LoginViewModel.Response> RealizarLogin(LoginViewModel request)
+        public async Task<Cliente> RealizarLogin(string email, string senha)
         {
-            var usuarioAutenticacao = await _clienteService.ConsultarCredenciaisLogin(request);
+            var usuarioAutenticacao = await _clienteService.ConsultarCredenciaisLogin(email,senha);
             _redis.IncluiValorCache(usuarioAutenticacao);
 
             return usuarioAutenticacao;
         }
 
-        public async Task<LogoutViewModel.Response> RealizarLogut(Guid id)
+        public async Task<Cliente> RealizarLogut(Guid id)
         {            
             var valorRedis = _redis.RetornaValorPorChave(id.ToString());
             var cliente = await _clienteService.ConsultarCliente(valorRedis.IdCliente);
@@ -45,7 +44,7 @@ namespace NFinance.Domain.Services
             var redisToken = _redis.RetornaValorPorChave(listaToken.FirstOrDefault().ToString()).Token;
             var cliente = await _clienteService.ConsultarCliente(Guid.Parse(listaToken.FirstOrDefault().ToString()));
 
-            if (cliente.BlackListToken == listaToken.FirstOrDefault(token => token == authorization.Substring(7)) || authorization.Substring(7) != redisToken)
+            if (cliente.LogoutToken == listaToken.FirstOrDefault(token => token == authorization.Substring(7)) || authorization.Substring(7) != redisToken)
                 throw new TokenException();
             else
                 return true;

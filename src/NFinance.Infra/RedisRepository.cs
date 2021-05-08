@@ -1,8 +1,6 @@
-using System;
+using ServiceStack.Redis;
 using Microsoft.Extensions.Configuration;
 using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain.ViewModel.AutenticacaoViewModel;
-using ServiceStack.Redis;
 
 namespace NFinance.Domain.Services
 {
@@ -15,21 +13,21 @@ namespace NFinance.Domain.Services
             _cliente = new RedisClient(Configuration.GetConnectionString("Redis"));
         }
 
-        public LoginViewModel.Response RetornaValorPorChave(string chave)
+        public Cliente RetornaValorPorChave(string chave)
         {
-            var retorno = _cliente.Get<LoginViewModel.Response>(chave);
+            var retorno = _cliente.Get<Cliente>(chave);
             return retorno;
         }
 
-        public LoginViewModel.Response IncluiValorCache(LoginViewModel.Response response)
+        public bool IncluiValorCache(Cliente cliente)
         {
-            var redis = _cliente.Set<LoginViewModel.Response>(response.IdCliente.ToString(), response);
+            var redis = _cliente.Set(cliente.Id.ToString(), cliente);
             
             if(redis)
-                return response;
+                return true;
             else
-                throw new Exception("Aconteceu um erro! Tente novamente em instantes");
-            
+                return false;
+
         }
 
         public bool RemoverValorCache(string chave)

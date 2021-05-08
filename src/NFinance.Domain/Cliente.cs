@@ -29,6 +29,9 @@ namespace NFinance.Domain
         [StringLength(400)]
         public string LogoutToken { get; set; }
 
+        //Criar um construtor para setar o token, mudar os sets para private set
+        public string LoginToken { get; set; }
+
         public Cliente() { }
 
         public Cliente(CadastrarClienteViewModel.Request clienteRequest)
