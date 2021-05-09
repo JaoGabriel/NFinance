@@ -1,5 +1,4 @@
-﻿using NFinance.ViewModel.ResgatesViewModel;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -41,16 +40,6 @@ namespace NFinance.Domain
             Valor = resgate.Valor;
             MotivoResgate = resgate.MotivoResgate;
             DataResgate = resgate.DataResgate;
-        }
-
-        public Resgate(RealizarResgateViewModel.Request request)
-        {
-            Id = Guid.NewGuid();
-            IdInvestimento = request.IdInvestimento;
-            IdCliente = request.IdCliente;
-            Valor = request.Valor;
-            MotivoResgate = request.MotivoResgate;
-            DataResgate = request.DataResgate;
         }
     }
 }

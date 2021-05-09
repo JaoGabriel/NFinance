@@ -1,44 +1,37 @@
-﻿using NFinance.Domain.Exceptions;
-using NFinance.Domain.Exceptions.Resgate;
-using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.ViewModel.ResgatesViewModel;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using NFinance.Domain.Exceptions;
+using NFinance.Domain.Exceptions.Resgate;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Interfaces.Repository;
 
 namespace NFinance.Domain.Services
 {
     public class ResgateService : IResgateService
     {
         private readonly IResgateRepository _resgateRepository;
-        private readonly IInvestimentoService _investimentosService;
 
-        public ResgateService(IResgateRepository resgateRepository, IInvestimentoService investimentosService)
+        public ResgateService(IResgateRepository resgateRepository)
         {
             _resgateRepository = resgateRepository;
-            _investimentosService = investimentosService;
         }
 
-        public async Task<ConsultarResgateViewModel.Response> ConsultarResgate(Guid id)
+        public async Task<Resgate> ConsultarResgate(Guid id)
         {
             if (Guid.Empty.Equals(id)) throw new IdException("Id resgate invalido");
 
-            var resgate = await _resgateRepository.ConsultarResgate(id);
-            var investimento = await _investimentosService.ConsultarInvestimento(resgate.IdInvestimento);
-            var response = new ConsultarResgateViewModel.Response { Id = resgate.Id, Valor = resgate.Valor, DataResgate = resgate.DataResgate, MotivoResgate = resgate.MotivoResgate, Investimento = investimento, IdCliente = resgate.IdCliente };
-            return response;
+            return await _resgateRepository.ConsultarResgate(id);
         }
 
-        public async Task<ConsultarResgatesViewModel.Response> ConsultarResgates(Guid idCliente)
+        public async Task<List<Resgate>> ConsultarResgates(Guid idCliente)
         {
             if (Guid.Empty.Equals(idCliente)) throw new IdException("Id cliente invalido");
 
-            var consultarResgates = await _resgateRepository.ConsultarResgates(idCliente);
-            var response = new ConsultarResgatesViewModel.Response(consultarResgates);
-            return response;
+            return await _resgateRepository.ConsultarResgates(idCliente);
         }
 
-        public async Task<RealizarResgateViewModel.Response> RealizarResgate(RealizarResgateViewModel.Request request)
+        public async Task<Resgate> RealizarResgate(Resgate request)
         {
             if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("Id cliente invalido");
             if (Guid.Empty.Equals(request.IdInvestimento)) throw new IdException("Id investimento invalido");
@@ -46,11 +39,7 @@ namespace NFinance.Domain.Services
             if (request.Valor <= 0) throw new ValorException("Valor deve ser maior que zero");
             if (request.DataResgate > DateTime.MaxValue.AddYears(-7899) || request.DataResgate < DateTime.MinValue.AddYears(1949)) throw new DataResgateException();
 
-            var resgateRequest = new Resgate(request);
-            var investimento = await _investimentosService.ConsultarInvestimento(resgateRequest.IdInvestimento);
-            var resgate = await _resgateRepository.RealizarResgate(resgateRequest);
-            var response = new RealizarResgateViewModel.Response { Id = resgate.Id, Valor = resgate.Valor, DataResgate = resgate.DataResgate, MotivoResgate = resgate.MotivoResgate, Investimento = investimento, IdCliente = resgate.IdCliente };
-            return response;
+            return await _resgateRepository.RealizarResgate(request);
         }
     }
 }

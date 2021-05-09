@@ -1,5 +1,4 @@
-﻿using NFinance.ViewModel.GastosViewModel;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -41,34 +40,6 @@ namespace NFinance.Domain
             Valor = gastos.Valor;
             QuantidadeParcelas = gastos.QuantidadeParcelas;
             DataDoGasto = gastos.DataDoGasto;
-        }
-
-        public Gasto(CadastrarGastoViewModel.Request request)
-        {
-            Id = Guid.NewGuid();
-            IdCliente = request.IdCliente;
-            NomeGasto = request.NomeGasto;
-            Valor = request.Valor;
-            QuantidadeParcelas = request.QuantidadeParcelas;
-            DataDoGasto = request.DataDoGasto;
-        }
-
-        public Gasto(Guid id,AtualizarGastoViewModel.Request request)
-        {
-            Id = id;
-            IdCliente = request.IdCliente;
-            NomeGasto = request.NomeGasto;
-            Valor = request.Valor;
-            QuantidadeParcelas = request.QuantidadeParcelas;
-            DataDoGasto = request.DataDoGasto;
-        }
-
-        public Gasto(ExcluirGastoViewModel.Request request)
-        {
-            Id = request.IdGasto;
-            IdCliente = request.IdCliente;
-            NomeGasto = request.MotivoExclusao;
-            DataDoGasto = DateTime.UtcNow;
         }
     }
 }

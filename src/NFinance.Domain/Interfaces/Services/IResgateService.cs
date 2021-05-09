@@ -1,13 +1,13 @@
-﻿using NFinance.ViewModel.ResgatesViewModel;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace NFinance.Domain.Interfaces.Services
 {
     public interface IResgateService
     {
-        Task<RealizarResgateViewModel.Response> RealizarResgate(RealizarResgateViewModel.Request request);
-        Task<ConsultarResgateViewModel.Response> ConsultarResgate(Guid id);
-        Task<ConsultarResgatesViewModel.Response> ConsultarResgates(Guid idCliente);
+        Task<Resgate> ConsultarResgate(Guid id);
+        Task<List<Resgate>> ConsultarResgates(Guid idCliente);
+        Task<Resgate> RealizarResgate(Resgate request);
     }
 }

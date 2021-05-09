@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using NFinance.Domain.ViewModel.GanhoViewModel;
 
 namespace NFinance.Domain
 {
@@ -28,24 +27,14 @@ namespace NFinance.Domain
         public bool Recorrente { get; set; }
 
         [Required]
-        [Range(typeof(DateTime), "01/01/1950", "12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
+        [Range(typeof(DateTime), "01/01/1950", "31/12/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataDoGanho { get; set; }
 
         public Ganho() {}
 
-        public Ganho(CadastrarGanhoViewModel.Request request)
+        public Ganho(Ganho request)
         {
             Id = Guid.NewGuid();
-            IdCliente = request.IdCliente;
-            NomeGanho = request.NomeGanho;
-            Valor = request.Valor;
-            Recorrente = request.Recorrente;
-            DataDoGanho = request.DataDoGanho;
-        }
-
-        public Ganho(Guid id,AtualizarGanhoViewModel.Request request)
-        {
-            Id = id;
             IdCliente = request.IdCliente;
             NomeGanho = request.NomeGanho;
             Valor = request.Valor;

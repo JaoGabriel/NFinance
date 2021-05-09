@@ -1,15 +1,10 @@
-﻿using Cronos;
-using NFinance.Domain.Exceptions;
-using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.ViewModel.GanhoViewModel;
-using NFinance.Domain.ViewModel.TelaInicialViewModel;
-using NFinance.ViewModel.GastosViewModel;
-using NFinance.ViewModel.InvestimentosViewModel;
-using NFinance.ViewModel.ResgatesViewModel;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using Cronos;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using NFinance.Domain.Exceptions;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Interfaces.Repository;
 
 namespace NFinance.Domain.Services
 {
@@ -21,7 +16,8 @@ namespace NFinance.Domain.Services
         private readonly IResgateRepository _resgateRepository;
         private readonly IClienteService _clienteService;
 
-        public TelaInicialService(IGanhoRepository ganhoRepository, IInvestimentoRepository investimentoRepository, IGastoRepository gastoRepository, IResgateRepository resgateRepository, IClienteService clienteService)
+        public TelaInicialService(IGanhoRepository ganhoRepository, IInvestimentoRepository investimentoRepository, IGastoRepository gastoRepository, 
+            IResgateRepository resgateRepository, IClienteService clienteService)
         {
             _ganhoRepository = ganhoRepository;
             _investimentoRepository = investimentoRepository;
@@ -81,7 +77,7 @@ namespace NFinance.Domain.Services
                             // sera que vale a pena salvar o valor parcela?
                             await _gastoRepository.AtualizarGasto(gasto.Id, gasto);
                         }
-                        gasto.Valor = gasto.Valor / gasto.QuantidadeParcelas;
+                        gasto.Valor /= gasto.QuantidadeParcelas;
                         vm.Valor = gasto.Valor;
                         vm.QuantidadeParcelas = gasto.QuantidadeParcelas;
                     }

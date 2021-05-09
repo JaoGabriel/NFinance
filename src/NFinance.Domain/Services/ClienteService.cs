@@ -41,12 +41,12 @@ namespace NFinance.Domain.Services
 
         public async Task<Cliente> CadastrarLogoutToken(Cliente request, string token)
         {
-            if (request == null) throw new ArgumentException("Ocorreu um erro, Tente novamente em instantes!");
+            if (request == null) throw new LogoutTokenException("Deve conter cliente para cadastro de logout token!");
+            if (string.IsNullOrWhiteSpace(token)) throw new LogoutTokenException("Deve conter token para cadastro!");
 
-            var cliente = new Cliente(request, token);
-            var clienteLogoutToken = await _clienteRepository.CadastrarLogoutToken(cliente);
+            var cliente = await _clienteRepository.CadastrarLogoutToken(request, token);
 
-            if (clienteLogoutToken != null)
+            if (cliente != null)
                 return cliente;
             else
                 return null;
@@ -60,20 +60,16 @@ namespace NFinance.Domain.Services
             return await _clienteRepository.ConsultarCliente(id);
         }
 
-        public async Task<Cliente> ConsultarCredenciaisLogin(Cliente request)
+        public async Task<Cliente> ConsultarCredenciaisLogin(string email,string senha)
         {
-            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Senha)) throw new LoginException("Login ou senha inválidos!");
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senha)) throw new LoginException("Login ou senha inválidos!");
 
-            var credenciaisCliente = await _clienteRepository.CredenciaisLogin(request.Email, request.Senha);
+            var cliente = await _clienteRepository.ConsultarCredenciaisLogin(email, senha);
 
-            if (credenciaisCliente != null)
-            {
-                var token = TokenService.GerarToken(credenciaisCliente);
-                request.LoginToken = token;
-                return request;
-            }
+            if (cliente != null)
+                return cliente;
             else
-                return null;
+                throw new LoginException("Cliente nao encontrado!");
 
         }
 

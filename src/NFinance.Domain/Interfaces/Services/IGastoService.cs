@@ -1,15 +1,15 @@
-﻿using NFinance.ViewModel.GastosViewModel;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace NFinance.Domain.Interfaces.Services
 {
     public interface IGastoService
     {
-        Task<CadastrarGastoViewModel.Response> CadastrarGasto(CadastrarGastoViewModel.Request request);
-        Task<AtualizarGastoViewModel.Response> AtualizarGasto(Guid id, AtualizarGastoViewModel.Request request);
-        Task<ExcluirGastoViewModel.Response> ExcluirGasto(ExcluirGastoViewModel.Request request);
-        Task<ConsultarGastoViewModel.Response> ConsultarGasto(Guid id);
-        Task<ConsultarGastosViewModel.Response> ConsultarGastos(Guid idCliente);
+        Task<Gasto> AtualizarGasto(Guid id, Gasto request);
+        Task<Gasto> CadastrarGasto(Gasto request);
+        Task<Gasto> ConsultarGasto(Guid id);
+        Task<List<Gasto>> ConsultarGastos(Guid idCliente);
+        Task<bool> ExcluirGasto(Gasto request);
     }
 }

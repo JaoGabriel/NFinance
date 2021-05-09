@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using NFinance.Domain.ViewModel.ClientesViewModel;
 
 namespace NFinance.Domain
 {
@@ -29,45 +28,35 @@ namespace NFinance.Domain
         [StringLength(400)]
         public string LogoutToken { get; set; }
 
-        //Criar um construtor para setar o token, mudar os sets para private set
-        public string LoginToken { get; set; }
-
         public Cliente() { }
 
-        public Cliente(CadastrarClienteViewModel.Request clienteRequest)
+        public Cliente(Cliente cliente)
         {
             Id = Guid.NewGuid();
-            Nome = clienteRequest.Nome;
-            CPF = clienteRequest.Cpf;
-            Email = clienteRequest.Email;
-            Senha = clienteRequest.Senha;
-        }
-
-        public Cliente(Guid id,AtualizarClienteViewModel.Request request)
-        {
-            Id = id;
-            Nome = request.Nome;
-            CPF = request.Cpf;
-            Email = request.Email;
-            Senha = request.Senha;
-        }
-
-        public Cliente(Cliente cliente, string token)
-        {
-            Id = cliente.Id;
             Nome = cliente.Nome;
             CPF = cliente.CPF;
             Email = cliente.Email;
-            LogoutToken = token;
+            Senha = cliente.Senha;
+            LogoutToken = cliente.LogoutToken;
         }
 
-        public Cliente(ConsultarClienteViewModel.Response cliente, string token)
+        public Cliente(string nome, string cpf, string email, string senha)
         {
-            Id = cliente.Id;
-            Nome = cliente.Nome;
-            CPF = cliente.Cpf;
-            Email = cliente.Email;
-            LogoutToken = token;
+            Id = Guid.NewGuid();
+            Nome = nome;
+            CPF = cpf;
+            Email = email;
+            Senha = senha;
+        }
+
+        public Cliente(string nome, string cpf, string email, string senha, string logoutToken)
+        {
+            Id = Guid.NewGuid();
+            Nome = nome;
+            CPF = cpf;
+            Email = email;
+            Senha = senha;
+            LogoutToken = logoutToken;
         }
     }
 }

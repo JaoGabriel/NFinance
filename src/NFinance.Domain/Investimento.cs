@@ -1,5 +1,4 @@
-﻿using NFinance.ViewModel.InvestimentosViewModel;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -36,24 +35,6 @@ namespace NFinance.Domain
             NomeInvestimento = investimentos.NomeInvestimento;
             Valor = investimentos.Valor;
             DataAplicacao = investimentos.DataAplicacao;
-        }
-
-        public Investimento(RealizarInvestimentoViewModel.Request request)
-        {
-            Id = Guid.NewGuid();
-            IdCliente = request.IdCliente;
-            NomeInvestimento = request.NomeInvestimento;
-            Valor = request.Valor;
-            DataAplicacao = request.DataAplicacao;
-        }
-
-        public Investimento(Guid id, AtualizarInvestimentoViewModel.Request request)
-        {
-            Id = id;
-            IdCliente = request.IdCliente;
-            NomeInvestimento = request.NomeInvestimento;
-            Valor = request.Valor;
-            DataAplicacao = request.DataAplicacao;
         }
     }
 }
