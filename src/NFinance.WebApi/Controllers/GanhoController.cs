@@ -24,7 +24,7 @@ namespace NFinance.WebApi.Controllers
             _autenticacaoService = autenticacaoService;
         }
 
-        [HttpGet("Ganho/Consultar{id}")]
+        [HttpGet("Ganho/Consultar/{id}")]
         [ProducesResponseType(typeof(ConsultarGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         [Authorize]

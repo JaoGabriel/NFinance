@@ -28,7 +28,7 @@ namespace NFinance.WebApi.Controllers
         [ProducesResponseType(typeof(ConsultarClienteViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
         [Authorize]
-        public async Task<IActionResult> ConsultarCliente(Guid id, [FromHeader] string authorization)
+        public async Task<IActionResult> ConsultarCliente([FromHeader] string authorization, Guid id)
         {
 
             _logger.LogInformation("Validando Bearer Token!");
