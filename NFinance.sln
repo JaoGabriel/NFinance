@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFinance.Infra", "src\NFina
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFinance.WebApi", "src\NFinance.WebApi\NFinance.WebApi.csproj", "{F72601B7-FD7A-4FC0-9978-3D1BE3147767}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFinance.Tests", "test\NFinance.Tests\NFinance.Tests.csproj", "{08B17FA5-A291-4A0B-B521-B075D5D53AE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFinance.Tests", "test\NFinance.Tests\NFinance.Tests.csproj", "{08B17FA5-A291-4A0B-B521-B075D5D53AE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFinance.Application", "NFinance.Application\NFinance.Application.csproj", "{9DDE33B0-88B2-4649-B75E-8E9B10D0D1BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{08B17FA5-A291-4A0B-B521-B075D5D53AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08B17FA5-A291-4A0B-B521-B075D5D53AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08B17FA5-A291-4A0B-B521-B075D5D53AE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DDE33B0-88B2-4649-B75E-8E9B10D0D1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DDE33B0-88B2-4649-B75E-8E9B10D0D1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DDE33B0-88B2-4649-B75E-8E9B10D0D1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DDE33B0-88B2-4649-B75E-8E9B10D0D1BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

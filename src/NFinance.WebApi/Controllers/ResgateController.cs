@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NFinance.Domain;
+using Microsoft.AspNetCore.Authorization;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.ViewModel.ResgatesViewModel;
+using NFinance.Application.ViewModel.ResgatesViewModel;
 
 namespace NFinance.WebApi.Controllers
 {
@@ -25,10 +24,10 @@ namespace NFinance.WebApi.Controllers
             _autenticacaoService = autenticacaoService;
         }
 
-        [HttpGet("/api/Resgate/Consultar/{id}")]
-        [Authorize]
-        [ProducesResponseType(typeof(Resgate), (int)HttpStatusCode.OK)]
+        [HttpGet("Resgate/Consultar/{id}")]
+        [ProducesResponseType(typeof(ConsultarResgateViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ConsultarResgate([FromHeader]string authorization, Guid id)
         {
             try
@@ -47,10 +46,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpGet("/api/Resgates/Consultar/{idCliente}")]
-        [Authorize]
+        [HttpGet("Resgates/Consultar/{idCliente}")]
         [ProducesResponseType(typeof(ConsultarResgatesViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ConsultarResgates([FromHeader]string authorization, Guid idCliente)
         {
             try
@@ -69,10 +68,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPost("/api/Resgate/Resgatar")]
-        [Authorize]
+        [HttpPost("Resgate/Resgatar")]
         [ProducesResponseType(typeof(RealizarResgateViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> RealizarResgate([FromHeader]string authorization, RealizarResgateViewModel.Request resgateRequest)
         {
             try

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.ViewModel.InvestimentosViewModel;
+using NFinance.Application.ViewModel.InvestimentosViewModel;
 
 namespace NFinance.WebApi.Controllers
 {
@@ -24,10 +24,10 @@ namespace NFinance.WebApi.Controllers
             _investimentosService = investimentosService;
         }
 
-        [HttpGet("/api/Investimento/Consultar/{id}")]
-        [Authorize]
+        [HttpGet("Investimento/Consultar/{id}")]
         [ProducesResponseType(typeof(ConsultarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ConsultarInvestimento([FromHeader]string authorization, Guid id)
         {
             try
@@ -46,10 +46,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpGet("/api/Investimentos/Consultar/{idCliente}")]
-        [Authorize]
+        [HttpGet("Investimentos/Consultar/{idCliente}")]
         [ProducesResponseType(typeof(ConsultarInvestimentosViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ConsultarInvestimentos([FromHeader]string authorization, Guid idCliente)
         {
             try
@@ -68,10 +68,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPost("/api/Investimento/Investir")]
-        [Authorize]
+        [HttpPost("Investimento/Investir")]
         [ProducesResponseType(typeof(RealizarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> RealizarInvestimento([FromHeader]string authorization, RealizarInvestimentoViewModel.Request investimentosRequest)
         {
             try
@@ -90,10 +90,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPut("/api/Investimento/Atualizar/{id}")]
-        [Authorize]
+        [HttpPut("Investimento/Atualizar/{id}")]
         [ProducesResponseType(typeof(AtualizarInvestimentoViewModel.Response), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int) HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> AtualizarInvestimento([FromHeader]string authorization, Guid id, AtualizarInvestimentoViewModel.Request investimentosRequest)
         {
             try

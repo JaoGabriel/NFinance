@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.ViewModel.GanhoViewModel;
+using NFinance.Application.ViewModel.GanhoViewModel;
 
 namespace NFinance.WebApi.Controllers
 {
@@ -24,10 +24,10 @@ namespace NFinance.WebApi.Controllers
             _autenticacaoService = autenticacaoService;
         }
 
-        [HttpGet("/api/Ganho/Consultar{id}")]
-        [Authorize]
+        [HttpGet("Ganho/Consultar{id}")]
         [ProducesResponseType(typeof(ConsultarGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ConsultarGanho([FromHeader]string authorization, Guid id)
         {
             try
@@ -46,10 +46,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpGet("/api/Ganhos/Consultar/{idCliente}")]
-        [Authorize]
+        [HttpGet("Ganhos/Consultar/{idCliente}")]
         [ProducesResponseType(typeof(ConsultarGanhosViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ConsultarGanhos([FromHeader]string authorization, Guid idCliente)
         {
             try
@@ -68,10 +68,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPost("/api/Ganho/Cadastrar")]
-        [Authorize]
+        [HttpPost("Ganho/Cadastrar")]
         [ProducesResponseType(typeof(CadastrarGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> CadastrarGanho(CadastrarGanhoViewModel.Request ganhoRequest)
         {
             try
@@ -87,10 +87,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpPut("/api/Ganho/Atualizar/{id}")]
-        [Authorize]
+        [HttpPut("Ganho/Atualizar/{id}")]
         [ProducesResponseType(typeof(AtualizarGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> AtualizarGanho([FromHeader]string authorization, Guid id, AtualizarGanhoViewModel.Request ganhoRequest)
         {
             try
@@ -109,10 +109,10 @@ namespace NFinance.WebApi.Controllers
             }
         }
 
-        [HttpDelete("/api/Ganho/Excluir")]
-        [Authorize]
+        [HttpDelete("Ganho/Excluir")]
         [ProducesResponseType(typeof(ExcluirGanhoViewModel.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> ExcluirGanho([FromHeader]string authorization, ExcluirGanhoViewModel.Request request)
         {
             try

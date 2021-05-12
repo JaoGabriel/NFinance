@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.ViewModel.AutenticacaoViewModel;
-using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using NFinance.Domain.Exceptions;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Application.ViewModel.AutenticacaoViewModel;
 
 namespace NFinance.WebApi.Controllers
 {
@@ -22,47 +23,33 @@ namespace NFinance.WebApi.Controllers
             _autenticacaoService = autenticacaoService;
         }
 
-        [HttpPost("/api/Login")]
+        [HttpPost("Login")]
         [ProducesResponseType(typeof(LoginViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApplicationException), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(DomainException), (int)HttpStatusCode.InternalServerError)]
         [AllowAnonymous]
         public async Task<IActionResult> Autenticar(LoginViewModel request)
         {
-            try
-            {
-                _logger.LogInformation("Iniciando Login!");
-                var response = await _autenticacaoService.RealizarLogin(request);
-                _logger.LogInformation("Login Realizado Com Sucesso!");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex, "Falha ao efetuar login!");
-                return BadRequest(ex.Message);
-            }
+            _logger.LogInformation("Iniciando Login!");
+            var response = await _autenticacaoService.RealizarLogin(request.Email,request.Senha);
+            _logger.LogInformation("Login Realizado Com Sucesso!");
+            return Ok(response);
         }
 
-        [HttpPost("/api/Logout/{id}")]
+        [HttpPost("Logout/{id}")]
         [ProducesResponseType(typeof(LogoutViewModel.Response), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Exception), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApplicationException), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(DomainException), (int)HttpStatusCode.InternalServerError)]
         [Authorize]
         public async Task<IActionResult> Deslogar([FromHeader] string authorization, Guid id)
         {
-            try
-            {
-                _logger.LogInformation("Validando Bearer Token!");
-                await _autenticacaoService.ValidaTokenRequest(authorization);
-                _logger.LogInformation("Bearer Token Validado!");
-                _logger.LogInformation("Iniciando Logout!");
-                var response = await _autenticacaoService.RealizarLogut(id);
-                _logger.LogInformation("Logot Realizado Com Sucesso!");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex, "Falha ao efetuar logout!");
-                return BadRequest(ex.Message);
-            }
+            _logger.LogInformation("Validando Bearer Token!");
+            await _autenticacaoService.ValidaTokenRequest(authorization);
+            _logger.LogInformation("Bearer Token Validado!");
+            _logger.LogInformation("Iniciando Logout!");
+            var response = await _autenticacaoService.RealizarLogut(id);
+            _logger.LogInformation("Logot Realizado Com Sucesso!");
+            return Ok(response);
         }
     }
 }

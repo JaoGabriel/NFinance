@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\NFinance.Application\NFinance.Application.csproj" />
     <ProjectReference Include="..\NFinance.Domain\NFinance.Domain.csproj" />
     <ProjectReference Include="..\NFinance.Infra\NFinance.Infra.csproj" />
   </ItemGroup>

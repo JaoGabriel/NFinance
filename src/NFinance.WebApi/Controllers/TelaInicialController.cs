@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.ViewModel.TelaInicialViewModel;
-using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Application.ViewModel.TelaInicialViewModel;
 
 namespace NFinance.WebApi.Controllers
 {
