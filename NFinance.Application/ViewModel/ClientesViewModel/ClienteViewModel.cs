@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NFinance.Domain;
+using System;
 
 namespace NFinance.Application.ViewModel.ClientesViewModel
 {
