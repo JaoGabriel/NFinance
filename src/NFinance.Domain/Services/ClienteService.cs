@@ -16,15 +16,15 @@ namespace NFinance.Domain.Services
             _clienteRepository = clienteRepository;
         }
 
-        public async Task<Cliente> AtualizarCliente(Guid id, Cliente clienteRequest)
+        public async Task<Cliente> AtualizarCliente(Cliente clienteRequest)
         {
-            if (Guid.Empty.Equals(id)) throw new IdException("Id cliente invalido");
+            if (Guid.Empty.Equals(clienteRequest.Id)) throw new IdException("Id cliente invalido");
             if (string.IsNullOrWhiteSpace(clienteRequest.Nome)) throw new NomeClienteException();
             if (string.IsNullOrWhiteSpace(clienteRequest.CPF)) throw new CpfClienteException();
             if (string.IsNullOrWhiteSpace(clienteRequest.Email)) throw new EmailClienteException();
             if (string.IsNullOrWhiteSpace(clienteRequest.Senha)) throw new SenhaClienteException();
 
-            var resposta = await _clienteRepository.AtualizarCliente(id, clienteRequest);
+            var resposta = await _clienteRepository.AtualizarCliente(clienteRequest);
             return resposta;
         }
 

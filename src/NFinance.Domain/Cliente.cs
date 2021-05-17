@@ -30,16 +30,6 @@ namespace NFinance.Domain
 
         public Cliente() { }
 
-        public Cliente(Cliente cliente)
-        {
-            Id = Guid.NewGuid();
-            Nome = cliente.Nome;
-            CPF = cliente.CPF;
-            Email = cliente.Email;
-            Senha = cliente.Senha;
-            LogoutToken = cliente.LogoutToken;
-        }
-
         public Cliente(string nome, string cpf, string email, string senha)
         {
             Id = Guid.NewGuid();
@@ -49,9 +39,9 @@ namespace NFinance.Domain
             Senha = senha;
         }
 
-        public Cliente(string nome, string cpf, string email, string senha, string logoutToken)
+        public Cliente(Guid id, string nome, string cpf, string email, string senha, string logoutToken)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Nome = nome;
             CPF = cpf;
             Email = email;

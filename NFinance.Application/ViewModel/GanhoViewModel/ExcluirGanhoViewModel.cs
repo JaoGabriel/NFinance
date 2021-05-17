@@ -15,6 +15,12 @@ namespace NFinance.Application.ViewModel.GanhoViewModel
 
         public class Response
         {
+            public int StatusCode { get; set; }
+
+            public string Mensagem { get; set; }
+
+            public DateTime DataExclusao { get; set; }
+            
             public Response() { }
 
             public Response(bool status)
@@ -33,11 +39,6 @@ namespace NFinance.Application.ViewModel.GanhoViewModel
                 }
             }
 
-            public int StatusCode { get; set; }
-
-            public string Mensagem { get; set; }
-
-            public DateTime DataExclusao { get; set; }
         }
     }
 }

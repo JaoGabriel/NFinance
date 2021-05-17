@@ -32,14 +32,24 @@ namespace NFinance.Domain
 
         public Ganho() {}
 
-        public Ganho(Ganho request)
+        public Ganho(Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
         {
             Id = Guid.NewGuid();
-            IdCliente = request.IdCliente;
-            NomeGanho = request.NomeGanho;
-            Valor = request.Valor;
-            Recorrente = request.Recorrente;
-            DataDoGanho = request.DataDoGanho;
+            IdCliente = idCliente;
+            NomeGanho = nomeGanho;
+            Valor = valor;
+            Recorrente = recorrente;
+            DataDoGanho = dataDoGanho;
+        }
+
+        public Ganho(Guid id, Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
+        {
+            Id = id;
+            IdCliente = idCliente;
+            NomeGanho = nomeGanho;
+            Valor = valor;
+            Recorrente = recorrente;
+            DataDoGanho = dataDoGanho;
         }
     }
 }

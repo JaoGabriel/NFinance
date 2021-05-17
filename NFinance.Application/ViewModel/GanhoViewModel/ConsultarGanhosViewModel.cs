@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NFinance.Domain;
+using System.Collections.Generic;
 
 namespace NFinance.Application.ViewModel.GanhoViewModel
 {

@@ -7,7 +7,7 @@ namespace NFinance.Domain.Interfaces.Repository
     {
         Task<Cliente> ConsultarCliente(Guid id);
         Task<Cliente> CadastrarCliente(Cliente cliente);
-        Task<Cliente> AtualizarCliente(Guid id, Cliente cliente);
+        Task<Cliente> AtualizarCliente(Cliente cliente);
         Task<Cliente> ConsultarCredenciaisLogin(string usuario,string senha);
         Task<Cliente> CadastrarLogoutToken(Cliente cliente,string token);
     }

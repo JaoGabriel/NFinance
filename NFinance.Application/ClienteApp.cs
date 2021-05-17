@@ -18,8 +18,8 @@ namespace NFinance.Application
 
         public async Task<AtualizarClienteViewModel.Response> AtualizarCliente(Guid id,AtualizarClienteViewModel.Request request)
         {
-            var clienteDadosAtualizados = new Cliente(request.Nome,request.Cpf,request.Email,request.Senha);
-            var clienteAtualizado = await _clienteService.AtualizarCliente(id,clienteDadosAtualizados);
+            var dadosClienteAtualizados = new Cliente(id,request.Nome,request.Cpf,request.Email,request.Senha,null);
+            var clienteAtualizado = await _clienteService.AtualizarCliente(dadosClienteAtualizados);
             var resposta = new AtualizarClienteViewModel.Response(clienteAtualizado);
             return resposta;
         }

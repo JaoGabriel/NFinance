@@ -24,9 +24,9 @@ namespace NFinance.Infra.Repository
             _context?.Dispose();
         }
 
-        public async Task<Cliente> AtualizarCliente(Guid id, Cliente cliente)
+        public async Task<Cliente> AtualizarCliente(Cliente cliente)
         {
-            var clienteAtualizar = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == id);
+            var clienteAtualizar = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == cliente.Id);
             var senhaCriptografada = HashValue(cliente.Senha);
             cliente.Senha = senhaCriptografada;
             _context.Entry(clienteAtualizar).CurrentValues.SetValues(cliente);
@@ -49,24 +49,24 @@ namespace NFinance.Infra.Repository
             return cliente;
         }
 
-        public async Task<Cliente> ConsultarCredenciaisLogin(string email, string senha)
+        public async Task<Cliente> ConsultarCredenciaisLogin(string usuario, string senha)
         {
-            var users = await _context.Cliente.ToListAsync();
+            var usuarios = await _context.Cliente.ToListAsync();
             var senhaCriptografada = HashValue(senha);
-            var response = users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Senha == senhaCriptografada);
+            var response = usuarios.FirstOrDefault(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senhaCriptografada);
 
             return response;
         }
 
-        public async Task<Cliente> CadastrarLogoutToken(Cliente clienteRequest,string token)
+        public async Task<Cliente> CadastrarLogoutToken(Cliente cliente,string token)
         {
-            var cliente = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == clienteRequest.Id);
-            clienteRequest.Senha = cliente.Senha;
-            clienteRequest.LogoutToken = token;
-            _context.Entry(cliente).CurrentValues.SetValues(clienteRequest);
+            var clienteToken = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == cliente.Id);
+            cliente.Senha = clienteToken.Senha;
+            cliente.LogoutToken = token;
+            _context.Entry(clienteToken).CurrentValues.SetValues(cliente);
             await UnitOfWork.Commit();
             
-            return clienteRequest;
+            return cliente;
         }
 
         static string HashValue(string value)
