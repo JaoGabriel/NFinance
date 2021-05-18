@@ -32,14 +32,24 @@ namespace NFinance.Domain
 
         public Gasto() { }
 
-        public Gasto(Gasto gastos)
+        public Gasto(Guid idCliente, string nomeGasto, decimal valor, int quantidadeParcelas, DateTime dataDoGasto)
         {
             Id = Guid.NewGuid();
-            IdCliente = gastos.IdCliente;
-            NomeGasto = gastos.NomeGasto;
-            Valor = gastos.Valor;
-            QuantidadeParcelas = gastos.QuantidadeParcelas;
-            DataDoGasto = gastos.DataDoGasto;
+            IdCliente = idCliente;
+            NomeGasto = nomeGasto;
+            Valor = valor;
+            QuantidadeParcelas = quantidadeParcelas;
+            DataDoGasto = dataDoGasto;
+        }
+
+        public Gasto(Guid id, Guid idCliente, string nomeGasto, decimal valor, int quantidadeParcelas, DateTime dataDoGasto)
+        {
+            Id = id;
+            IdCliente = idCliente;
+            NomeGasto = nomeGasto;
+            Valor = valor;
+            QuantidadeParcelas = quantidadeParcelas;
+            DataDoGasto = dataDoGasto;
         }
     }
 }

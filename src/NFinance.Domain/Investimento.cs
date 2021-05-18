@@ -28,13 +28,22 @@ namespace NFinance.Domain
 
         public Investimento() { }
 
-        public Investimento(Investimento investimentos)
+        public Investimento(Guid idCliente, string nomeInvestimento, decimal valor, DateTime dataAplicacao)
         {
             Id = Guid.NewGuid();
-            IdCliente = investimentos.IdCliente;
-            NomeInvestimento = investimentos.NomeInvestimento;
-            Valor = investimentos.Valor;
-            DataAplicacao = investimentos.DataAplicacao;
+            IdCliente = idCliente;
+            NomeInvestimento = nomeInvestimento;
+            Valor = valor;
+            DataAplicacao = dataAplicacao;
+        }
+
+        public Investimento(Guid id, Guid idCliente, string nomeInvestimento, decimal valor, DateTime dataAplicacao)
+        {
+            Id = id;
+            IdCliente = idCliente;
+            NomeInvestimento = nomeInvestimento;
+            Valor = valor;
+            DataAplicacao = dataAplicacao;
         }
     }
 }

@@ -6,6 +6,14 @@ namespace NFinance.Application.Interfaces
 {
     public interface ITelaInicialApp
     {
-        public Task<TelaInicialViewModel> CarregarTelaInicial(Guid id);
+        public Task<TelaInicialViewModel> TelaInicial(Guid idCliente);
+
+        public Task<GanhoMensalViewModel> GanhoMensal(Guid idCliente);
+
+        public Task<GastoMensalViewModel> GastoMensal(Guid idCliente);
+
+        public Task<InvestimentoMensalViewModel> InvestimentoMensal(Guid idCliente);
+
+        public Task<ResgateMensalViewModel> ResgateMensal(Guid idCliente);
     }
 }

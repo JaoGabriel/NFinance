@@ -1,4 +1,5 @@
 ﻿using System;
+using NFinance.Domain;
 
 namespace NFinance.Application.ViewModel.ResgatesViewModel
 {
@@ -16,7 +17,12 @@ namespace NFinance.Application.ViewModel.ResgatesViewModel
         
             public DateTime DataResgate { get; set; }
         }
-        
-        public class Response : ResgateViewModel { };
+
+        public class Response : ResgateViewModel
+        {
+            public Response(Resgate resgate) : base(resgate)
+            {
+            }
+        }
     }
 }

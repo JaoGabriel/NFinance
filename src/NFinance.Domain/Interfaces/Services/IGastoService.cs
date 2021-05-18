@@ -6,7 +6,7 @@ namespace NFinance.Domain.Interfaces.Services
 {
     public interface IGastoService
     {
-        Task<Gasto> AtualizarGasto(Guid id, Gasto request);
+        Task<Gasto> AtualizarGasto(Gasto request);
         Task<Gasto> CadastrarGasto(Gasto request);
         Task<Gasto> ConsultarGasto(Guid id);
         Task<List<Gasto>> ConsultarGastos(Guid idCliente);

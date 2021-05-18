@@ -1,4 +1,5 @@
 ﻿using System;
+using NFinance.Domain;
 
 namespace NFinance.Application.ViewModel.InvestimentosViewModel
 {
@@ -14,7 +15,12 @@ namespace NFinance.Application.ViewModel.InvestimentosViewModel
         
             public DateTime DataAplicacao { get; set; }
         }
-        
-        public class Response : InvestimentoViewModel { };
+
+        public class Response : InvestimentoViewModel
+        {
+            public Response(Investimento investimentos) : base(investimentos)
+            {
+            }
+        }
     }
 }

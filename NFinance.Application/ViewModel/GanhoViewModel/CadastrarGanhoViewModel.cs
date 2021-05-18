@@ -20,16 +20,8 @@ namespace NFinance.Application.ViewModel.GanhoViewModel
 
         public class Response : GanhoViewModel
         {
-            public Response() { }
-
-            public Response(Ganho ganho)
+            public Response(Ganho ganho) : base(ganho)
             {
-                Id = ganho.Id;
-                IdCliente = ganho.IdCliente;
-                NomeGanho = ganho.NomeGanho;
-                Valor = ganho.Valor;
-                Recorrente = ganho.Recorrente;
-                DataDoGanho = ganho.DataDoGanho;
             }
         }
     }

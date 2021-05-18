@@ -16,16 +16,16 @@ namespace NFinance.Domain.Services
             _gastosRepository = gastosRepository;
         }
 
-        public async Task<Gasto> AtualizarGasto(Guid id, Gasto request)
+        public async Task<Gasto> AtualizarGasto(Gasto request)
         {
-            if (Guid.Empty.Equals(id)) throw new IdException("ID gasto invalido");
+            if (Guid.Empty.Equals(request.Id)) throw new IdException("ID gasto invalido");
             if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("ID cliente invalido");
             if (string.IsNullOrWhiteSpace(request.NomeGasto)) throw new NomeGastoException("Nome nao deve ser vazio,branco ou nulo");
             if (request.Valor <= 0) throw new ValorGastoException("Valor deve ser maior que zero");
             if (request.QuantidadeParcelas <= 0 || request.QuantidadeParcelas >= 1000) throw new QuantidadeParcelaException("Valor deve ser maior que zero e menor que mil");
             if (request.DataDoGasto > DateTime.MaxValue.AddYears(-7899) || request.DataDoGasto < DateTime.MinValue.AddYears(1949)) throw new DataGastoException();
 
-            return await _gastosRepository.AtualizarGasto(id, request);
+            return await _gastosRepository.AtualizarGasto(request);
         }
 
         public async Task<Gasto> CadastrarGasto(Gasto request)

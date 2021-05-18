@@ -20,6 +20,24 @@ namespace NFinance.Application.ViewModel.GastosViewModel
             public string Mensagem { get; set; }
             
             public DateTime DataExclusao { get; set; }
+           
+            public Response() { }
+
+            public Response(bool status)
+            {
+                if (status)
+                {
+                    StatusCode = 200;
+                    DataExclusao = DateTime.UtcNow;
+                    Mensagem = "Excluido Com Sucesso";
+                }
+                else
+                {
+                    StatusCode = 400;
+                    DataExclusao = DateTime.UtcNow;
+                    Mensagem = "Ocorreu um erro ao Excluir";
+                }
+            }
         }
     }
 }

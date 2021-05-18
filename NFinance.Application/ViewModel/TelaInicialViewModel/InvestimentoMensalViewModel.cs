@@ -6,13 +6,13 @@ namespace NFinance.Application.ViewModel.TelaInicialViewModel
 {
     public class InvestimentoMensalViewModel
     {
-        public List<InvestimentoViewModel.Response> Investimentos { get; set; }
+        public List<InvestimentoViewModel> Investimentos { get; set; }
 
         public decimal SaldoMensal { get; set; }
 
         public InvestimentoMensalViewModel() { }
 
-        public InvestimentoMensalViewModel(List<InvestimentoViewModel.Response> listInvestimentos)
+        public InvestimentoMensalViewModel(List<InvestimentoViewModel> listInvestimentos)
         {
             Investimentos = listInvestimentos;
             SaldoMensal = listInvestimentos.Sum(s => s.Valor);

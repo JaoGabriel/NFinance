@@ -8,13 +8,13 @@ namespace NFinance.Domain.Services
 {
     public class AutenticacaoService : IAutenticacaoService
     {
-        private readonly IClienteService _clienteService;
         private readonly IRedisService _redis;
+        private readonly IClienteService _clienteService;
 
         public AutenticacaoService(IClienteService clienteService,IRedisService redis)
         {
-            _clienteService = clienteService;
             _redis = redis;
+            _clienteService = clienteService;
         }
 
         public async Task<Cliente> RealizarLogin(string email, string senha)
@@ -28,8 +28,8 @@ namespace NFinance.Domain.Services
         public async Task<Cliente> RealizarLogut(Guid id)
         {            
             var valorRedis = _redis.RetornaValorPorChave(id.ToString());
-            var cliente = await _clienteService.ConsultarCliente(valorRedis.IdCliente);
-            var response = await _clienteService.CadastrarLogoutToken(cliente, valorRedis.Token);
+            var cliente = await _clienteService.ConsultarCliente(valorRedis.Id);
+            var response = await _clienteService.CadastrarLogoutToken(cliente, valorRedis.LogoutToken);
             var clienteExcluido = _redis.RemoverValorCache(id.ToString());
             
             if(clienteExcluido)
@@ -41,7 +41,7 @@ namespace NFinance.Domain.Services
         public async Task<bool> ValidaTokenRequest(string authorization)
         {
             var listaToken = TokenService.LerToken(authorization);
-            var redisToken = _redis.RetornaValorPorChave(listaToken.FirstOrDefault().ToString()).Token;
+            var redisToken = _redis.RetornaValorPorChave(listaToken.FirstOrDefault().ToString()).LogoutToken;
             var cliente = await _clienteService.ConsultarCliente(Guid.Parse(listaToken.FirstOrDefault().ToString()));
 
             if (cliente.LogoutToken == listaToken.FirstOrDefault(token => token == authorization.Substring(7)) || authorization.Substring(7) != redisToken)

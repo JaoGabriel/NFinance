@@ -38,7 +38,6 @@ namespace NFinance.Application.ViewModel.GanhoViewModel
                     Mensagem = "Ocorreu um erro ao Excluir";
                 }
             }
-
         }
     }
 }

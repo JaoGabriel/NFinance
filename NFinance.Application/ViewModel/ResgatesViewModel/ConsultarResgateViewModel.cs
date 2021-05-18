@@ -1,7 +1,14 @@
-﻿namespace NFinance.Application.ViewModel.ResgatesViewModel
+﻿using NFinance.Domain;
+
+namespace NFinance.Application.ViewModel.ResgatesViewModel
 {
     public class ConsultarResgateViewModel
     {
-        public class Response : ResgateViewModel{ };
+        public class Response : ResgateViewModel
+        {
+            public Response(Resgate resgate) : base(resgate)
+            {
+            }
+        }
     }
 }

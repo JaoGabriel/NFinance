@@ -32,14 +32,14 @@ namespace NFinance.Domain
 
         public Resgate() { }
 
-        public Resgate(Resgate resgate)
+        public Resgate(Guid idInvestimento, Guid idCliente, decimal valor, string motivoResgate, DateTime dataResgate)
         {
             Id = Guid.NewGuid();
-            IdInvestimento = resgate.IdInvestimento;
-            IdCliente = resgate.IdCliente;
-            Valor = resgate.Valor;
-            MotivoResgate = resgate.MotivoResgate;
-            DataResgate = resgate.DataResgate;
+            IdInvestimento = idInvestimento;
+            IdCliente = idCliente;
+            Valor = valor;
+            MotivoResgate = motivoResgate;
+            DataResgate = dataResgate;
         }
     }
 }

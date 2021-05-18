@@ -4,22 +4,10 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
 {
     public class ConsultarClienteViewModel
     {
-        public class Response
+        public class Response : ClienteViewModel
         {
-            public string Nome { get; set; }
-
-            public string Cpf { get; set; }
-
-            public string Email { get; set; }
-
-
-            public Response() { }
-
-            public Response(Cliente cliente)
+            public Response(Cliente cliente) : base(cliente)
             {
-                Nome = cliente.Nome;
-                Cpf = cliente.CPF;
-                Email = cliente.Email;
             }
         }
     }

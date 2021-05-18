@@ -17,15 +17,15 @@ namespace NFinance.Domain.Services
             _investimentosRepository = investimentosRepository;
         }
 
-        public async Task<Investimento> AtualizarInvestimento(Guid id, Investimento request)
+        public async Task<Investimento> AtualizarInvestimento(Investimento request)
         {
-            if (Guid.Empty.Equals(id)) throw new IdException("Id investimento invalido");
+            if (Guid.Empty.Equals(request.Id)) throw new IdException("Id investimento invalido");
             if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("Id cliente invalido");
             if (string.IsNullOrWhiteSpace(request.NomeInvestimento)) throw new NomeInvestimentoException("Nome nao pode ser nulo,vazio ou em branco");
             if (request.Valor <= 0) throw new ValorInvestimentoException("Valor nao pode ser menor que zero");
             if (request.DataAplicacao > DateTime.MaxValue.AddYears(-7899) || request.DataAplicacao < DateTime.MinValue.AddYears(1949)) throw new DataInvestimentoException();
 
-            return await _investimentosRepository.AtualizarInvestimento(id, request);
+            return await _investimentosRepository.AtualizarInvestimento(request);
         }
 
         public async Task<Investimento> ConsultarInvestimento(Guid id)

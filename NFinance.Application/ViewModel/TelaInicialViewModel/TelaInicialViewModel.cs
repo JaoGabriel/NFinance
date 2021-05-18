@@ -1,13 +1,10 @@
-﻿using System;
-using NFinance.Application.ViewModel.ClientesViewModel;
+﻿using NFinance.Domain;
 
 namespace NFinance.Application.ViewModel.TelaInicialViewModel
 {
     public class TelaInicialViewModel
     {
-        public Guid Id { get; set; }
-
-        public ConsultarClienteViewModel.Response Cliente { get; set; }
+        public Cliente Cliente { get; set; }
 
         public GanhoMensalViewModel GanhoMensal { get; set; }
 
@@ -19,10 +16,9 @@ namespace NFinance.Application.ViewModel.TelaInicialViewModel
 
         public decimal ResumoMensal { get; set; }
 
-        public TelaInicialViewModel(ConsultarClienteViewModel.Response cliente, GanhoMensalViewModel ganhoMensal, GastoMensalViewModel gastoMensal, 
+        public TelaInicialViewModel(Cliente cliente, GanhoMensalViewModel ganhoMensal, GastoMensalViewModel gastoMensal, 
             InvestimentoMensalViewModel investimentoMensal, ResgateMensalViewModel resgateMensal, decimal resumoMensal)
         {
-            Id = Guid.NewGuid();
             Cliente = cliente;
             GanhoMensal = ganhoMensal;
             GastoMensal = gastoMensal;

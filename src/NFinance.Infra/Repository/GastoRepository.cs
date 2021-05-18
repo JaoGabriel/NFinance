@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
 using NFinance.Domain;
-using NFinance.Domain.Interfaces.Repository;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using NFinance.Domain.Interfaces.Repository;
 
 namespace NFinance.Infra.Repository
 {
@@ -23,9 +23,9 @@ namespace NFinance.Infra.Repository
         }
 
 
-        public async Task<Gasto> AtualizarGasto(Guid id, Gasto gastos)
+        public async Task<Gasto> AtualizarGasto(Gasto gastos)
         {
-            var gastoAtualizar = await _context.Gasto.FirstOrDefaultAsync(i => i.Id == id);
+            var gastoAtualizar = await _context.Gasto.FirstOrDefaultAsync(i => i.Id == gastos.Id);
             _context.Entry(gastoAtualizar).CurrentValues.SetValues(gastos);
             await UnitOfWork.Commit();
             return gastos;

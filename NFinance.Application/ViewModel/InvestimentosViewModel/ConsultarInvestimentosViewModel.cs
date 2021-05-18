@@ -5,13 +5,13 @@ namespace NFinance.Application.ViewModel.InvestimentosViewModel
 {
     public class ConsultarInvestimentosViewModel
     {
-        public class Response : List<InvestimentoViewModel.Response>
+        public class Response : List<InvestimentoViewModel>
         {
             public Response(List<Investimento> investimentos)
             {
                 foreach (var item in investimentos)
                 {
-                    var investimentoVm = new InvestimentoViewModel.Response(item);
+                    var investimentoVm = new InvestimentoViewModel(item);
                     this.Add(investimentoVm);
                 }
             }

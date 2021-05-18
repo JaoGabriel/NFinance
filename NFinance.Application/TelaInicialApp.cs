@@ -1,34 +1,39 @@
 ﻿using System;
 using Cronos;
+using NFinance.Domain;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using NFinance.Domain.Exceptions;
+using System.Collections.Generic;
+using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.Interfaces.Repository;
+using NFinance.Application.ViewModel.GanhoViewModel;
+using NFinance.Application.ViewModel.GastosViewModel;
+using NFinance.Application.ViewModel.ResgatesViewModel;
+using NFinance.Application.ViewModel.TelaInicialViewModel;
+using NFinance.Application.ViewModel.InvestimentosViewModel;
 
-namespace NFinance.Domain.Services
+namespace NFinance.Application
 {
-    public class TelaInicialService : ITelaInicialService
+    public class TelaInicialApp : ITelaInicialApp
     {
-        private readonly IGanhoRepository _ganhoRepository;
-        private readonly IInvestimentoRepository _investimentoRepository;
-        private readonly IGastoRepository _gastoRepository;
-        private readonly IResgateRepository _resgateRepository;
+        private readonly IGanhoService _ganhoService;
+        private readonly IInvestimentoService _investimentoService;
+        private readonly IGastoService _gastoService;
+        private readonly IResgateService _resgateService;
         private readonly IClienteService _clienteService;
 
-        public TelaInicialService(IGanhoRepository ganhoRepository, IInvestimentoRepository investimentoRepository, IGastoRepository gastoRepository, 
-            IResgateRepository resgateRepository, IClienteService clienteService)
+        public TelaInicialApp(IGanhoService ganhoService, IInvestimentoService investimentoService, IGastoService gastoService, IResgateService resgateService, IClienteService clienteService)
         {
-            _ganhoRepository = ganhoRepository;
-            _investimentoRepository = investimentoRepository;
-            _gastoRepository = gastoRepository;
-            _resgateRepository = resgateRepository;
+            _ganhoService = ganhoService;
+            _investimentoService = investimentoService;
+            _gastoService = gastoService;
+            _resgateService = resgateService;
             _clienteService = clienteService;
         }
 
         public async Task<TelaInicialViewModel> TelaInicial(Guid idCliente)
         {
-            if (Guid.Empty.Equals(idCliente)) throw new IdException("ID gasto invalido");
+            if (Guid.Empty.Equals(idCliente)) throw new IdException("Id cliente invalido");
 
             var cliente = await _clienteService.ConsultarCliente(idCliente);
             var ganhoMensal = await GanhoMensal(idCliente);
@@ -46,7 +51,7 @@ namespace NFinance.Domain.Services
         public async Task<GanhoMensalViewModel> GanhoMensal(Guid idCliente)
         {
 
-            var ganhos = await _ganhoRepository.ConsultarGanhos(idCliente);
+            var ganhos = await _ganhoService.ConsultarGanhos(idCliente);
             var listGanho = new List<GanhoViewModel>();
             foreach (var ganho in ganhos)
                 if (ValidaGanho(ganho))
@@ -62,20 +67,19 @@ namespace NFinance.Domain.Services
 
         public async Task<GastoMensalViewModel> GastoMensal(Guid idCliente)
         {
-            var gastos = await _gastoRepository.ConsultarGastos(idCliente);
-            var listGastos = new List<GastoViewModel.Response>();
-            
+            var gastos = await _gastoService.ConsultarGastos(idCliente);
+            var listGastos = new List<GastoViewModel>();
+
             foreach (var gasto in gastos)
                 if (ValidaGasto(gasto))
                 {
-                    var vm = new GastoViewModel.Response(gasto);
+                    var vm = new GastoViewModel(gasto);
                     if (gasto.QuantidadeParcelas > 0)
                     {
                         if (ValidaProximoMes(DateTime.Today))
                         {
                             gasto.QuantidadeParcelas -= 1;
-                            // sera que vale a pena salvar o valor parcela?
-                            await _gastoRepository.AtualizarGasto(gasto.Id, gasto);
+                            await _gastoService.AtualizarGasto(gasto);
                         }
                         gasto.Valor /= gasto.QuantidadeParcelas;
                         vm.Valor = gasto.Valor;
@@ -91,13 +95,13 @@ namespace NFinance.Domain.Services
 
         public async Task<InvestimentoMensalViewModel> InvestimentoMensal(Guid idCliente)
         {
-            var investimentos = await _investimentoRepository.ConsultarInvestimentos(idCliente);
-            var listInvestimentos = new List<InvestimentoViewModel.Response>();
+            var investimentos = await _investimentoService.ConsultarInvestimentos(idCliente);
+            var listInvestimentos = new List<InvestimentoViewModel>();
 
             foreach (var investimento in investimentos)
                 if (investimento.DataAplicacao.Month.Equals(DateTime.Today.Month))
                 {
-                    var vm = new InvestimentoViewModel.Response(investimento);
+                    var vm = new InvestimentoViewModel(investimento);
                     listInvestimentos.Add(vm);
                 }
 
@@ -108,13 +112,13 @@ namespace NFinance.Domain.Services
 
         public async Task<ResgateMensalViewModel> ResgateMensal(Guid idCliente)
         {
-            var resgates = await _resgateRepository.ConsultarResgates(idCliente);
-            var listResgates = new List<ResgateViewModel.Response>();
+            var resgates = await _resgateService.ConsultarResgates(idCliente);
+            var listResgates = new List<ResgateViewModel>();
 
             foreach (var resgate in resgates)
                 if (resgate.DataResgate.Month.Equals(DateTime.Today.Month))
                 {
-                    var vm = new ResgateViewModel.Response(resgate);
+                    var vm = new ResgateViewModel(resgate);
                     listResgates.Add(vm);
                 }
 
@@ -123,7 +127,7 @@ namespace NFinance.Domain.Services
             return response;
         }
 
-        private bool ValidaProximoMes(DateTime date)
+        private static bool ValidaProximoMes(DateTime date)
         {
             var cron = CronExpression.Parse("* * 1 * *");
             var proxOcorrencia = cron.GetNextOccurrence(DateTime.UtcNow);
@@ -134,7 +138,7 @@ namespace NFinance.Domain.Services
                 return false;
         }
 
-        private bool ValidaGasto(Gasto gasto)
+        private static bool ValidaGasto(Gasto gasto)
         {
             if (gasto.DataDoGasto.Month > DateTime.Today.Month || gasto.DataDoGasto.Year > DateTime.Today.Year)
                 return false;
@@ -146,17 +150,17 @@ namespace NFinance.Domain.Services
 
             if (dataMax.Month >= DateTime.Today.Month)
                 return true;
-            
+
             return false;
         }
 
-        private bool ValidaGanho(Ganho ganho)
+        private static bool ValidaGanho(Ganho ganho)
         {
             if (DateTime.Today.Month.Equals(ganho.DataDoGanho.Month))
                 return true;
             else
                 if (ganho.Recorrente && DateTime.Today.Month.Equals(ganho.DataDoGanho.Month))
-                    return true;
+                return true;
 
             return false;
         }
