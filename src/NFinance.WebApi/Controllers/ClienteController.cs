@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NFinance.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.ClientesViewModel;
@@ -13,15 +14,15 @@ namespace NFinance.WebApi.Controllers
     [Route("[controller]")]
     public class ClienteController : ControllerBase
     {
-        private readonly IClienteService _clienteService;
+        private readonly IClienteApp _clienteApp;
         private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<ClienteController> _logger;
 
-        public ClienteController(ILogger<ClienteController> logger, IClienteService clienteService, IAutenticacaoService autenticacaoService)
+        public ClienteController(ILogger<ClienteController> logger, IClienteApp clienteApp, IAutenticacaoService AutenticacaoService)
         {
             _logger = logger;
-            _clienteService = clienteService;
-            _autenticacaoService = autenticacaoService;
+            _clienteApp = clienteApp;
+            _autenticacaoService = AutenticacaoService;
         }
 
         [HttpGet("Cliente/Consultar/{id}")]
@@ -34,7 +35,7 @@ namespace NFinance.WebApi.Controllers
             _logger.LogInformation("Validando Bearer Token!");
             await _autenticacaoService.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
-            var cliente = await _clienteService.ConsultarCliente(id);
+            var cliente = await _clienteApp.ConsultaCliente(id);
             _logger.LogInformation("Clientes Encontrado Com Sucesso!");
             return Ok(cliente);
         }
@@ -45,11 +46,9 @@ namespace NFinance.WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CadastrarCliente(CadastrarClienteViewModel.Request request)
         {
-
-            var response = await _clienteService.CadastrarCliente(request);
+            var response = await _clienteApp.CadastrarCliente(request);
             _logger.LogInformation("Clientes Cadastrado Com Sucesso!");
             return Ok(response);
-
         }
 
         [HttpPut("Cliente/Atualizar/{id}")]
@@ -58,11 +57,10 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> AtualizarCliente([FromHeader] string authorization, Guid id, AtualizarClienteViewModel.Request request)
         {
-
             _logger.LogInformation("Validando Bearer Token!");
             await _autenticacaoService.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
-            var response = await _clienteService.AtualizarCliente(id, request);
+            var response = await _clienteApp.AtualizarCliente(id, request);
             _logger.LogInformation("Cliente Atualizado Com Sucesso!");
             return Ok(response);
         }
