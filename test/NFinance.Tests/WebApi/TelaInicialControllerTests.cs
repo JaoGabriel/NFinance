@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.GanhoViewModel;
+using NFinance.Application.ViewModel.GastosViewModel;
+using NFinance.Application.ViewModel.InvestimentosViewModel;
+using NFinance.Application.ViewModel.ResgatesViewModel;
+using NFinance.Application.ViewModel.TelaInicialViewModel;
+using NFinance.Domain;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Services;
-using NFinance.Domain.ViewModel.ClientesViewModel;
-using NFinance.Domain.ViewModel.GanhoViewModel;
-using NFinance.Domain.ViewModel.TelaInicialViewModel;
-using NFinance.ViewModel.GastosViewModel;
-using NFinance.ViewModel.InvestimentosViewModel;
-using NFinance.ViewModel.ResgatesViewModel;
 using NFinance.WebApi.Controllers;
 using NSubstitute;
 using System;
@@ -21,20 +22,20 @@ namespace NFinance.Tests.WebApi
 {
     public class TelaInicialControllerTests
     {
-        private readonly ITelaInicialService _telaInicialService;
+        private readonly ITelaInicialApp _telaInicialApp;
         private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<TelaInicialController> _logger;
 
         public TelaInicialControllerTests()
         {
-            _telaInicialService = Substitute.For<ITelaInicialService>();
+            _telaInicialApp = Substitute.For<ITelaInicialApp>();
             _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<TelaInicialController>>();
         }
 
         private TelaInicialController InicializarLoginController()
         {
-            return new TelaInicialController(_logger, _telaInicialService,_autenticacaoService);
+            return new TelaInicialController(_logger, _telaInicialApp,_autenticacaoService);
         }
 
         [Fact]
@@ -63,26 +64,26 @@ namespace NFinance.Tests.WebApi
             var dataResgate = DateTime.Today.AddDays(-2);
             var motivoResgate = "Necessidade";
             var ganho = new GanhoViewModel { Id = idGanho, IdCliente = idCliente, NomeGanho = nomeGanho, Valor = valorGanho, DataDoGanho = dataGanho, Recorrente = recorrente};
-            var gasto = new GastoViewModel.Response { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
-            var investimento = new InvestimentoViewModel.Response { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataAplicacao };
-            var resgate = new ResgateViewModel.Response { Id = idResgate, IdCliente = idCliente, IdInvestimento = idInvestimento, Valor = valorInvestimento, DataResgate = dataResgate, MotivoResgate = motivoResgate };
+            var gasto = new GastoViewModel { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
+            var investimento = new InvestimentoViewModel { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataAplicacao };
+            var resgate = new ResgateViewModel { Id = idResgate, IdCliente = idCliente, Investimento = investimento, Valor = valorInvestimento, DataResgate = dataResgate, MotivoResgate = motivoResgate };
             var listGanho = new List<GanhoViewModel>();
-            var listGasto = new List<GastoViewModel.Response>();
-            var listInvestimento = new List<InvestimentoViewModel.Response>();
-            var listResgate = new List<ResgateViewModel.Response>();
+            var listGasto = new List<GastoViewModel>();
+            var listInvestimento = new List<InvestimentoViewModel>();
+            var listResgate = new List<ResgateViewModel>();
             listGanho.Add(ganho);
             listGasto.Add(gasto);
             listInvestimento.Add(investimento);
             listResgate.Add(resgate);
-            var cliente = new ConsultarClienteViewModel.Response { Id = idCliente, Nome = nomeCliente, Cpf = cpfCliente, Email = emailCliente };
+            var cliente = new Cliente(nomeCliente, cpfCliente, emailCliente , "aaaaaa");
             var ganhoMensal = new GanhoMensalViewModel(listGanho);
             var gastoMensal = new GastoMensalViewModel(listGasto);
             var investimentoMensal = new InvestimentoMensalViewModel(listInvestimento);
             var resgateMensal = new ResgateMensalViewModel(listResgate);
             var telaInicialViewModelR = new TelaInicialViewModel(cliente,ganhoMensal,gastoMensal,investimentoMensal,resgateMensal,4000M);
             var controller = InicializarLoginController();
-            _telaInicialService.TelaInicial(Arg.Any<Guid>()).Returns(telaInicialViewModelR);
-            var token = TokenService.GerarToken(new Domain.Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva"});
+            _telaInicialApp.TelaInicial(Arg.Any<Guid>()).Returns(telaInicialViewModelR);
+            var token = TokenService.GerarToken(cliente);
 
             //Act
             var teste = controller.TelaInicial(token,idCliente);
@@ -92,7 +93,6 @@ namespace NFinance.Tests.WebApi
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.NotEqual(Guid.Empty, telaInicialViewModel.Id);
             Assert.NotEqual(Guid.Empty, telaInicialViewModel.Cliente.Id);
             Assert.Single(telaInicialViewModel.GanhoMensal.Ganhos);
             Assert.NotEmpty(telaInicialViewModel.GastoMensal.Gastos);
@@ -106,7 +106,7 @@ namespace NFinance.Tests.WebApi
             //Assert Cliente
             Assert.Equal(idCliente, telaInicialViewModel.Cliente.Id);
             Assert.Equal(nomeCliente, telaInicialViewModel.Cliente.Nome);
-            Assert.Equal(cpfCliente, telaInicialViewModel.Cliente.Cpf);
+            Assert.Equal(cpfCliente, telaInicialViewModel.Cliente.CPF);
             Assert.Equal(emailCliente, telaInicialViewModel.Cliente.Email);
             //Assert Ganho
             var ganhoTest = telaInicialViewModel.GanhoMensal.Ganhos.FirstOrDefault(g => g.Id == idGanho);

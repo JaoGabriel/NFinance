@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using NFinance.Application;
 using NFinance.Domain;
 using NFinance.Infra;
 using NSwag;
@@ -46,6 +47,7 @@ namespace NFinance.WebApi
             });
             services.AddInfraDataSqlServices(Configuration);
             services.AddDomainServices(Configuration);
+            services.AddApplicationServices();
 
             services.AddControllers();
 

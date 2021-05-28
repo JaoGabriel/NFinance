@@ -1,75 +1,64 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NFinance.Domain;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.Services;
-using NFinance.Domain.ViewModel.GanhoViewModel;
-using NFinance.WebApi.Controllers;
-using NSubstitute;
+﻿using Xunit;
 using System;
+using NSubstitute;
+using NFinance.Domain;
+using NFinance.Domain.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
-using Xunit;
+using NFinance.WebApi.Controllers;
+using Microsoft.Extensions.Logging;
+using NFinance.Application.Interfaces;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Application.ViewModel.GanhoViewModel;
 
 namespace NFinance.Tests.WebApi
 {
     public class GanhoControllerTests
     {
-        private readonly IGanhoService _ganhoService;
+        private readonly IGanhoApp _ganhoApp;
         private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<GanhoController> _logger;
 
         public GanhoControllerTests()
         {
-            _ganhoService = Substitute.For<IGanhoService>();
+            _ganhoApp = Substitute.For<IGanhoApp>();
             _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<GanhoController>>();
         }
 
         private GanhoController InicializarGanhoController()
         {
-            return new GanhoController(_logger, _ganhoService, _autenticacaoService);
+            return new GanhoController(_logger, _ganhoApp, _autenticacaoService);
+        }
+
+        public static Ganho GeraGanho()
+        {
+            return new Ganho(Guid.NewGuid(),"SAlario",231207983.201983M,true,DateTime.Today);
         }
 
         [Fact]
         public void GanhoController_CadastrarGanho_ComSucesso()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var idCliente = Guid.NewGuid();
-            var nomeGanho = "Testeee";
-            var valor = 123712930.89M;
-            _ganhoService.CadastrarGanho(Arg.Any<CadastrarGanhoViewModel.Request>())
-                .Returns(new CadastrarGanhoViewModel.Response
-                {
-                    Id = id,
-                    IdCliente = idCliente,
-                    NomeGanho = nomeGanho,
-                    Valor = valor,
-                    Recorrente = false
-                });
+            var ganho = GeraGanho();
+            _ganhoApp.CadastrarGanho(Arg.Any<CadastrarGanhoViewModel.Request>()).Returns(new CadastrarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
-            var ganho = new CadastrarGanhoViewModel.Request
-            {
-                IdCliente = idCliente,
-                NomeGanho = nomeGanho,
-                Valor = valor,
-                Recorrente = false
-            };
+            var ganhoRequest = new CadastrarGanhoViewModel.Request();
 
             //Act
-            var teste = controller.CadastrarGanho(ganho);
+            var teste = controller.CadastrarGanho(ganhoRequest);
             var okResult = teste.Result as ObjectResult;
             var cadastrarGanhoViewModel = Assert.IsType<CadastrarGanhoViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, cadastrarGanhoViewModel.Id);
-            Assert.Equal(nomeGanho, cadastrarGanhoViewModel.NomeGanho);
-            Assert.Equal(valor, cadastrarGanhoViewModel.Valor);
-            Assert.Equal(idCliente, cadastrarGanhoViewModel.IdCliente);
-            Assert.Equal(id, cadastrarGanhoViewModel.Id);
+            Assert.Equal(ganho.Id, cadastrarGanhoViewModel.Id);
+            Assert.Equal(ganho.NomeGanho, cadastrarGanhoViewModel.NomeGanho);
+            Assert.Equal(ganho.Valor, cadastrarGanhoViewModel.Valor);
+            Assert.Equal(ganho.IdCliente, cadastrarGanhoViewModel.IdCliente);
+            Assert.Equal(ganho.Id, cadastrarGanhoViewModel.Id);
             Assert.False(cadastrarGanhoViewModel.Recorrente);
         }
 
@@ -77,44 +66,25 @@ namespace NFinance.Tests.WebApi
         public void GanhoController_AtualizarGanho_ComSucesso()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var idCliente = Guid.NewGuid();
-            var nomeGanho = "Testeee";
-            var nomeNovo = "jhaasduhasd"; 
-            var valor = 123712930.89M;
-            _ganhoService.AtualizarGanho(Arg.Any<Guid>(),Arg.Any<AtualizarGanhoViewModel.Request>())
-                .Returns(new AtualizarGanhoViewModel.Response
-                {
-                    Id = id,
-                    IdCliente = idCliente,
-                    NomeGanho = nomeGanho,
-                    Valor = valor,
-                    Recorrente = false
-                });
+            var ganho = GeraGanho();
+            _ganhoApp.AtualizarGanho(Arg.Any<Guid>(),Arg.Any<AtualizarGanhoViewModel.Request>()).Returns(new AtualizarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
-            var ganho = new AtualizarGanhoViewModel.Request
-            {
-                IdCliente = idCliente,
-                NomeGanho = nomeNovo,
-                Valor = valor,
-                Recorrente = true
-            };
-            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var ganhoRequest = new AtualizarGanhoViewModel.Request(ganho);
+            var token = TokenService.GerarToken(new Cliente { Id = ganho.IdCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 
             //Act
-            var teste = controller.AtualizarGanho(token,id,ganho);
+            var teste = controller.AtualizarGanho(token,ganho.Id,ganhoRequest);
             var okResult = teste.Result as ObjectResult;
             var atualizarGanhoViewModel = Assert.IsType<AtualizarGanhoViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, atualizarGanhoViewModel.Id);
-            Assert.Equal(nomeGanho, atualizarGanhoViewModel.NomeGanho);
-            Assert.DoesNotMatch(nomeNovo, atualizarGanhoViewModel.NomeGanho);
-            Assert.Equal(valor, atualizarGanhoViewModel.Valor);
-            Assert.Equal(idCliente, atualizarGanhoViewModel.IdCliente);
-            Assert.Equal(id, atualizarGanhoViewModel.Id);
+            Assert.Equal(ganho.Id, atualizarGanhoViewModel.Id);
+            Assert.Equal(ganho.NomeGanho, atualizarGanhoViewModel.NomeGanho);
+            Assert.Equal(ganho.Valor, atualizarGanhoViewModel.Valor);
+            Assert.Equal(ganho.IdCliente, atualizarGanhoViewModel.IdCliente);
+            Assert.Equal(ganho.Id, atualizarGanhoViewModel.Id);
             Assert.False(atualizarGanhoViewModel.Recorrente);
         }
 
@@ -122,35 +92,24 @@ namespace NFinance.Tests.WebApi
         public void GanhoController_ConsultarGanho_ComSucesso()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var idCliente = Guid.NewGuid();
-            var nomeGanho = "Testeee";
-            var valor = 123712930.89M;
-            _ganhoService.ConsultarGanho(Arg.Any<Guid>())
-                .Returns(new ConsultarGanhoViewModel.Response
-                {
-                    Id = id,
-                    IdCliente = idCliente,
-                    NomeGanho = nomeGanho,
-                    Valor = valor,
-                    Recorrente = false
-                });
+            var ganho = GeraGanho();
+            _ganhoApp.ConsultarGanho(Arg.Any<Guid>()).Returns(new ConsultarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
-            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var token = TokenService.GerarToken(new Cliente { Id = ganho.IdCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
             
             //Act
-            var teste = controller.ConsultarGanho(token,id);
+            var teste = controller.ConsultarGanho(token,ganho.Id);
             var okResult = teste.Result as ObjectResult;
             var consultarGanhoViewModel = Assert.IsType<ConsultarGanhoViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, consultarGanhoViewModel.Id);
-            Assert.Equal(nomeGanho, consultarGanhoViewModel.NomeGanho);
-            Assert.Equal(valor, consultarGanhoViewModel.Valor);
-            Assert.Equal(idCliente, consultarGanhoViewModel.IdCliente);
-            Assert.Equal(id, consultarGanhoViewModel.Id);
+            Assert.Equal(ganho.Id, consultarGanhoViewModel.Id);
+            Assert.Equal(ganho.NomeGanho, consultarGanhoViewModel.NomeGanho);
+            Assert.Equal(ganho.Valor, consultarGanhoViewModel.Valor);
+            Assert.Equal(ganho.IdCliente, consultarGanhoViewModel.IdCliente);
+            Assert.Equal(ganho.Id, consultarGanhoViewModel.Id);
             Assert.False(consultarGanhoViewModel.Recorrente);
         }
 
@@ -162,7 +121,7 @@ namespace NFinance.Tests.WebApi
             var idCliente = Guid.NewGuid();
             var motivo = "Perdio money";
             var mensagemSucesso = "Excluido com sucesso";
-            _ganhoService.ExcluirGanho(Arg.Any<ExcluirGanhoViewModel.Request>())
+            _ganhoApp.ExcluirGanho(Arg.Any<ExcluirGanhoViewModel.Request>())
                 .Returns(new ExcluirGanhoViewModel.Response
                 {
                     StatusCode = 200,
@@ -220,7 +179,7 @@ namespace NFinance.Tests.WebApi
             listaGanho.Add(ganho);
             listaGanho.Add(ganho1);
             var listarGanhos = new ConsultarGanhosViewModel.Response(listaGanho);
-            _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listarGanhos);
+            _ganhoApp.ConsultarGanhos(Arg.Any<Guid>()).Returns(listarGanhos);
             var controller = InicializarGanhoController();
             var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
 

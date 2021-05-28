@@ -91,268 +91,121 @@ namespace NFinance.Tests.Service
             Assert.Equal(cliente.Senha, response.Senha);
         }
 
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComNome_Nulo()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_CadastrarCliente_ComNome_Invalido(string nome)
         {
             //Arrange
             var cliente = GeraCliente();
-            cliente.Nome = null;
+            cliente.Nome = nome;
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
         }
 
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComNome_Vazio()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_CadastrarCliente_ComCPF_Invalido(string cpf)
         {
             //Arrange
             var cliente = GeraCliente();
-            cliente.Nome = "";
+            cliente.CPF = cpf;
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
-            await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
+            await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
         }
 
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComNome_EmBranco()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_CadastrarCliente_ComEmail_Invalido(string email)
         {
             //Arrange
             var cliente = GeraCliente();
-            cliente.Nome = " ";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
-        }
-
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComCPF_Vazio()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.CPF = "";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
-        }
-        
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComCPF_EmBranco()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.CPF = " ";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
-        }
-        
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComCPF_Nulo()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.CPF = null;
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
-        }
-        
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComEmail_Vazio()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Email = "";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
-        }
-        
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComEmail_Nulo()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Email = null;
+            cliente.Email = email;
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
         }
 
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComEmail_EmBranco()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_CadastrarCliente_ComSenha_Invalida(string senha)
         {
             //Arrange
             var cliente = GeraCliente();
-            cliente.Email = " ";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
-        }
-
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComSenha_Nula()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Senha = null;
+            cliente.Senha = senha;
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<SenhaClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
         }
 
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComSenha_EmBranco()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_AtualizarCliente_ComNome_Invalido(string nome)
         {
             //Arrange
             var cliente = GeraCliente();
-            cliente.Senha = " ";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            cliente.Nome = nome;
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
-            await Assert.ThrowsAsync<SenhaClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
-        }
-
-        [Fact]
-        public async Task ClienteService_CadastrarCliente_ComSenha_Vazia()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Senha = "";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<SenhaClienteException>(() => /*Act*/ services.CadastrarCliente(cliente));
-        }
-
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComNome_EmBranco()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Nome = " ";
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
-        }
-
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComNome_Nulo()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Nome = null;
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
-        }
-
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComNome_Vazio()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Nome = "";
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
+            await Assert.ThrowsAsync<NomeClienteException>(() => /*Act*/ services.AtualizarCliente(cliente));
         }
 
         [Fact]
         public async Task ClienteService_AtualizarCliente_ComId_Vazio()
         {
             //Arrange
-            var id = Guid.Empty;
             var cliente = GeraCliente();
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(), Arg.Any<Cliente>()).Returns(cliente);
+            cliente.Id = Guid.Empty;
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.AtualizarCliente(id, cliente));
+            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.AtualizarCliente(cliente));
         }
 
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComCPF_Vazio()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_AtualizarCliente_ComCPF_Vazio(string cpf)
         {
             //Arrange
             var cliente = GeraCliente();
-            cliente.CPF = "";
+            cliente.CPF = cpf;
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
-            await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
+            await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.AtualizarCliente(cliente));
         }
-        
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComCPF_EmBranco()
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_AtualizarCliente_ComEmail_Invalido(string email)
         {
             //Arrange
             var cliente = GeraCliente();
-            cliente.CPF = " ";
+            cliente.Email = email;
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
-            await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
-        }
-        
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComCPF_Nulo()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.CPF = null;
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
-        }
-        
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComEmail_Vazio()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Email = "";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
-        }
-        
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComEmail_Nulo()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Email = null;
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
-        }
-        
-        [Fact]
-        public async Task ClienteService_AtualizarCliente_ComEmail_EmBranco()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            cliente.Email = " ";
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
-            var services = InicializaServico();
-            //Assert
-            await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(cliente.Id, cliente));
+            await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(cliente));
         }
 
         [Fact]
@@ -360,11 +213,11 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var cliente = GeraCliente();
-            _clienteRepository.AtualizarCliente(Arg.Any<Guid>(),Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             
             //Act
-            var response = await services.AtualizarCliente(cliente.Id, cliente);
+            var response = await services.AtualizarCliente(cliente);
 
             //Assert
             Assert.NotNull(response.Nome);
@@ -438,43 +291,20 @@ namespace NFinance.Tests.Service
             Assert.Equal(cliente.Senha, response.Senha);
         }
 
-        [Fact]
-        public async Task ClienteService_CadastrarLogoutToken_ComToken_Nulo()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_CadastrarLogoutToken_ComToken_Invalido(string token)
         {
             //Arrange
             var cliente = GeraClienteComLogoutToken();
-            cliente.LogoutToken = null;
+            cliente.LogoutToken = token;
             _clienteRepository.CadastrarLogoutToken(Arg.Any<Cliente>(), Arg.Any<string>()).Returns(cliente);
             var services = InicializaServico();
 
             //Assert
             await Assert.ThrowsAsync<LogoutTokenException>(() => /*Act*/ services.CadastrarLogoutToken(cliente, null));
-        }
-
-        [Fact]
-        public async Task ClienteService_CadastrarLogoutToken_ComToken_Vazio()
-        {
-            //Arrange
-            var cliente = GeraClienteComLogoutToken();
-            cliente.LogoutToken = "";
-            _clienteRepository.CadastrarLogoutToken(Arg.Any<Cliente>(), Arg.Any<string>()).Returns(cliente);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<LogoutTokenException>(() => /*Act*/ services.CadastrarLogoutToken(cliente, ""));
-        }
-
-        [Fact]
-        public async Task ClienteService_CadastrarLogoutToken_ComToken_EmBranco()
-        {
-            //Arrange
-            var cliente = GeraClienteComLogoutToken();
-            cliente.LogoutToken = " ";
-            _clienteRepository.CadastrarLogoutToken(Arg.Any<Cliente>(), Arg.Any<string>()).Returns(cliente);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<LogoutTokenException>(() => /*Act*/ services.CadastrarLogoutToken(cliente, " "));
         }
 
         [Fact]
@@ -511,8 +341,11 @@ namespace NFinance.Tests.Service
             Assert.Equal(cliente.Senha, response.Senha);
         }
 
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComEmail_Nulo()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_ConsultarCredenciaisLogin_ComEmail_Invalido(string email)
         {
             //Arrange
             var cliente = GeraCliente();
@@ -520,11 +353,14 @@ namespace NFinance.Tests.Service
             var services = InicializaServico();
 
             //Assert
-            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(null ,cliente.Senha));
+            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(email ,cliente.Senha));
         }
 
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComEmail_Vazio()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_ConsultarCredenciaisLogin_ComSenha_Invalida(string senha)
         {
             //Arrange
             var cliente = GeraCliente();
@@ -532,11 +368,14 @@ namespace NFinance.Tests.Service
             var services = InicializaServico();
 
             //Assert
-            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin("", cliente.Senha));
+            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(cliente.Email, senha));
         }
 
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComEmail_EmBranco()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_ConsultarCredenciaisLogin_ComEmaileSenha_Invalida(string credenciais)
         {
             //Arrange
             var cliente = GeraCliente();
@@ -544,82 +383,7 @@ namespace NFinance.Tests.Service
             var services = InicializaServico();
 
             //Assert
-            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(" ", cliente.Senha));
-        }
-
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComSenha_EmBranco()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(cliente.Email, " "));
-        }
-
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComSenha_Vazio()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(cliente.Email, ""));
-        }
-
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComSenha_Nula()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(cliente.Email, null));
-        }
-
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComEmail_Invalido()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
-            var services = InicializaServico();
-
-            //Assert
-            //await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(cliente.Email, null));
-            Assert.False(true);
-        }
-
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComSenha_Invalida()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
-            var services = InicializaServico();
-
-            //Assert
-            //await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(cliente.Email, null));
-            Assert.False(true);
-        }
-
-        [Fact]
-        public async Task ClienteService_ConsultarCredenciaisLogin_ComEmaileSenha_Invalida()
-        {
-            //Arrange
-            var cliente = GeraCliente();
-            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
-            var services = InicializaServico();
-
-            //Assert
-            //await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(cliente.Email, null));
-            Assert.False(true);
+            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(credenciais, credenciais));
         }
     }
 }

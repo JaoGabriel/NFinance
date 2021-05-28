@@ -6,11 +6,14 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
     {
         public class Request : ClienteViewModel
         {
-            public Request(Request response)
+            public Request() { }
+
+            public Request(Cliente request)
             {
-                Nome = response.Nome;
-                Cpf = response.Cpf;
-                Email = response.Email;
+                Nome = request.Nome;
+                Cpf = request.CPF;
+                Email = request.Email;
+                Senha = request.Senha;
             }
         }
 

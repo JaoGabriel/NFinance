@@ -5,13 +5,13 @@ namespace NFinance.Application.ViewModel.GastosViewModel
 {
     public class ConsultarGastosViewModel
     {
-        public class Response : List<GastoViewModel.Response>
+        public class Response : List<GastoViewModel>
         {
             public Response(List<Gasto> gastos)
             {
                 foreach (var item in gastos)
                 {
-                    var gastoVm = new GastoViewModel.Response(item);
+                    var gastoVm = new GastoViewModel(item);
                     this.Add(gastoVm);
                 }
             }

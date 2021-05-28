@@ -1,26 +1,20 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NFinance.Application.Interfaces;
 
 namespace NFinance.Application
 {
     [ExcludeFromCodeCoverage]
     public static class ServicesExtensions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddApplicationServices(this IServiceCollection services)
         {
-            services.Scan(_ => _
-           .FromAssemblies(
-               typeof(GanhoApp).Assembly,
-               typeof(GastoApp).Assembly,
-               typeof(ClienteApp).Assembly,
-               typeof(InvestimentoApp).Assembly,
-               typeof(ResgateApp).Assembly,
-               typeof(TelaInicialApp).Assembly
-           )
-           .AddClasses()
-           .AsImplementedInterfaces());
-            return services;
+            services.AddTransient<IClienteApp, ClienteApp>();
+            services.AddTransient<IGanhoApp, GanhoApp>();
+            services.AddTransient<IInvestimentoApp, InvestimentoApp>();
+            services.AddTransient<IGastoApp, GastoApp>();
+            services.AddTransient<IResgateApp, ResgateApp>();
+            services.AddTransient<ITelaInicialApp, TelaInicialApp>();
         }
     }
 }

@@ -1,165 +1,118 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NFinance.Domain;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.ViewModel.InvestimentosViewModel;
-using NFinance.WebApi.Controllers;
-using NSubstitute;
+﻿using Xunit;
 using System;
-using System.Collections.Generic;
-using NFinance.Domain.ViewModel.ClientesViewModel;
-using Xunit;
+using NSubstitute;
+using NFinance.Domain;
+using Microsoft.AspNetCore.Mvc;
 using NFinance.Domain.Services;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using NFinance.WebApi.Controllers;
+using Microsoft.Extensions.Logging;
+using NFinance.Application.Interfaces;
+using NFinance.Domain.Interfaces.Services;
+using NFinance.Application.ViewModel.InvestimentosViewModel;
 
 namespace NFinance.Tests.WebApi
 {
     public class InvestimentosControllerTests
     {
-        private readonly IInvestimentoService _investimentoService;
+        private readonly IInvestimentoApp _investimentoApp;
         private readonly IAutenticacaoService _autenticacaoService;
         private readonly ILogger<InvestimentoController> _logger;
         public InvestimentosControllerTests()
         {
-            _investimentoService = Substitute.For<IInvestimentoService>();
+            _investimentoApp = Substitute.For<IInvestimentoApp>();
             _autenticacaoService = Substitute.For<IAutenticacaoService>();
             _logger = Substitute.For<ILogger<InvestimentoController>>();
         }
 
         private InvestimentoController InicializarInvestimentoController()
         {
-            return new InvestimentoController(_logger, _investimentoService,_autenticacaoService);
+            return new InvestimentoController(_logger, _investimentoApp,_autenticacaoService);
+        }
+
+        public static Investimento GeraInvestimento()
+        {
+            return new Investimento(Guid.NewGuid(),"asdygaygsd",37219783.09M,DateTime.Today);
+        }
+
+        public static Cliente GeraCliente()
+        {
+            return new Cliente("asuhdahusd","31237123712","teste@teste.com","dhuasudha");
         }
 
         [Fact]
         public void InvestimentosController_RealizarInvestimento_ComSucesso()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var nomeInvestimento = "FIC FIM 123ADASE";
-            decimal valorInvestimento = 1238.12M;
-            var dataAplicacao = DateTime.Today;
-            var idCliente = Guid.NewGuid();
-            var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
-            _investimentoService.RealizarInvestimento(Arg.Any<RealizarInvestimentoViewModel.Request>())
-                .Returns(new RealizarInvestimentoViewModel.Response
-                {
-                    Id = id,
-                    DataAplicacao = dataAplicacao,
-                    NomeInvestimento = nomeInvestimento,
-                    Valor = valorInvestimento,
-                    Cliente = cliente
-                });
+            var investimento = GeraInvestimento();
+            _investimentoApp.RealizarInvestimento(Arg.Any<RealizarInvestimentoViewModel.Request>()).Returns(new RealizarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
-            var investimento = new RealizarInvestimentoViewModel.Request
-            {
-                DataAplicacao = dataAplicacao,
-                NomeInvestimento = nomeInvestimento,
-                Valor = valorInvestimento,
-                IdCliente = idCliente
-            };
-            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var investimentoRequest = new RealizarInvestimentoViewModel.Request();
+            var token = TokenService.GerarToken(GeraCliente());
 
             //Act
-            var teste = controller.RealizarInvestimento(token,investimento);
+            var teste = controller.RealizarInvestimento(token, investimentoRequest);
             var okResult = teste.Result as ObjectResult;
             var realizarInvesitimentoViewModel = Assert.IsType<RealizarInvestimentoViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, realizarInvesitimentoViewModel.Id);
-            Assert.Equal(nomeInvestimento, realizarInvesitimentoViewModel.NomeInvestimento);
-            Assert.Equal(dataAplicacao, realizarInvesitimentoViewModel.DataAplicacao);
-            Assert.Equal(valorInvestimento, realizarInvesitimentoViewModel.Valor);
-            Assert.Equal(idCliente, realizarInvesitimentoViewModel.Cliente.Id);
-            Assert.Equal(nomeCliente, realizarInvesitimentoViewModel.Cliente.Nome);
+            Assert.Equal(investimento.Id, realizarInvesitimentoViewModel.Id);
+            Assert.Equal(investimento.NomeInvestimento, realizarInvesitimentoViewModel.NomeInvestimento);
+            Assert.Equal(investimento.DataAplicacao, realizarInvesitimentoViewModel.DataAplicacao);
+            Assert.Equal(investimento.Valor, realizarInvesitimentoViewModel.Valor);
+            Assert.Equal(investimento.IdCliente, realizarInvesitimentoViewModel.IdCliente);
         }
 
         [Fact]
         public void InvestimentosController_AtualizarInvestimento_ComSucesso()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var nomeInvestimento = "FIC FIM 123ADASE";
-            decimal valorInvestimento = 1238.12M;
-            var dataAplicacao = DateTime.Today;
-            var idCliente = Guid.NewGuid();
-            var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
-            _investimentoService.AtualizarInvestimento(Arg.Any<Guid>(),Arg.Any<AtualizarInvestimentoViewModel.Request>())
-                .Returns(new AtualizarInvestimentoViewModel.Response
-                {
-                    Id = id,
-                    DataAplicacao = dataAplicacao,
-                    NomeInvestimento = nomeInvestimento,
-                    Valor = valorInvestimento,
-                    Cliente = cliente
-                });
+            var investimento = GeraInvestimento();
+            _investimentoApp.AtualizarInvestimento(Arg.Any<Guid>(),Arg.Any<AtualizarInvestimentoViewModel.Request>()).Returns(new AtualizarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
-            var investimento = new AtualizarInvestimentoViewModel.Request
-            {
-                DataAplicacao = dataAplicacao,
-                NomeInvestimento = nomeInvestimento,
-                Valor = valorInvestimento,
-                IdCliente = idCliente
-            };
-            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var investimentoRequest = new AtualizarInvestimentoViewModel.Request();
+            var token = TokenService.GerarToken(GeraCliente());
 
             //Act
-            var teste = controller.AtualizarInvestimento(token,id,investimento);
+            var teste = controller.AtualizarInvestimento(token,investimento.Id,investimentoRequest);
             var okResult = teste.Result as ObjectResult;
             var atualizarInvesitimentoViewModel = Assert.IsType<AtualizarInvestimentoViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, atualizarInvesitimentoViewModel.Id);
-            Assert.Equal(nomeInvestimento, atualizarInvesitimentoViewModel.NomeInvestimento);
-            Assert.Equal(dataAplicacao, atualizarInvesitimentoViewModel.DataAplicacao);
-            Assert.Equal(valorInvestimento, atualizarInvesitimentoViewModel.Valor);
-            Assert.Equal(idCliente, atualizarInvesitimentoViewModel.Cliente.Id);
-            Assert.Equal(nomeCliente, atualizarInvesitimentoViewModel.Cliente.Nome);
+            Assert.Equal(investimento.Id, atualizarInvesitimentoViewModel.Id);
+            Assert.Equal(investimento.NomeInvestimento, atualizarInvesitimentoViewModel.NomeInvestimento);
+            Assert.Equal(investimento.DataAplicacao, atualizarInvesitimentoViewModel.DataAplicacao);
+            Assert.Equal(investimento.Valor, atualizarInvesitimentoViewModel.Valor);
+            Assert.Equal(investimento.IdCliente, atualizarInvesitimentoViewModel.IdCliente);
         }
 
         [Fact]
         public void InvestimentosController_ConsultarInvestimento_ComSucesso()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var nomeInvestimento = "FIC FIM 123ADASE";
-            decimal valorInvestimento = 1238.12M;
-            var dataAplicacao = DateTime.Today;
-            var idCliente = Guid.NewGuid();
-            var nomeCliente = "Alberto Junior";
-            var cliente = new ClienteViewModel.SimpleResponse { Id = idCliente, Nome = nomeCliente };
-            _investimentoService.ConsultarInvestimento(Arg.Any<Guid>())
-                .Returns(new ConsultarInvestimentoViewModel.Response
-                {
-                    Id = id,
-                    DataAplicacao = dataAplicacao,
-                    NomeInvestimento = nomeInvestimento,
-                    Valor = valorInvestimento,
-                    Cliente = cliente
-                });
+            var investimento = GeraInvestimento();
+            _investimentoApp.ConsultarInvestimento(Arg.Any<Guid>()).Returns(new ConsultarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
-            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var token = TokenService.GerarToken(GeraCliente());
 
             //Act
-            var teste = controller.ConsultarInvestimento(token,id);
+            var teste = controller.ConsultarInvestimento(token,investimento.Id);
             var okResult = teste.Result as ObjectResult;
             var consultarInvesitimentoViewModel = Assert.IsType<ConsultarInvestimentoViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(id, consultarInvesitimentoViewModel.Id);
-            Assert.Equal(nomeInvestimento, consultarInvesitimentoViewModel.NomeInvestimento);
-            Assert.Equal(dataAplicacao, consultarInvesitimentoViewModel.DataAplicacao);
-            Assert.Equal(valorInvestimento, consultarInvesitimentoViewModel.Valor);
-            Assert.Equal(idCliente, consultarInvesitimentoViewModel.Cliente.Id);
-            Assert.Equal(nomeCliente, consultarInvesitimentoViewModel.Cliente.Nome);
+            Assert.Equal(investimento.Id, consultarInvesitimentoViewModel.Id);
+            Assert.Equal(investimento.NomeInvestimento, consultarInvesitimentoViewModel.NomeInvestimento);
+            Assert.Equal(investimento.DataAplicacao, consultarInvesitimentoViewModel.DataAplicacao);
+            Assert.Equal(investimento.Valor, consultarInvesitimentoViewModel.Valor);
+            Assert.Equal(investimento.IdCliente, consultarInvesitimentoViewModel.IdCliente);
         }
 
         [Fact]
@@ -173,26 +126,12 @@ namespace NFinance.Tests.WebApi
             var valor = 1238.12M;
             var dataAplicacao = DateTime.Today;
             var listaInvestimento = new List<Investimento>();
-            var investimento = new Investimento
-            {
-                Id = id,
-                IdCliente = idCliente,
-                NomeInvestimento = nomeInvestimento,
-                Valor = valor,
-                DataAplicacao = dataAplicacao
-            };
-            var investimento1 = new Investimento
-            {
-                Id = id1,
-                IdCliente = idCliente,
-                NomeInvestimento = nomeInvestimento,
-                Valor = valor,
-                DataAplicacao = dataAplicacao
-            };
+            var investimento = new Investimento { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento,Valor = valor, DataAplicacao = dataAplicacao };
+            var investimento1 = new Investimento { Id = id1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valor, DataAplicacao = dataAplicacao };
             listaInvestimento.Add(investimento);
             listaInvestimento.Add(investimento1);
             var listarInvestimentos = new ConsultarInvestimentosViewModel.Response(listaInvestimento);
-            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listarInvestimentos);
+            _investimentoApp.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listarInvestimentos);
             var controller = InicializarInvestimentoController();
 
             //Act

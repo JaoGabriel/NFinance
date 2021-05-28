@@ -1,10 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using NFinance.Infra.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain.Services;
-using NFinance.Infra.Repository;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace NFinance.Infra
 {

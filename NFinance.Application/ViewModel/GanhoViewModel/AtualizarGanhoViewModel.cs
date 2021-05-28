@@ -16,6 +16,17 @@ namespace NFinance.Application.ViewModel.GanhoViewModel
             public bool Recorrente { get; set; }
 
             public DateTime DataDoGanho { get; set; }
+
+            public Request() { }
+
+            public Request(Ganho ganho)
+            {
+                IdCliente = ganho.IdCliente;
+                NomeGanho = ganho.NomeGanho;
+                Valor = ganho.Valor;
+                Recorrente = ganho.Recorrente;
+                DataDoGanho = ganho.DataDoGanho;
+            }
         }
 
         public class Response : GanhoViewModel
