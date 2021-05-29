@@ -36,7 +36,7 @@ namespace NFinance.Domain.Services
         public static List<string> LerToken(string authorization)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var token = authorization.Substring(7);
+            var token = authorization[7..];
             var payloadToken = tokenHandler.ReadJwtToken(token);
             var tokenValues = payloadToken.Payload.Values;
             var listaItens = new List<string>();

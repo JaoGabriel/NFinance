@@ -239,9 +239,7 @@ namespace NFinance.Tests.Application
             var recorrente1 = true;
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
-            var listGanho = new List<Ganho>();
-            listGanho.Add(ganho);
-            listGanho.Add(ganho1);
+            var listGanho = new List<Ganho> { ganho, ganho1};
             _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
             var services = InicializaApplication();
 
@@ -285,9 +283,7 @@ namespace NFinance.Tests.Application
             var recorrente1 = true;
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
-            var listGanho = new List<Ganho>();
-            listGanho.Add(ganho);
-            listGanho.Add(ganho1);
+            var listGanho = new List<Ganho> { ganho, ganho1 };
             _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
             var services = InicializaApplication();
 
@@ -316,7 +312,7 @@ namespace NFinance.Tests.Application
             var recorrente1 = true;
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
-            var listGanho = new List<Ganho>();
+            var listGanho = new List<Ganho> { ganho, ganho1 };
             listGanho.Add(ganho);
             listGanho.Add(ganho1);
             _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
@@ -347,9 +343,8 @@ namespace NFinance.Tests.Application
             var recorrente1 = true;
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
-            var listGanho = new List<Ganho>();
-            listGanho.Add(ganho);
-            listGanho.Add(ganho1);
+            var listGanho = new List<Ganho> { ganho, ganho1 };
+
             _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
             var services = InicializaApplication();
 
@@ -384,9 +379,7 @@ namespace NFinance.Tests.Application
             var qtdParcelas = 0;
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
-            var listGasto = new List<Gasto>();
-            listGasto.Add(gasto);
-            listGasto.Add(gasto1);
+            var listGasto = new List<Gasto> { gasto, gasto1 };
             _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
             var services = InicializaApplication();
 
@@ -430,9 +423,7 @@ namespace NFinance.Tests.Application
             var qtdParcelas = 0;
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
-            var listGasto = new List<Gasto>();
-            listGasto.Add(gasto);
-            listGasto.Add(gasto1);
+            var listGasto = new List<Gasto> { gasto, gasto1 };
             _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
             var services = InicializaApplication();
 
@@ -462,9 +453,7 @@ namespace NFinance.Tests.Application
             var qtdParcelas1 = 0;
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
-            var listGasto = new List<Gasto>();
-            listGasto.Add(gasto);
-            listGasto.Add(gasto1);
+            var listGasto = new List<Gasto> { gasto, gasto1 };
             _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
             var services = InicializaApplication();
 
@@ -494,9 +483,7 @@ namespace NFinance.Tests.Application
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
             var gastoResponse = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = 1000, DataDoGasto = dataGasto, QuantidadeParcelas = 5 };
-            var listGasto = new List<Gasto>();
-            listGasto.Add(gasto);
-            listGasto.Add(gasto1);
+            var listGasto = new List<Gasto> { gasto, gasto1 };
             _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
             _gastoService.AtualizarGasto(Arg.Any<Gasto>()).Returns(gastoResponse);
             var services = InicializaApplication();
@@ -532,9 +519,7 @@ namespace NFinance.Tests.Application
             var dataInvestimento = DateTime.Today;
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
-            var listInvestimento = new List<Investimento>();
-            listInvestimento.Add(Investimento);
-            listInvestimento.Add(Investimento1);
+            var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
             _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
             var services = InicializaApplication();
 
@@ -575,9 +560,7 @@ namespace NFinance.Tests.Application
             var dataInvestimento = DateTime.Today.AddMonths(-2);
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
-            var listInvestimento = new List<Investimento>();
-            listInvestimento.Add(Investimento);
-            listInvestimento.Add(Investimento1);
+            var listInvestimento = new List<Investimento> { Investimento,Investimento1 };
             _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
             var services = InicializaApplication();
 
@@ -604,9 +587,7 @@ namespace NFinance.Tests.Application
             var dataInvestimento = DateTime.Today.AddMonths(2);
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
-            var listInvestimento = new List<Investimento>();
-            listInvestimento.Add(Investimento);
-            listInvestimento.Add(Investimento1);
+            var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
             _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
             var services = InicializaApplication();
 
@@ -633,9 +614,7 @@ namespace NFinance.Tests.Application
             var dataInvestimento = DateTime.Today.AddMonths(-2);
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
-            var listInvestimento = new List<Investimento>();
-            listInvestimento.Add(Investimento);
-            listInvestimento.Add(Investimento1);
+            var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
             _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
             var services = InicializaApplication();
 
@@ -667,10 +646,7 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var Investimento2 = new Investimento { Id = idInvestimento2, IdCliente = idCliente, NomeInvestimento = nomeInvestimento2, Valor = valorInvestimento2, DataAplicacao = dataInvestimento2 };
-            var listInvestimento = new List<Investimento>();
-            listInvestimento.Add(Investimento);
-            listInvestimento.Add(Investimento1);
-            listInvestimento.Add(Investimento2);
+            var listInvestimento = new List<Investimento> { Investimento, Investimento1, Investimento2 };
             _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
             var services = InicializaApplication();
 
@@ -704,9 +680,7 @@ namespace NFinance.Tests.Application
             var dataResgate1 = DateTime.Today;
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
-            var listResgate = new List<Resgate>();
-            listResgate.Add(Resgate);
-            listResgate.Add(Resgate1);
+            var listResgate = new List<Resgate> { Resgate, Resgate1 };
             _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
             var services = InicializaApplication();
 
@@ -747,9 +721,7 @@ namespace NFinance.Tests.Application
             var dataResgate1 = DateTime.Today;
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
-            var listResgate = new List<Resgate>();
-            listResgate.Add(Resgate);
-            listResgate.Add(Resgate1);
+            var listResgate = new List<Resgate> { Resgate, Resgate1 };
             _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
             var services = InicializaApplication();
 
@@ -783,9 +755,7 @@ namespace NFinance.Tests.Application
             var dataResgate1 = DateTime.Today.AddMonths(-6);
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
-            var listResgate = new List<Resgate>();
-            listResgate.Add(Resgate);
-            listResgate.Add(Resgate1);
+            var listResgate = new List<Resgate> { Resgate, Resgate1 };
             _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
             var services = InicializaApplication();
 
@@ -812,9 +782,7 @@ namespace NFinance.Tests.Application
             var dataResgate1 = DateTime.Today.AddMonths(6);
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
-            var listResgate = new List<Resgate>();
-            listResgate.Add(Resgate);
-            listResgate.Add(Resgate1);
+            var listResgate = new List<Resgate> { Resgate, Resgate1 };
             _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
             var services = InicializaApplication();
 

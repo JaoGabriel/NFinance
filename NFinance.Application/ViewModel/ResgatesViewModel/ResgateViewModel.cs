@@ -1,6 +1,5 @@
 ﻿using System;
 using NFinance.Domain;
-using NFinance.Application.ViewModel.InvestimentosViewModel;
 
 namespace NFinance.Application.ViewModel.ResgatesViewModel
 {
@@ -10,7 +9,7 @@ namespace NFinance.Application.ViewModel.ResgatesViewModel
 
         public Guid IdCliente { get; set; }
 
-        public InvestimentoViewModel Investimento { get; set; }
+        public Guid IdInvestimento { get; set; }
         
         public decimal Valor { get; set; }
         
@@ -26,7 +25,8 @@ namespace NFinance.Application.ViewModel.ResgatesViewModel
             Valor = resgate.Valor;
             MotivoResgate = resgate.MotivoResgate;
             DataResgate = resgate.DataResgate;
-            Investimento.Id = resgate.IdInvestimento;
+            IdInvestimento = resgate.IdInvestimento;
+            IdCliente = resgate.IdCliente;
         }
     }
 }

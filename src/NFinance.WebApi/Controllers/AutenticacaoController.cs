@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NFinance.Domain.Exceptions;
 using Microsoft.Extensions.Logging;
+using NFinance.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
 
 namespace NFinance.WebApi.Controllers
@@ -14,13 +14,13 @@ namespace NFinance.WebApi.Controllers
     [Route("[controller]")]
     public class AutenticacaoController : ControllerBase
     {
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<AutenticacaoController> _logger;
 
-        public AutenticacaoController(ILogger<AutenticacaoController> logger, IAutenticacaoService autenticacaoService)
+        public AutenticacaoController(ILogger<AutenticacaoController> logger, IAutenticacaoApp autenticacaoApp)
         {
             _logger = logger;
-            _autenticacaoService = autenticacaoService;
+            _autenticacaoApp = autenticacaoApp;
         }
 
         [HttpPost("Login")]
@@ -31,7 +31,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> Autenticar(LoginViewModel request)
         {
             _logger.LogInformation("Iniciando Login!");
-            var response = await _autenticacaoService.RealizarLogin(request.Email,request.Senha);
+            var response = await _autenticacaoApp.EfetuarLogin(request);
             _logger.LogInformation("Login Realizado Com Sucesso!");
             return Ok(response);
         }
@@ -41,13 +41,13 @@ namespace NFinance.WebApi.Controllers
         [ProducesResponseType(typeof(ApplicationException), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(DomainException), (int)HttpStatusCode.InternalServerError)]
         [Authorize]
-        public async Task<IActionResult> Deslogar([FromHeader] string authorization, Guid id)
+        public async Task<IActionResult> Deslogar([FromHeader] string authorization, LogoutViewModel logout)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             _logger.LogInformation("Iniciando Logout!");
-            var response = await _autenticacaoService.RealizarLogut(id);
+            var response = await _autenticacaoApp.EfetuarLogoff(logout);
             _logger.LogInformation("Logot Realizado Com Sucesso!");
             return Ok(response);
         }

@@ -59,7 +59,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(ganho.Valor, cadastrarGanhoViewModel.Valor);
             Assert.Equal(ganho.IdCliente, cadastrarGanhoViewModel.IdCliente);
             Assert.Equal(ganho.Id, cadastrarGanhoViewModel.Id);
-            Assert.False(cadastrarGanhoViewModel.Recorrente);
+            Assert.True(cadastrarGanhoViewModel.Recorrente);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(ganho.Valor, atualizarGanhoViewModel.Valor);
             Assert.Equal(ganho.IdCliente, atualizarGanhoViewModel.IdCliente);
             Assert.Equal(ganho.Id, atualizarGanhoViewModel.Id);
-            Assert.False(atualizarGanhoViewModel.Recorrente);
+            Assert.True(atualizarGanhoViewModel.Recorrente);
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(ganho.Valor, consultarGanhoViewModel.Valor);
             Assert.Equal(ganho.IdCliente, consultarGanhoViewModel.IdCliente);
             Assert.Equal(ganho.Id, consultarGanhoViewModel.Id);
-            Assert.False(consultarGanhoViewModel.Recorrente);
+            Assert.True(consultarGanhoViewModel.Recorrente);
         }
 
         [Fact]

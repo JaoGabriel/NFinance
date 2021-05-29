@@ -49,12 +49,11 @@ namespace NFinance.Tests.Service
             Assert.NotEqual(Guid.Empty, response.Id);
             Assert.NotEqual(0, response.Valor);
             Assert.NotEqual("00/00/00", response.DataAplicacao.ToString());
-            //Assert.Equal(id, response.Id);
-            //Assert.Equal(nomeInvestimento, response.NomeInvestimento);
-            //Assert.Equal(data, response.DataAplicacao);
-            //Assert.Equal(valorInvestido, response.Valor);
-            //Assert.Equal(idCliente, response.Cliente.Id);
-            //Assert.Equal(nomeCliente, response.Cliente.Nome);
+            Assert.Equal(investimento.Id, response.Id);
+            Assert.Equal(investimento.NomeInvestimento, response.NomeInvestimento);
+            Assert.Equal(investimento.DataAplicacao, response.DataAplicacao);
+            Assert.Equal(investimento.Valor, response.Valor);
+            Assert.Equal(investimento.IdCliente, response.IdCliente);
         }
 
         [Fact]
@@ -74,12 +73,11 @@ namespace NFinance.Tests.Service
             Assert.NotEqual(Guid.Empty, response.Id);
             Assert.NotEqual(0, response.Valor);
             Assert.NotEqual("00/00/00", response.DataAplicacao.ToString());
-            //Assert.Equal(id, response.Id);
-            //Assert.Equal(nomeInvestimento, response.NomeInvestimento);
-            //Assert.Equal(data, response.DataAplicacao);
-            //Assert.Equal(valorInvestido, response.Valor);
-            //Assert.Equal(idCliente, response.Cliente.Id);
-            //Assert.Equal(nomeCliente, response.Cliente.Nome);
+            Assert.Equal(investimento.Id, response.Id);
+            Assert.Equal(investimento.NomeInvestimento, response.NomeInvestimento);
+            Assert.Equal(investimento.DataAplicacao, response.DataAplicacao);
+            Assert.Equal(investimento.Valor, response.Valor);
+            Assert.Equal(investimento.IdCliente, response.IdCliente);
         }
 
         [Fact]
@@ -87,6 +85,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.IdCliente = Guid.Empty;
             _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -94,11 +93,15 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.RealizarInvestimento(investimento));
         }
 
-        [Fact]
-        public async Task InvestimentoService_RealizarInvestimento_ComNomeInvestimento_Vazio()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task InvestimentoService_RealizarInvestimento_ComNomeInvestimento_Invalido(string nome)
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.NomeInvestimento = nome;
             _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -106,35 +109,14 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<NomeInvestimentoException>(() => /*Act*/ services.RealizarInvestimento(investimento));
         }
 
-        [Fact]
-        public async Task InvestimentoService_RealizarInvestimento_ComNomeInvestimento_EmBranco()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1500)]
+        public async Task InvestimentoService_RealizarInvestimento_ComValor_Invalido(decimal valor)
         {
             //Arrange
             var investimento = GeraInvestimento();
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<NomeInvestimentoException>(() => /*Act*/ services.RealizarInvestimento(investimento));
-        }
-
-        [Fact]
-        public async Task InvestimentoService_RealizarInvestimento_ComNomeInvestimento_Nulo()
-        {
-            //Arrange
-            var investimento = GeraInvestimento();
-            _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<NomeInvestimentoException>(() => /*Act*/ services.RealizarInvestimento(investimento));
-        }
-
-        [Fact]
-        public async Task InvestimentoService_RealizarInvestimento_ComValor_Invalido()
-        {
-            //Arrange
-            var investimento = GeraInvestimento();
+            investimento.Valor = valor;
             _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -147,6 +129,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.DataAplicacao = DateTime.Today.AddYears(120);
             _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -159,6 +142,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.DataAplicacao = DateTime.Today.AddYears(-120);
             _investimentosRepository.RealizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);           
             var services = InicializaServico();
 
@@ -172,6 +156,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.Id = Guid.Empty;
             _investimentosRepository.AtualizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -184,6 +169,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.IdCliente = Guid.Empty;
             _investimentosRepository.AtualizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -191,11 +177,15 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.AtualizarInvestimento(investimento));
         }
 
-        [Fact]
-        public async Task InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_Nulo()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_Invalido(string nome)
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.NomeInvestimento = nome;
             _investimentosRepository.AtualizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -203,35 +193,14 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<NomeInvestimentoException>(() => /*Act*/ services.AtualizarInvestimento(investimento));
         }
 
-        [Fact]
-        public async Task InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_Vazio()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1500)]
+        public async Task InvestimentoService_AtualizarInvestimento_ComValor_Invalido(decimal valor)
         {
             //Arrange
             var investimento = GeraInvestimento();
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<NomeInvestimentoException>(() => /*Act*/ services.AtualizarInvestimento(investimento));
-        }
-
-        [Fact]
-        public async Task InvestimentoService_AtualizarInvestimento_ComNomeInvestimento_EmBranco()
-        {
-            //Arrange
-            var investimento = GeraInvestimento();
-            _investimentosRepository.AtualizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<NomeInvestimentoException>(() => /*Act*/ services.AtualizarInvestimento(investimento));
-        }
-
-        [Fact]
-        public async Task InvestimentoService_AtualizarInvestimento_ComValor_Invalido()
-        {
-            //Arrange
-            var investimento = GeraInvestimento();
+            investimento.Valor = valor;
             _investimentosRepository.AtualizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -244,6 +213,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.DataAplicacao = DateTime.Today.AddYears(-120);
             _investimentosRepository.AtualizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -256,6 +226,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.DataAplicacao = DateTime.Today.AddYears(120);
             _investimentosRepository.AtualizarInvestimento(Arg.Any<Investimento>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -280,12 +251,11 @@ namespace NFinance.Tests.Service
             Assert.NotEqual(Guid.Empty, response.Id);
             Assert.NotEqual(0, response.Valor);
             Assert.NotEqual("00/00/00", response.DataAplicacao.ToString());
-            //Assert.Equal(id, response.Id);
-            //Assert.Equal(nomeInvestimento, response.NomeInvestimento);
-            //Assert.Equal(data, response.DataAplicacao);
-            //Assert.Equal(valorInvestido, response.Valor);
-            //Assert.Equal(idCliente, response.Cliente.Id);
-            //Assert.Equal(nomeCliente, response.Cliente.Nome);
+            Assert.Equal(investimento.Id, response.Id);
+            Assert.Equal(investimento.NomeInvestimento, response.NomeInvestimento);
+            Assert.Equal(investimento.DataAplicacao, response.DataAplicacao);
+            Assert.Equal(investimento.Valor, response.Valor);
+            Assert.Equal(investimento.IdCliente, response.IdCliente);
         }
 
         [Fact]
@@ -293,6 +263,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var investimento = GeraInvestimento();
+            investimento.Id = Guid.Empty;
             _investimentosRepository.ConsultarInvestimento(Arg.Any<Guid>()).Returns(investimento);
             var services = InicializaServico();
 
@@ -329,7 +300,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - investimento 0
             var responseTeste = response.FirstOrDefault(g => g.Id == id);
-            Assert.IsType<InvestimentoViewModel>(responseTeste);
+            Assert.IsType<Investimento>(responseTeste);
             Assert.Equal(id, responseTeste.Id);
             Assert.Equal(idCliente, responseTeste.IdCliente);
             Assert.Equal(nomeInvestimento, responseTeste.NomeInvestimento);
@@ -338,7 +309,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - investimento 1
             var responseTeste1 = response.FirstOrDefault(g => g.Id == id1);
-            Assert.IsType<InvestimentoViewModel>(responseTeste1);
+            Assert.IsType<Investimento>(responseTeste1);
             Assert.Equal(id1, responseTeste1.Id);
             Assert.Equal(idCliente, responseTeste1.IdCliente);
             Assert.Equal(nomeInvestimento, responseTeste1.NomeInvestimento);
@@ -347,7 +318,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - investimento 2
             var responseTeste2 = response.FirstOrDefault(g => g.Id == id2);
-            Assert.IsType<InvestimentoViewModel>(responseTeste2);
+            Assert.IsType<Investimento>(responseTeste2);
             Assert.Equal(id2, responseTeste2.Id);
             Assert.Equal(idCliente, responseTeste2.IdCliente);
             Assert.Equal(nomeInvestimento, responseTeste2.NomeInvestimento);
@@ -356,7 +327,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - investimento 3
             var responseTeste3 = response.FirstOrDefault(g => g.Id == id3);
-            Assert.IsType<InvestimentoViewModel>(responseTeste3);
+            Assert.IsType<Investimento>(responseTeste3);
             Assert.Equal(id3, responseTeste3.Id);
             Assert.Equal(idCliente, responseTeste3.IdCliente);
             Assert.Equal(nomeInvestimento, responseTeste3.NomeInvestimento);

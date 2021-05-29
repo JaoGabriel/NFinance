@@ -51,8 +51,7 @@ namespace NFinance.Tests.WebApi
             var controller = InicializarResgateController();
             var resgateRequest = new RealizarResgateViewModel.Request();
             var token = TokenService.GerarToken(GeraCliente());
-            Substitute.For<InvestimentoViewModel>().Returns(new InvestimentoViewModel {Id = resgate.IdInvestimento, IdCliente = resgate.IdCliente, NomeInvestimento = "Investimento ABC", Valor = 32138123987.20138M, DataAplicacao = DateTime.Today });
-           
+            
             //Act
             var teste = controller.RealizarResgate(token, resgateRequest);
             var okResult = teste.Result as ObjectResult;
@@ -65,11 +64,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(resgate.MotivoResgate, realizarResgateViewModel.MotivoResgate);
             Assert.Equal(resgate.Valor, realizarResgateViewModel.Valor);
             Assert.Equal(resgate.DataResgate, realizarResgateViewModel.DataResgate);
-            Assert.Equal(resgate.IdInvestimento, realizarResgateViewModel.Investimento.Id);
-            Assert.Equal("Investimento ABC", realizarResgateViewModel.Investimento.NomeInvestimento);
-            Assert.Equal(resgate.IdCliente, realizarResgateViewModel.Investimento.IdCliente);
-            Assert.Equal(DateTime.Today, realizarResgateViewModel.Investimento.DataAplicacao);
-            Assert.Equal(resgate.Valor, realizarResgateViewModel.Investimento.Valor);
+            Assert.Equal(resgate.IdInvestimento, realizarResgateViewModel.IdInvestimento);
         }
 
         [Fact]
@@ -77,7 +72,6 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var resgate = GeraResgate();
-            Substitute.For<InvestimentoViewModel>().Returns(new InvestimentoViewModel { Id = resgate.IdInvestimento, DataAplicacao = DateTime.Today.AddMonths(-4), NomeInvestimento = "Investimento ABC", Valor = 32138123987.20138M, IdCliente = resgate.IdCliente});
             _resgateApp.ConsultarResgate(Arg.Any<Guid>()).Returns(new ConsultarResgateViewModel.Response(resgate));
             var controller = InicializarResgateController();
 
@@ -93,11 +87,8 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(resgate.MotivoResgate, consultarResgateViewModel.MotivoResgate);
             Assert.Equal(resgate.Valor, consultarResgateViewModel.Valor);
             Assert.Equal(DateTime.Today, consultarResgateViewModel.DataResgate);
-            Assert.Equal(418371623812.23M, consultarResgateViewModel.Investimento.Valor);
-            Assert.Equal("Investimento ABC", consultarResgateViewModel.Investimento.NomeInvestimento);
-            Assert.Equal(resgate.IdInvestimento, consultarResgateViewModel.Investimento.Id);
-            Assert.Equal(DateTime.Today.AddMonths(-4), consultarResgateViewModel.Investimento.DataAplicacao);
             Assert.Equal(resgate.IdCliente, consultarResgateViewModel.IdCliente);
+            Assert.Equal(resgate.IdInvestimento, consultarResgateViewModel.IdInvestimento);
         }
 
         [Fact]
@@ -145,14 +136,14 @@ namespace NFinance.Tests.WebApi
             //verificar o gasto
             var resgateTest = consultarResgatesViewModel.Find(g => g.Id == id);
             Assert.Equal(id, resgateTest.Id);
-            Assert.Equal(idInvestimento, resgateTest.Investimento.Id);
+            Assert.Equal(idInvestimento, resgateTest.IdInvestimento);
             Assert.Equal(motivoResgate, resgateTest.MotivoResgate);
             Assert.Equal(valor, resgateTest.Valor);
             Assert.Equal(dataResgate, resgateTest.DataResgate);
             //verificar o gasto1
             var resgateTest1 = consultarResgatesViewModel.Find(g => g.Id == id1);
             Assert.Equal(id1, resgateTest1.Id);
-            Assert.Equal(idInvestimento, resgateTest1.Investimento.Id);
+            Assert.Equal(idInvestimento, resgateTest1.IdInvestimento);
             Assert.Equal(motivoResgate, resgateTest1.MotivoResgate);
             Assert.Equal(valor, resgateTest1.Valor);
             Assert.Equal(dataResgate, resgateTest1.DataResgate);

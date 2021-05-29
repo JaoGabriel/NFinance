@@ -1,47 +1,45 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NFinance.Application.ViewModel.AutenticacaoViewModel;
-using NFinance.Domain;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.Services;
-using NFinance.WebApi.Controllers;
+﻿using Xunit;
 using NSubstitute;
-using System;
-using System.Threading.Tasks;
-using Xunit;
+using NFinance.Domain;
+using NFinance.Domain.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using NFinance.WebApi.Controllers;
+using Microsoft.Extensions.Logging;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.AutenticacaoViewModel;
 
 namespace NFinance.Tests.WebApi
 {
     public class AutenticacaoControllerTests
     {
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<AutenticacaoController> _logger;
 
         public AutenticacaoControllerTests()
         {
             _logger = Substitute.For<ILogger<AutenticacaoController>>();
-            _autenticacaoService = Substitute.For<IAutenticacaoService>();
+            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
         }
 
         private AutenticacaoController InicializarAutenticacaoController()
         {
-            return new AutenticacaoController(_logger, _autenticacaoService);
+            return new AutenticacaoController(_logger, _autenticacaoApp);
         }
 
-        public Cliente GeraCliente()
+        public static Cliente GeraCliente()
         {
             return new Cliente("Jorgin da Lages", "12345678910", "aloha@teste.com", "123456");
         }
 
         [Fact]
-        public async Task LoginController_EfetuarLogin_ComSucesso()
+        public void LoginController_EfetuarLogin_ComSucesso()
         {
             //Arrange
             var cliente = GeraCliente();
             var loginViewModel = new LoginViewModel { Email = cliente.Email, Senha = cliente.Senha};
             var controller = InicializarAutenticacaoController();
-            _autenticacaoService.RealizarLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
+            _autenticacaoApp.EfetuarLogin(Arg.Any<LoginViewModel>()).Returns(new LoginViewModel.Response(cliente,"aaaaaaaaaaaaaa"));
 
             //Act
             var teste = controller.Autenticar(loginViewModel);
@@ -56,23 +54,24 @@ namespace NFinance.Tests.WebApi
         }
 
         [Fact]
-        public async Task LoginController_EfetuarLogout_ComSucesso()
+        public void LoginController_EfetuarLogout_ComSucesso()
         {
             //Arrange
             var cliente = GeraCliente();
             var token = TokenService.GerarToken(cliente);
+            var logoutVm = new LogoutViewModel(cliente.Id);
             var controller = InicializarAutenticacaoController();
-            _autenticacaoService.RealizarLogut(Arg.Any<Guid>()).Returns(cliente);
+            _autenticacaoApp.EfetuarLogoff(Arg.Any<LogoutViewModel>()).Returns(new LogoutViewModel.Response("Realizado com sucesso",true));
 
             //Act
-            var teste = controller.Deslogar(token, cliente.Id);
+            var teste = controller.Deslogar(token,logoutVm);
             var okResult = teste.Result as ObjectResult;
             var autenticarViewModel = Assert.IsType<LogoutViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal("Logot Realizado Com Sucesso!", autenticarViewModel.Message);
+            Assert.Equal("Realizado com sucesso", autenticarViewModel.Message);
             Assert.True(autenticarViewModel.Deslogado);
         }
     }

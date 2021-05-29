@@ -21,14 +21,16 @@ namespace NFinance.Domain
         [Required]
         [Range(0, 999999999999, ErrorMessage = "Valor {0} deve estar entre {1} e {2}")]
         public decimal Valor { get; set; }
-        
+
         [Required]
         [Range(-1, 1000, ErrorMessage = "Sua parcela {0} deve estar entre {1} e {2}")]
         public int QuantidadeParcelas { get; set; }
-        
+
         [Required]
         [Range(typeof(DateTime), "01/01/1950", "12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataDoGasto { get; set; }
+
+        public string MotivoExclusao { get; set; }
 
         public Gasto() { }
 

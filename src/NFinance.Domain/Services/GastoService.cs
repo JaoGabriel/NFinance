@@ -57,6 +57,7 @@ namespace NFinance.Domain.Services
         {
             if (Guid.Empty.Equals(request.Id)) throw new IdException("Id gasto invalido");
             if (Guid.Empty.Equals(request.IdCliente)) throw new IdException("Id gasto invalido");
+            if (string.IsNullOrWhiteSpace(request.MotivoExclusao)) throw new MotivoExclusaoException("Motivo exclusao invalido");
 
             return await _gastosRepository.ExcluirGasto(request.Id);
         }

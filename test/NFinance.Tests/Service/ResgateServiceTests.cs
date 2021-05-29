@@ -49,11 +49,12 @@ namespace NFinance.Tests.Service
             Assert.NotEqual(0, response.Valor);
             Assert.NotEqual(Guid.Empty, response.Id);
             Assert.NotEqual(Guid.Empty, response.IdCliente);
-            //Assert.NotNull(response.Investimento);
-            //Assert.Equal(id, response.Id);
-            //Assert.Equal(cliente.Id, response.IdCliente);
-            //Assert.Equal(motivo, response.MotivoResgate);
-            //Assert.Equal(valor, response.Valor);
+            Assert.NotEqual(Guid.Empty, response.IdInvestimento);
+            Assert.Equal(resgate.Id, response.Id);
+            Assert.Equal(resgate.IdCliente, response.IdCliente);
+            Assert.Equal(resgate.MotivoResgate, response.MotivoResgate);
+            Assert.Equal(resgate.Valor, response.Valor);
+            Assert.Equal(resgate.DataResgate, response.DataResgate);
         }
 
         [Fact]
@@ -61,6 +62,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var resgate = GeraResgate();
+            resgate.IdInvestimento = Guid.Empty;
             _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
             var services = InicializaServico();
 
@@ -69,10 +71,27 @@ namespace NFinance.Tests.Service
         }
 
         [Fact]
-        public async Task ResgateService_RealizarResgate_ComMotivo_Vazio()
+        public async Task ResgateService_RealizarResgate_ComIdCliente_Vazio()
         {
             //Arrange
             var resgate = GeraResgate();
+            resgate.IdCliente = Guid.Empty;
+            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.RealizarResgate(resgate));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ResgateService_RealizarResgate_ComMotivo_Invalido(string motivo)
+        {
+            //Arrange
+            var resgate = GeraResgate();
+            resgate.MotivoResgate = motivo;
             _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
             var services = InicializaServico();
 
@@ -80,35 +99,14 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<MotivoResgateException>(() => /*Act*/ services.RealizarResgate(resgate));
         }
 
-        [Fact]
-        public async Task ResgateService_RealizarResgate_ComMotivo_EmBranco()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1500)]
+        public async Task ResgateService_RealizarResgate_ComValor_Invalido(decimal valor)
         {
             //Arrange
             var resgate = GeraResgate();
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<MotivoResgateException>(() => /*Act*/ services.RealizarResgate(resgate));
-        }
-
-        [Fact]
-        public async Task ResgateService_RealizarResgate_ComMotivo_Nulo()
-        {
-            //Arrange
-            var resgate = GeraResgate();
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<MotivoResgateException>(() => /*Act*/ services.RealizarResgate(resgate));
-        }
-
-        [Fact]
-        public async Task ResgateService_RealizarResgate_ComValor_Zero()
-        {
-            //Arrange
-            var resgate = GeraResgate();
+            resgate.Valor = valor;
             _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
             var services = InicializaServico();
 
@@ -121,6 +119,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var resgate = GeraResgate();
+            resgate.DataResgate = DateTime.Today.AddYears(-120);
             _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
             var services = InicializaServico();
 
@@ -133,23 +132,12 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var resgate = GeraResgate();
+            resgate.DataResgate = DateTime.Today.AddYears(120);
             _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
             var services = InicializaServico();
 
             //Assert
             await Assert.ThrowsAsync<DataResgateException>(() => /*Act*/ services.RealizarResgate(resgate));
-        }
-
-        [Fact]
-        public async Task ResgateService_RealizarResgate_ComIdCliente_Invalido()
-        {
-            //Arrange
-            var resgate = GeraResgate();
-            _resgateRepository.RealizarResgate(Arg.Any<Resgate>()).Returns(resgate);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.RealizarResgate(resgate));
         }
 
         [Fact]
@@ -169,11 +157,12 @@ namespace NFinance.Tests.Service
             Assert.NotEqual(0, response.Valor);
             Assert.NotEqual(Guid.Empty, response.Id);
             Assert.NotEqual(Guid.Empty, response.IdCliente);
-            //Assert.NotNull(response.Investimento);
-            //Assert.Equal(id, response.Id);
-            //Assert.Equal(idCliente, response.IdCliente);
-            //Assert.Equal(motivo, response.MotivoResgate);
-            //Assert.Equal(valor, response.Valor);
+            Assert.NotEqual(Guid.Empty, response.IdInvestimento);
+            Assert.Equal(resgate.Id, response.Id);
+            Assert.Equal(resgate.IdCliente, response.IdCliente);
+            Assert.Equal(resgate.MotivoResgate, response.MotivoResgate);
+            Assert.Equal(resgate.Valor, response.Valor);
+            Assert.Equal(resgate.DataResgate, response.DataResgate);
         }
 
         [Fact]
@@ -181,6 +170,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var resgate = GeraResgate();
+            resgate.Id = Guid.Empty;
             _resgateRepository.ConsultarResgate(Arg.Any<Guid>()).Returns(resgate);
             var services = InicializaServico();
 
@@ -221,7 +211,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - resgate 0
             var responseTeste = response.FirstOrDefault(g => g.Id == id);
-            Assert.IsType<ResgateViewModel>(responseTeste);
+            Assert.IsType<Resgate>(responseTeste);
             Assert.Equal(id, responseTeste.Id);
             Assert.Equal(idCliente, responseTeste.IdCliente);
             Assert.Equal(idInvestimento, responseTeste.IdInvestimento);
@@ -231,7 +221,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - resgate 1
             var responseTeste1 = response.FirstOrDefault(g => g.Id == id1);
-            Assert.IsType<ResgateViewModel>(responseTeste1);
+            Assert.IsType<Resgate>(responseTeste1);
             Assert.Equal(id1, responseTeste1.Id);
             Assert.Equal(idCliente, responseTeste.IdCliente);
             Assert.Equal(idInvestimento1, responseTeste1.IdInvestimento);
@@ -241,7 +231,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - resgate 2
             var responseTeste2 = response.FirstOrDefault(g => g.Id == id2);
-            Assert.IsType<ResgateViewModel>(responseTeste2);
+            Assert.IsType<Resgate>(responseTeste2);
             Assert.Equal(id2, responseTeste2.Id);
             Assert.Equal(idCliente, responseTeste.IdCliente);
             Assert.Equal(idInvestimento2, responseTeste2.IdInvestimento);
@@ -251,7 +241,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - resgate 3
             var responseTeste3 = response.FirstOrDefault(g => g.Id == id3);
-            Assert.IsType<ResgateViewModel>(responseTeste3);
+            Assert.IsType<Resgate>(responseTeste3);
             Assert.Equal(id3, responseTeste3.Id);
             Assert.Equal(idCliente, responseTeste.IdCliente);
             Assert.Equal(idInvestimento3, responseTeste3.IdInvestimento);

@@ -37,14 +37,13 @@ namespace NFinance.Domain.Services
             else
                 throw new LogoutException("Aconteceu um erro! Tente novamente em instantes!");
         }
-
         public async Task<bool> ValidaTokenRequest(string authorization)
         {
             var listaToken = TokenService.LerToken(authorization);
             var redisToken = _redis.RetornaValorPorChave(listaToken.FirstOrDefault().ToString()).LogoutToken;
             var cliente = await _clienteService.ConsultarCliente(Guid.Parse(listaToken.FirstOrDefault().ToString()));
 
-            if (cliente.LogoutToken == listaToken.FirstOrDefault(token => token == authorization.Substring(7)) || authorization.Substring(7) != redisToken)
+            if (cliente.LogoutToken == listaToken.FirstOrDefault(token => token == authorization[7..]) || authorization[7..] != redisToken)
                 throw new TokenException();
             else
                 return true;

@@ -65,6 +65,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.IdCliente = Guid.Empty;
             _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -72,11 +73,15 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.CadastrarGasto(gasto));
         }
 
-        [Fact]
-        public async Task GastosService_CadastrarGasto_ComNomeGasto_Vazio()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task GastosService_CadastrarGasto_ComNomeGasto_Invalido(string nome)
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.NomeGasto = nome;
             _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -84,36 +89,14 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.CadastrarGasto(gasto));
         }
 
-        [Fact]
-        public async Task GastosService_CadastrarGasto_ComNomeGasto_Nulo()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-15421)]
+        public async Task GastosService_CadastrarGasto_ComValorTotal_Invalido(decimal valor)
         {
             //Arrange
             var gasto = GerarGasto();
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.CadastrarGasto(gasto));
-        }
-
-        [Fact]
-        public async Task GastosService_CadastrarGasto_ComNomeGasto_EmBranco()
-        {
-            //Arrange
-            var gasto = GerarGasto();
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
-            
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.CadastrarGasto(gasto));
-        }
-
-        [Fact]
-        public async Task GastosService_CadastrarGasto_ComValorTotal_Invalido()
-        {
-            //Arrange
-            var gasto = GerarGasto();
+            gasto.Valor = valor;
             _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -121,23 +104,16 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<ValorGastoException>(() => /*Act*/ services.CadastrarGasto(gasto));
         }
 
-        [Fact]
-        public async Task GastosService_CadastrarGasto_ComQuantidadeParcela_Maior_Permitido()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-15)]
+        [InlineData(1000)]
+        [InlineData(1500)]
+        public async Task GastosService_CadastrarGasto_ComQuantidadeParcela_Invalida(int qtdParcela)
         {
             //Arrange
             var gasto = GerarGasto();
-            _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<QuantidadeParcelaException>(() => /*Act*/ services.CadastrarGasto(gasto));
-        }
-
-        [Fact]
-        public async Task GastosService_CadastrarGasto_ComQuantidadeParcela_Menor_Permitido()
-        {
-            //Arrange
-            var gasto = GerarGasto();
+            gasto.QuantidadeParcelas = qtdParcela;
             _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -150,6 +126,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.DataDoGasto = DateTime.Today.AddYears(-120);
             _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -162,6 +139,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.DataDoGasto = DateTime.Today.AddYears(120);
             _gastosRepository.CadastrarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -188,15 +166,13 @@ namespace NFinance.Tests.Service
             Assert.False(response.DataDoGasto.CompareTo(DateTime.MaxValue.AddYears(-7899)) > 0);
             Assert.False(response.DataDoGasto.CompareTo(DateTime.MinValue.AddYears(1949)) < 0);
             Assert.NotEqual(Guid.Empty, response.Id);
-            //Assert.NotEqual(Guid.Empty, response.Cliente.Id);
-            //Assert.NotNull(response.Cliente.Nome);
-            //Assert.Equal(id, response.Id);
-            //Assert.Equal(idCliente, response.Cliente.Id);
-            //Assert.Equal(nomeGasto, response.NomeGasto);
-            //Assert.Equal(valorTotal, response.Valor);
-            //Assert.Equal(data, response.DataDoGasto);
-            //Assert.Equal(qtdParcelas, response.QuantidadeParcelas);
-            //Assert.Equal(nomeCliente, response.Cliente.Nome);
+            Assert.NotEqual(Guid.Empty, response.IdCliente);
+            Assert.Equal(gasto.Id, response.Id);
+            Assert.Equal(gasto.IdCliente, response.IdCliente);
+            Assert.Equal(gasto.NomeGasto, response.NomeGasto);
+            Assert.Equal(gasto.Valor, response.Valor);
+            Assert.Equal(gasto.DataDoGasto, response.DataDoGasto);
+            Assert.Equal(gasto.QuantidadeParcelas, response.QuantidadeParcelas);
         }
 
         [Fact]
@@ -204,6 +180,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.Id = Guid.Empty;
             _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -216,6 +193,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.IdCliente = Guid.Empty;
             _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -223,11 +201,15 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.AtualizarGasto(gasto));
         }
 
-        [Fact]
-        public async Task GastosService_AtualizarGasto_ComNomeGasto_Vazio()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task GastosService_AtualizarGasto_ComNomeGasto_Invalido(string nome)
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.NomeGasto = nome;
             _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -235,35 +217,14 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.AtualizarGasto(gasto));
         }
 
-        [Fact]
-        public async Task GastosService_AtualizarGasto_ComNomeGasto_Nulo()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-15421)]
+        public async Task GastosService_AtualizarGasto_ComValorTotal_Invalido(decimal valor)
         {
             //Arrange
             var gasto = GerarGasto();
-            _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.AtualizarGasto(gasto));
-        }
-
-        [Fact]
-        public async Task GastosService_AtualizarGasto_ComNomeGasto_EmBranco()
-        {
-            //Arrange
-            var gasto = GerarGasto();
-            _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.AtualizarGasto(gasto));
-        }
-
-        [Fact]
-        public async Task GastosService_AtualizarGasto_ComValorTotal_Invalido()
-        {
-            //Arrange
-            var gasto = GerarGasto();
+            gasto.Valor = valor;
             _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -271,23 +232,16 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<ValorGastoException>(() => /*Act*/ services.AtualizarGasto(gasto));
         }
 
-        [Fact]
-        public async Task GastosService_AtualizarGasto_ComQuantidadeParcela_Maior_Permitido()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-15)]
+        [InlineData(1000)]
+        [InlineData(1500)]
+        public async Task GastosService_AtualizarGasto_ComQuantidadeParcela_Invalida(int qtdParcela)
         {
             //Arrange
             var gasto = GerarGasto();
-            _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
-            var services = InicializaServico();
-
-            //Assert
-            await Assert.ThrowsAsync<QuantidadeParcelaException>(() => /*Act*/ services.AtualizarGasto(gasto));
-        }
-
-        [Fact]
-        public async Task GastosService_AtualizarGasto_ComQuantidadeParcela_Menor_Permitido()
-        {
-            //Arrange
-            var gasto = GerarGasto();
+            gasto.QuantidadeParcelas = qtdParcela;
             _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
@@ -300,10 +254,11 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.DataDoGasto = DateTime.Today.AddYears(-120);
             _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
-            ///Assert
+            //Assert
             await Assert.ThrowsAsync<DataGastoException>(() => /*Act*/ services.AtualizarGasto(gasto));
         }
 
@@ -312,10 +267,11 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.DataDoGasto = DateTime.Today.AddYears(120);
             _gastosRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gasto);
             var services = InicializaServico();
 
-            ///Assert
+            //Assert
             await Assert.ThrowsAsync<DataGastoException>(() => /*Act*/ services.AtualizarGasto(gasto));
         }
 
@@ -324,6 +280,7 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.MotivoExclusao = "aaaaaa";
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
@@ -339,10 +296,11 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.Id = Guid.Empty;
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
-            ///Assert
+            //Assert
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.ExcluirGasto(gasto));
         }
 
@@ -351,47 +309,28 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.IdCliente = Guid.Empty;
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
-            ///Assert
+            //Assert
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.ExcluirGasto(gasto));
         }
 
-        [Fact]
-        public async Task GastosService_ExcluirGasto_ComMotivoExclusao_Vazio()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task GastosService_ExcluirGasto_ComMotivoExclusao_Invalido(string motivo)
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.MotivoExclusao = motivo;
             _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
             var services = InicializaServico();
 
-            ///Assert
-            await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.ExcluirGasto(gasto));
-        }
-
-        [Fact]
-        public async Task GastosService_ExcluirGasto_ComMotivoExclusao_Nulo()
-        {
-            //Arrange
-            var gasto = GerarGasto();
-            _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
-            var services = InicializaServico();
-
-            ///Assert
-            await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.ExcluirGasto(gasto));
-        }
-
-        [Fact]
-        public async Task GastosService_ExcluirGasto_ComMotivoExclusao_EmBranco()
-        {
-            //Arrange
-            var gasto = GerarGasto();
-            _gastosRepository.ExcluirGasto(Arg.Any<Guid>()).Returns(true);
-            var services = InicializaServico();
-
-            ///Assert
-            await Assert.ThrowsAsync<NomeGastoException>(() => /*Act*/ services.ExcluirGasto(gasto));
+            //Assert
+            await Assert.ThrowsAsync<MotivoExclusaoException>(() => /*Act*/ services.ExcluirGasto(gasto));
         }
 
         [Fact]
@@ -414,13 +353,12 @@ namespace NFinance.Tests.Service
             Assert.False(response.DataDoGasto.CompareTo(DateTime.MinValue.AddYears(1949)) < 0);
             Assert.NotEqual(Guid.Empty, response.Id);
             Assert.NotEqual(Guid.Empty, response.IdCliente);
-            //Assert.Equal(id, response.Id);
-            //Assert.Equal(idCliente, response.Cliente.Id);
-            //Assert.Equal(nomeGasto, response.NomeGasto);
-            //Assert.Equal(valorTotal, response.Valor);
-            //Assert.Equal(data, response.DataDoGasto);
-            //Assert.Equal(qtdParcelas, response.QuantidadeParcelas);
-            //Assert.Equal(nomeCliente, response.Cliente.Nome);
+            Assert.Equal(gasto.Id, response.Id);
+            Assert.Equal(gasto.IdCliente, response.IdCliente);
+            Assert.Equal(gasto.NomeGasto, response.NomeGasto);
+            Assert.Equal(gasto.Valor, response.Valor);
+            Assert.Equal(gasto.DataDoGasto, response.DataDoGasto);
+            Assert.Equal(gasto.QuantidadeParcelas, response.QuantidadeParcelas);
         }
 
         [Fact]
@@ -428,10 +366,11 @@ namespace NFinance.Tests.Service
         {
             //Arrange
             var gasto = GerarGasto();
+            gasto.Id = Guid.Empty;
             _gastosRepository.ConsultarGasto(Arg.Any<Guid>()).Returns(gasto);
             var services = InicializaServico();
 
-            ///Assert
+            //Assert
             await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.ConsultarGasto(gasto.Id));
         }
 
@@ -464,7 +403,7 @@ namespace NFinance.Tests.Service
             
             //Assert dos ganhos do cliente - gasto 0
             var responseTeste = response.FirstOrDefault(g => g.Id == id);
-            Assert.IsType<GastoViewModel>(responseTeste);
+            Assert.IsType<Gasto>(responseTeste);
             Assert.Equal(id, responseTeste.Id);
             Assert.Equal(idCliente, responseTeste.IdCliente);
             Assert.Equal(nomeGasto, responseTeste.NomeGasto);
@@ -474,7 +413,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - gasto 1
             var responseTeste1 = response.FirstOrDefault(g => g.Id == id1);
-            Assert.IsType<GastoViewModel>(responseTeste1);
+            Assert.IsType<Gasto>(responseTeste1);
             Assert.Equal(id1, responseTeste1.Id);
             Assert.Equal(idCliente, responseTeste1.IdCliente);
             Assert.Equal(nomeGasto, responseTeste1.NomeGasto);
@@ -484,7 +423,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - gasto 2
             var responseTeste2 = response.FirstOrDefault(g => g.Id == id2);
-            Assert.IsType<GastoViewModel>(responseTeste2);
+            Assert.IsType<Gasto>(responseTeste2);
             Assert.Equal(id2, responseTeste2.Id);
             Assert.Equal(idCliente, responseTeste2.IdCliente);
             Assert.Equal(nomeGasto, responseTeste2.NomeGasto);
@@ -494,7 +433,7 @@ namespace NFinance.Tests.Service
 
             //Assert dos ganhos do cliente - gasto 3
             var responseTeste3 = response.FirstOrDefault(g => g.Id == id3);
-            Assert.IsType<GastoViewModel>(responseTeste3);
+            Assert.IsType<Gasto>(responseTeste3);
             Assert.Equal(id3, responseTeste3.Id);
             Assert.Equal(idCliente, responseTeste3.IdCliente);
             Assert.Equal(nomeGasto, responseTeste3.NomeGasto);
