@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using NFinance.Domain.Exceptions;
 using NFinance.Domain.Exceptions.Ganho;
 using NFinance.Domain.Interfaces.Repository;
-using NFinance.Application.ViewModel.GanhoViewModel;
 
 namespace NFinance.Tests.Service
 {

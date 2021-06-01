@@ -48,9 +48,8 @@ namespace NFinance.Domain.Services
 
             if (cliente != null)
                 return cliente;
-            else
-                return null;
             
+            return null;
         }
 
         public async Task<Cliente> ConsultarCliente(Guid id)

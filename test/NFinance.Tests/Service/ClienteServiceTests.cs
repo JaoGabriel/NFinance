@@ -207,6 +207,21 @@ namespace NFinance.Tests.Service
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(cliente));
         }
+        
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ClienteService_AtualizarCliente_ComSenha_Invalida(string senha)
+        {
+            //Arrange
+            var cliente = GeraCliente();
+            cliente.Senha = senha;
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var services = InicializaServico();
+            //Assert
+            await Assert.ThrowsAsync<SenhaClienteException>(() => /*Act*/ services.AtualizarCliente(cliente));
+        }
 
         [Fact]
         public async Task ClienteService_AtualizarCliente_ComSucesso()
@@ -318,6 +333,21 @@ namespace NFinance.Tests.Service
             //Assert
             await Assert.ThrowsAsync<LogoutTokenException>(() => /*Act*/ services.CadastrarLogoutToken(cliente, "auhdahuduhaisdhuiadhiuasiduhssaiuh"));
         }
+        
+        [Fact]
+        public async Task ClienteService_CadastrarLogoutToken_ComDadosRequestValidos_RetornoCadastro_RetornaNulo()
+        {
+            //Arrange
+            var cliente = GeraCliente();
+            _clienteRepository.CadastrarLogoutToken(Arg.Any<Cliente>(), Arg.Any<string>()).Returns((Cliente)null);
+            var services = InicializaServico();
+            
+            //Act
+            var resposta = await services.CadastrarLogoutToken(cliente, "auhdahuduhaisdhuiadhiuasiduhssaiuh");
+            
+            //Assert
+            Assert.Null(resposta);
+        }
 
         [Fact]
         public async Task ClienteService_ConsultarCredenciaisLogin_ComSucesso()
@@ -378,12 +408,23 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_ConsultarCredenciaisLogin_ComEmaileSenha_Invalida(string credenciais)
         {
             //Arrange
-            var cliente = GeraCliente();
-            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
+            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns((Cliente)null);
             var services = InicializaServico();
 
             //Assert
             await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(credenciais, credenciais));
+        }
+        
+        [Fact]
+        public async Task ClienteService_ConsultarCredenciaisLogin_ComDadosRequestValidos_RetornoConsulta_RetornaNulo()
+        {
+            //Arrange
+            var cliente = GeraCliente();
+            _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns((Cliente)null);
+            var services = InicializaServico();
+
+            //Assert
+            await Assert.ThrowsAsync<LoginException>(() => /*Act*/ services.ConsultarCredenciaisLogin(cliente.Email, cliente.Senha));
         }
     }
 }

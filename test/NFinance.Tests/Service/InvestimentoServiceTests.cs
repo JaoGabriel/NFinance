@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using NFinance.Domain.Exceptions;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Exceptions.Investimento;
-using NFinance.Application.ViewModel.InvestimentosViewModel;
 
 namespace NFinance.Tests.Service
 {

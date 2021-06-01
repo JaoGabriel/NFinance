@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.ResgatesViewModel;
-using NFinance.Application.ViewModel.InvestimentosViewModel;
 
 namespace NFinance.Tests.WebApi
 {

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using NFinance.Domain.Exceptions;
 using NFinance.Domain.Interfaces.Services;
 using NFinance.Domain.Exceptions.Autenticacao;
 
@@ -19,14 +20,20 @@ namespace NFinance.Domain.Services
 
         public async Task<Cliente> RealizarLogin(string email, string senha)
         {
-            var usuarioAutenticacao = await _clienteService.ConsultarCredenciaisLogin(email,senha);
-            _redis.IncluiValorCache(usuarioAutenticacao);
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senha)) throw new LoginException("Email ou senha invalida");
 
+            var usuarioAutenticacao = await _clienteService.ConsultarCredenciaisLogin(email,senha);
+
+            if (usuarioAutenticacao == null) throw new LoginException("Ocorreu um erro, tente novamente!");
+            
+            _redis.IncluiValorCache(usuarioAutenticacao);
             return usuarioAutenticacao;
         }
 
         public async Task<Cliente> RealizarLogut(Guid id)
-        {            
+        {
+            if (Guid.Empty.Equals(id)) throw new IdException("Id invalido");
+            
             var valorRedis = _redis.RetornaValorPorChave(id.ToString());
             var cliente = await _clienteService.ConsultarCliente(valorRedis.Id);
             var response = await _clienteService.CadastrarLogoutToken(cliente, valorRedis.LogoutToken);
@@ -40,8 +47,8 @@ namespace NFinance.Domain.Services
         public async Task<bool> ValidaTokenRequest(string authorization)
         {
             var listaToken = TokenService.LerToken(authorization);
-            var redisToken = _redis.RetornaValorPorChave(listaToken.FirstOrDefault().ToString()).LogoutToken;
-            var cliente = await _clienteService.ConsultarCliente(Guid.Parse(listaToken.FirstOrDefault().ToString()));
+            var redisToken = _redis.RetornaValorPorChave(listaToken.FirstOrDefault()).LogoutToken;
+            var cliente = await _clienteService.ConsultarCliente(Guid.Parse(listaToken.FirstOrDefault()));
 
             if (cliente.LogoutToken == listaToken.FirstOrDefault(token => token == authorization[7..]) || authorization[7..] != redisToken)
                 throw new TokenException();

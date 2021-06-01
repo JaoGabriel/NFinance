@@ -148,7 +148,7 @@ namespace NFinance.Application
 
             var dataMax = gasto.DataDoGasto.AddMonths(gasto.QuantidadeParcelas);
 
-            if (dataMax.Month >= DateTime.Today.Month)
+            if (dataMax.Month >= DateTime.Today.Month || dataMax.Year >= DateTime.Today.Year)
                 return true;
 
             return false;
