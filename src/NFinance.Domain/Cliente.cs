@@ -1,4 +1,6 @@
 ﻿using System;
+using NFinance.Domain.Exceptions;
+using NFinance.Domain.Exceptions.Cliente;
 using System.ComponentModel.DataAnnotations;
 
 namespace NFinance.Domain
@@ -32,6 +34,8 @@ namespace NFinance.Domain
 
         public Cliente(string nome, string cpf, string email, string senha)
         {
+            ValidaCadastroCliente(nome,cpf,email,senha);
+                
             Id = Guid.NewGuid();
             Nome = nome;
             CPF = cpf;
@@ -41,6 +45,8 @@ namespace NFinance.Domain
 
         public Cliente(Guid id, string nome, string cpf, string email, string senha, string logoutToken)
         {
+            ValidaCliente(id,nome,cpf,email,senha,logoutToken);
+            
             Id = id;
             Nome = nome;
             CPF = cpf;
@@ -48,5 +54,24 @@ namespace NFinance.Domain
             Senha = senha;
             LogoutToken = logoutToken;
         }
+
+        private static void ValidaCadastroCliente(string nome, string cpf, string email, string senha)
+        {
+            if (string.IsNullOrWhiteSpace(nome)) throw new NomeClienteException();
+            if (string.IsNullOrWhiteSpace(cpf)) throw new CpfClienteException();
+            if (string.IsNullOrWhiteSpace(email)) throw new EmailClienteException();
+            if (string.IsNullOrWhiteSpace(senha)) throw new SenhaClienteException();
+        }
+        
+        private static void ValidaCliente(Guid id, string nome, string cpf, string email, string senha, string logoutToken)
+        {
+            if (Guid.Empty.Equals(id)) throw new IdException();
+            if (string.IsNullOrWhiteSpace(nome)) throw new NomeClienteException();
+            if (string.IsNullOrWhiteSpace(cpf)) throw new CpfClienteException();
+            if (string.IsNullOrWhiteSpace(email)) throw new EmailClienteException();
+            if (string.IsNullOrWhiteSpace(senha)) throw new SenhaClienteException();
+            if (string.IsNullOrWhiteSpace(logoutToken)) throw new LogoutTokenException();
+        }
+        
     }
 }

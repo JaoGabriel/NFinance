@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Xunit;
 using NFinance.Domain;
 using NFinance.Application.ViewModel.ClientesViewModel;
+using NFinance.Domain.Exceptions.Cliente;
 
 namespace NFinance.Tests.Application
 {
@@ -52,26 +53,72 @@ namespace NFinance.Tests.Application
             Assert.Equal(cliente.Senha, response.Senha);
         }
 
-        [Fact]
-        public async Task ClienteApp_AtualizarCliente_ComNome_EmBranco()
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData(" ")]
+        public async Task ClienteApp_AtualizarCliente_ComNome_Invalido(string nome)
         {
             //Arrange
             var cliente = GeraCliente();
-            cliente.Nome = " ";
+            cliente.Nome = nome;
             var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
             _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
-            var response = await app.CadastrarCliente(cadastroClienteVM);
+            await Assert.ThrowsAsync<NomeClienteException>(() => app.CadastrarCliente(cadastroClienteVM));
+        }
+        
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData(" ")]
+        public async Task ClienteApp_AtualizarCliente_ComCPF_Invalido(string cpf)
+        {
+            //Arrange
+            var cliente = GeraCliente();
+            cliente.LogoutToken = cpf;
+            var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
+            _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var app = IniciaApplication();
 
-            //Assert
-            Assert.NotNull(response);
-            Assert.IsType<CadastrarClienteViewModel.Response>(response);
-            Assert.Equal(cliente.Nome, response.Nome);
-            Assert.Equal(cliente.CPF, response.Cpf);
-            Assert.Equal(cliente.Email, response.Email);
-            Assert.Equal(cliente.Senha, response.Senha);
+            //Act
+            await Assert.ThrowsAsync<CpfClienteException>(() => app.CadastrarCliente(cadastroClienteVM));
+        }
+        
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData(" ")]
+        public async Task ClienteApp_AtualizarCliente_ComEmail_Invalido(string email)
+        {
+            //Arrange
+            var cliente = GeraCliente();
+            cliente.Email = email;
+            var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
+            _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var app = IniciaApplication();
+
+            //Act
+            await Assert.ThrowsAsync<EmailClienteException>(() => app.CadastrarCliente(cadastroClienteVM));
+        }
+        
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData(" ")]
+        public async Task ClienteApp_AtualizarCliente_ComSenha_Invalida(string senha)
+        {
+            //Arrange
+            var cliente = GeraCliente();
+            cliente.Senha = senha;
+            var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
+            _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var app = IniciaApplication();
+
+            //Act
+            await Assert.ThrowsAsync<NomeClienteException>(() => app.CadastrarCliente(cadastroClienteVM));
         }
     }
 }

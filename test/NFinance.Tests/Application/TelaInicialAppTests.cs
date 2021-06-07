@@ -67,8 +67,8 @@ namespace NFinance.Tests.Application
 
         public static List<Investimento> GeraListaInvestimento(Cliente cliente)
         {
-            var investimento = new Investimento(cliente.Id, "Fundo CTT", 10000M, DateTime.Today.AddDays(-7));
-            var investimento2 = new Investimento(cliente.Id, "Fundo C32", 150000M, DateTime.Today.AddDays(-15));
+            var investimento = new Investimento(cliente.Id, "Fundo CTT", 10000M, DateTime.Today.AddDays(-4));
+            var investimento2 = new Investimento(cliente.Id, "Fundo C32", 150000M, DateTime.Today.AddDays(-3));
             var investimento3 = new Investimento(cliente.Id, "Fundo AJ4", 35000M, DateTime.Today.AddDays(-1));
 
             return new List<Investimento> { investimento, investimento2, investimento3 };
@@ -289,7 +289,7 @@ namespace NFinance.Tests.Application
             var nomeGanho = "Ganho";
             var nomeGanho1 = "Ganho1";
             var dataGanho = DateTime.Today;
-            var dataGanho1 = DateTime.Today.AddDays(-5);
+            var dataGanho1 = DateTime.Today.AddDays(-3);
             var recorrente = false;
             var recorrente1 = true;
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
@@ -531,7 +531,7 @@ namespace NFinance.Tests.Application
             var valorGasto1 = 3000M;
             var nomeGasto = "Gasto";
             var nomeGasto1 = "Gasto1";
-            var dataGasto1 = DateTime.Today.AddMonths(-5);
+            var dataGasto1 = DateTime.Today.AddMonths(-5).AddDays(-5);
             var dataGasto = DateTime.Today;
             var qtdParcelas = 6;
             var qtdParcelas1 = 0;

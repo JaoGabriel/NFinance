@@ -182,12 +182,12 @@ namespace NFinance.Tests.Service
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public async Task ClienteService_AtualizarCliente_ComCPF_Vazio(string cpf)
+        public async Task ClienteService_AtualizarCliente_ComCPF_Invalido(string cpf)
         {
             //Arrange
             var cliente = GeraCliente();
             cliente.CPF = cpf;
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<CpfClienteException>(() => /*Act*/ services.AtualizarCliente(cliente));
@@ -202,7 +202,7 @@ namespace NFinance.Tests.Service
             //Arrange
             var cliente = GeraCliente();
             cliente.Email = email;
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<EmailClienteException>(() => /*Act*/ services.AtualizarCliente(cliente));
@@ -217,7 +217,7 @@ namespace NFinance.Tests.Service
             //Arrange
             var cliente = GeraCliente();
             cliente.Senha = senha;
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
             await Assert.ThrowsAsync<SenhaClienteException>(() => /*Act*/ services.AtualizarCliente(cliente));
