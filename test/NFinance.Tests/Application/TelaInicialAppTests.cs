@@ -51,7 +51,7 @@ namespace NFinance.Tests.Application
         {
             var gasto = new Gasto(cliente.Id, "Comida", 2000M, 4, DateTime.Today);
             var gasto2 = new Gasto(cliente.Id, "Sapato", 1500M, 16, DateTime.Today.AddDays(-3));
-            var gasto3 = new Gasto(cliente.Id, "Geladeira", 25000M, 32, DateTime.Today.AddDays(-7));
+            var gasto3 = new Gasto(cliente.Id, "Geladeira", 25000M, 32, DateTime.Today.AddDays(-4));
 
             return new List<Gasto> { gasto, gasto2, gasto3 };
         }
@@ -531,8 +531,8 @@ namespace NFinance.Tests.Application
             var valorGasto1 = 3000M;
             var nomeGasto = "Gasto";
             var nomeGasto1 = "Gasto1";
-            var dataGasto1 = DateTime.Today.AddMonths(-5).AddDays(-5);
             var dataGasto = DateTime.Today;
+            var dataGasto1 = DateTime.Today.AddMonths(-5);
             var qtdParcelas = 6;
             var qtdParcelas1 = 0;
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };

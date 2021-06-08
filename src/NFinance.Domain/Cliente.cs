@@ -9,26 +9,26 @@ namespace NFinance.Domain
     {
         [Key]
         [Required]
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
 
         [Required]
         [StringLength(100,MinimumLength = 10)]
-        public string Nome { get; set; }
+        public string Nome { get; private set; }
 
         [Required]
         [StringLength(14,MinimumLength = 11)]
-        public string CPF { get; set; }
+        public string CPF { get; private set; }
         
         [Required]
         [StringLength(120,MinimumLength = 15)]
-        public string Email { get; set; }
+        public string Email { get; private set; }
 
         [Required]
         [StringLength(120, MinimumLength = 10)]
-        public string Senha { get; set; }
+        public string Senha { get; private set; }
 
         [StringLength(400)]
-        public string LogoutToken { get; set; }
+        public string LogoutToken { get; private set; }
 
         public Cliente() { }
 
@@ -42,10 +42,21 @@ namespace NFinance.Domain
             Email = email;
             Senha = senha;
         }
+        
+        public Cliente(Guid id,string nome, string cpf, string email, string senha)
+        {
+            ValidaCliente(id,nome,cpf,email,senha);
+                
+            Id = id;
+            Nome = nome;
+            CPF = cpf;
+            Email = email;
+            Senha = senha;
+        }
 
         public Cliente(Guid id, string nome, string cpf, string email, string senha, string logoutToken)
         {
-            ValidaCliente(id,nome,cpf,email,senha,logoutToken);
+            ValidaCliente(id,nome,cpf,email,senha);
             
             Id = id;
             Nome = nome;
@@ -63,15 +74,18 @@ namespace NFinance.Domain
             if (string.IsNullOrWhiteSpace(senha)) throw new SenhaClienteException();
         }
         
-        private static void ValidaCliente(Guid id, string nome, string cpf, string email, string senha, string logoutToken)
+        private static void ValidaCliente(Guid id, string nome, string cpf, string email, string senha)
         {
             if (Guid.Empty.Equals(id)) throw new IdException();
             if (string.IsNullOrWhiteSpace(nome)) throw new NomeClienteException();
             if (string.IsNullOrWhiteSpace(cpf)) throw new CpfClienteException();
             if (string.IsNullOrWhiteSpace(email)) throw new EmailClienteException();
             if (string.IsNullOrWhiteSpace(senha)) throw new SenhaClienteException();
-            if (string.IsNullOrWhiteSpace(logoutToken)) throw new LogoutTokenException();
         }
-        
+
+        private static void ValidaLogoutToken(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token)) throw new LogoutTokenException();
+        }
     }
 }

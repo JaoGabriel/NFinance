@@ -140,7 +140,7 @@ namespace NFinance.Application
 
         private static bool ValidaGasto(Gasto gasto)
         {
-            if (gasto.DataDoGasto.Month > DateTime.Today.Month || gasto.DataDoGasto.Year > DateTime.Today.Year)
+            if (gasto.DataDoGasto.Month > DateTime.Today.Month || gasto.DataDoGasto.Year > DateTime.Today.Year || gasto.DataDoGasto.Month < DateTime.Today.Month )
                 return false;
 
             if (gasto.QuantidadeParcelas == 1)

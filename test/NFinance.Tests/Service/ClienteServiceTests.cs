@@ -17,61 +17,27 @@ namespace NFinance.Tests.Service
     public class ClienteServiceTests
     {
         private readonly IClienteRepository _clienteRepository;
+        private readonly string _cpf = "12345678910";
+        private readonly string _email = "teste@teste.com";
+        private readonly string _nome = "joaquin da zils";
+        private readonly string _senha = "12391ukla";
+        private readonly string _logoutToken = "asuhdhausduhasdiuhasuih";
 
         public ClienteServiceTests()
         {
             _clienteRepository = Substitute.For<IClienteRepository>();
         }
 
-        public ClienteService InicializaServico()
+        private ClienteService InicializaServico()
         {
-            return new ClienteService(_clienteRepository);
-        }
-
-        public Cliente GeraCliente()
-        {
-            var nome = "Teste@Sucesso";
-            var cpf = "123.654.987-96";
-            var email = "teste@teste.com";
-            var senha = "dahusdhuasuh";
-            var senhaCriptografada = HashValue(senha);
-            return new Cliente(nome, cpf, email, senhaCriptografada);
-        }
-
-        public Cliente GeraClienteComLogoutToken()
-        {
-            var nome = "Teste@Sucesso";
-            var cpf = "123.654.987-96";
-            var email = "teste@teste.com";
-            var senha = "dahusdhuasuh";
-            var senhaCriptografada = HashValue(senha);
-            var cliente = new Cliente(nome, cpf, email, senhaCriptografada);
-            var logoutToken = TokenService.GerarToken(cliente);
-            cliente.LogoutToken = logoutToken;
-            return cliente;
-        }
-
-        static string HashValue(string value)
-        {
-            var encoding = new UnicodeEncoding();
-            byte[] hashBytes;
-            using (HashAlgorithm hash = SHA256.Create())
-                hashBytes = hash.ComputeHash(encoding.GetBytes(value));
-
-            var hashValue = new StringBuilder(hashBytes.Length * 2);
-            foreach (byte b in hashBytes)
-            {
-                hashValue.AppendFormat(CultureInfo.InvariantCulture, "{0:X2}", b);
-            }
-
-            return hashValue.ToString();
+            return new(_clienteRepository);
         }
 
         [Fact]
         public async Task ClienteService_CadastrarCliente_ComSucesso()
         {
             //Arrange
-            var cliente = GeraCliente();
+            var cliente = new Cliente(_nome,_cpf,_email,_senha);
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
 
@@ -98,8 +64,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_CadastrarCliente_ComNome_Invalido(string nome)
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.Nome = nome;
+            var cliente = new Cliente(nome,_cpf,_email,_senha);
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -113,8 +78,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_CadastrarCliente_ComCPF_Invalido(string cpf)
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.CPF = cpf;
+            var cliente = new Cliente(_nome,cpf,_email,_senha);
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -128,8 +92,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_CadastrarCliente_ComEmail_Invalido(string email)
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.Email = email;
+            var cliente = new Cliente(_nome,_cpf,email,_senha);
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -143,8 +106,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_CadastrarCliente_ComSenha_Invalida(string senha)
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.Senha = senha;
+            var cliente = new Cliente(_nome,_cpf,_email,senha);
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -158,8 +120,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_AtualizarCliente_ComNome_Invalido(string nome)
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.Nome = nome;
+            var cliente = new Cliente(nome,_cpf,_email,_senha);
             _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -170,8 +131,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_AtualizarCliente_ComId_Vazio()
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.Id = Guid.Empty;
+            var cliente = new Cliente(Guid.Empty,_nome,_cpf,_email,_senha);
             _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -185,8 +145,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_AtualizarCliente_ComCPF_Invalido(string cpf)
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.CPF = cpf;
+            var cliente = new Cliente(_nome,cpf,_email,_senha);
             _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -200,8 +159,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_AtualizarCliente_ComEmail_Invalido(string email)
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.Email = email;
+            var cliente = new Cliente(_nome,_cpf,email,_senha);
             _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -215,8 +173,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_AtualizarCliente_ComSenha_Invalida(string senha)
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.Senha = senha;
+            var cliente = new Cliente(_nome,_cpf,_email,senha);
             _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             //Assert
@@ -227,7 +184,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_AtualizarCliente_ComSucesso()
         {
             //Arrange
-            var cliente = GeraCliente();
+            var cliente = new Cliente(Guid.NewGuid(),_nome,_cpf,_email,_senha);
             _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var services = InicializaServico();
             
@@ -249,7 +206,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_ConsultarCliente_ComSucesso()
         {
             //Arrange
-            var cliente = GeraCliente();
+            var cliente = new Cliente(_nome,_cpf,_email,_senha);
             _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
             var services = InicializaServico();
 
@@ -272,8 +229,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_ConsultarCliente_ComId_Vazio()
         {
             //Arrange
-            var cliente = GeraCliente();
-            cliente.Id = Guid.Empty;
+            var cliente = new Cliente(Guid.Empty,_nome,_cpf,_email,_senha);
             _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
             var services = InicializaServico();
             
@@ -285,13 +241,12 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_CadastrarLogoutToken_ComSucesso()
         {
             //Arrange
-            var cliente = GeraClienteComLogoutToken();
-            var token = cliente.LogoutToken;
+            var cliente = new Cliente(Guid.NewGuid(),_nome,_cpf,_email,_senha,_logoutToken);
             _clienteRepository.CadastrarLogoutToken(Arg.Any<Cliente>(),Arg.Any<string>()).Returns(cliente);
             var services = InicializaServico();
 
             //Assert
-            var response = await services.CadastrarLogoutToken(cliente,token);
+            var response = await services.CadastrarLogoutToken(cliente,cliente.LogoutToken);
 
             Assert.NotNull(response.Nome);
             Assert.NotNull(response.CPF);
@@ -313,13 +268,12 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_CadastrarLogoutToken_ComToken_Invalido(string token)
         {
             //Arrange
-            var cliente = GeraClienteComLogoutToken();
-            cliente.LogoutToken = token;
+            var cliente = new Cliente(Guid.NewGuid(),_nome,_cpf,_email,_senha,token);
             _clienteRepository.CadastrarLogoutToken(Arg.Any<Cliente>(), Arg.Any<string>()).Returns(cliente);
             var services = InicializaServico();
 
             //Assert
-            await Assert.ThrowsAsync<LogoutTokenException>(() => /*Act*/ services.CadastrarLogoutToken(cliente, null));
+            await Assert.ThrowsAsync<LogoutTokenException>(() => /*Act*/ services.CadastrarLogoutToken(cliente, token));
         }
 
         [Fact]
@@ -331,14 +285,14 @@ namespace NFinance.Tests.Service
             var services = InicializaServico();
 
             //Assert
-            await Assert.ThrowsAsync<LogoutTokenException>(() => /*Act*/ services.CadastrarLogoutToken(cliente, "auhdahuduhaisdhuiadhiuasiduhssaiuh"));
+            await Assert.ThrowsAsync<LogoutTokenException>(() => /*Act*/ services.CadastrarLogoutToken(cliente, _logoutToken));
         }
         
         [Fact]
         public async Task ClienteService_CadastrarLogoutToken_ComDadosRequestValidos_RetornoCadastro_RetornaNulo()
         {
             //Arrange
-            var cliente = GeraCliente();
+            var cliente = new Cliente(Guid.NewGuid(),_nome,_cpf,_email,_senha,_logoutToken);
             _clienteRepository.CadastrarLogoutToken(Arg.Any<Cliente>(), Arg.Any<string>()).Returns((Cliente)null);
             var services = InicializaServico();
             
@@ -353,7 +307,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_ConsultarCredenciaisLogin_ComSucesso()
         {
             //Arrange
-            var cliente = GeraCliente();
+            var cliente = new Cliente(Guid.NewGuid(),_nome,_cpf,_email,_senha,_logoutToken);
             _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
             var services = InicializaServico();
 
@@ -378,7 +332,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_ConsultarCredenciaisLogin_ComEmail_Invalido(string email)
         {
             //Arrange
-            var cliente = GeraCliente();
+            var cliente = new Cliente(Guid.NewGuid(),_nome,_cpf,email,_senha,_logoutToken);
             _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
             var services = InicializaServico();
 
@@ -393,7 +347,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_ConsultarCredenciaisLogin_ComSenha_Invalida(string senha)
         {
             //Arrange
-            var cliente = GeraCliente();
+            var cliente = new Cliente(Guid.NewGuid(),_nome,_cpf,_email,senha,_logoutToken);
             _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(cliente);
             var services = InicializaServico();
 
@@ -419,7 +373,7 @@ namespace NFinance.Tests.Service
         public async Task ClienteService_ConsultarCredenciaisLogin_ComDadosRequestValidos_RetornoConsulta_RetornaNulo()
         {
             //Arrange
-            var cliente = GeraCliente();
+            var cliente = new Cliente(Guid.NewGuid(),_nome,_cpf,_email,_senha,_logoutToken);
             _clienteRepository.ConsultarCredenciaisLogin(Arg.Any<string>(), Arg.Any<string>()).Returns((Cliente)null);
             var services = InicializaServico();
 
