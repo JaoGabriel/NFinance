@@ -30,8 +30,7 @@ namespace NFinance.Tests.Service
 
         public static Cliente GeraCliente()
         {
-            var cliente = new Cliente("Nome","CPF","Email","Senha");
-            cliente.LogoutToken = "TokenTeste";
+            var cliente = new Cliente(Guid.NewGuid(), "Nome","CPF","Email","Senha","TokenTEste");
             return cliente;
         }
 
@@ -143,22 +142,22 @@ namespace NFinance.Tests.Service
             await Assert.ThrowsAsync<LogoutException>(() => servico.RealizarLogut(cliente.Id));
         }
         
-        // [Fact]
-        // public async Task AutenticacaoService_ValidaTokenRequest_ComSucesso()
-        // {
-        //     //Arrange
-        //     var cliente = GeraCliente();
-        //     var servico = InicializaServico();
-        //     var listaToken = new List<string> {"Bearer udauisdauhsduashuiauhdiahiusdahuidhuiasduhiahuidsui"};
-        //     _redis.RetornaValorPorChave(Arg.Any<string>()).Returns(cliente);
-        //     _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
-        //     TokenService.LerToken(Arg.Any<string>()).Returns(listaToken);
-        //     
-        //     //Act
-        //     var resposta = await servico.ValidaTokenRequest("Bearer udauisdauhsduashuiauhdiahiusdahuidhuiasduhiahuidsui");
-        //
-        //     //Assert
-        //     Assert.True(resposta);
-        // }
+        [Fact]
+        public async Task AutenticacaoService_ValidaTokenRequest_ComSucesso()
+        {
+            //Arrange
+            var cliente = GeraCliente();
+            var servico = InicializaServico();
+            var listaToken = new List<string> {"Bearer udauisdauhsduashuiauhdiahiusdahuidhuiasduhiahuidsui"};
+            _redis.RetornaValorPorChave(Arg.Any<string>()).Returns(cliente);
+            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
+            TokenService.LerToken(Arg.Any<string>()).Returns(listaToken);
+            
+            //Act
+            var resposta = await servico.ValidaTokenRequest("Bearer udauisdauhsduashuiauhdiahiusdahuidhuiasduhiahuidsui");
+        
+            //Assert
+            Assert.True(resposta);
+        }
     }
 }

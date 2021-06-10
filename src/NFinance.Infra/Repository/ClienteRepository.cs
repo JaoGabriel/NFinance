@@ -27,8 +27,6 @@ namespace NFinance.Infra.Repository
         public async Task<Cliente> AtualizarCliente(Cliente cliente)
         {
             var clienteAtualizar = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == cliente.Id);
-            var senhaCriptografada = HashValue(cliente.Senha);
-            cliente.Senha = senhaCriptografada;
             _context.Entry(clienteAtualizar).CurrentValues.SetValues(cliente);
             await UnitOfWork.Commit();
             return cliente;
@@ -36,8 +34,6 @@ namespace NFinance.Infra.Repository
 
         public async Task<Cliente> CadastrarCliente(Cliente cliente)
         {
-            var senhaCriptografada = HashValue(cliente.Senha);
-            cliente.Senha = senhaCriptografada;
             await _context.Cliente.AddAsync(cliente);
             await UnitOfWork.Commit();
             return cliente;
@@ -52,8 +48,7 @@ namespace NFinance.Infra.Repository
         public async Task<Cliente> ConsultarCredenciaisLogin(string usuario, string senha)
         {
             var usuarios = await _context.Cliente.ToListAsync();
-            var senhaCriptografada = HashValue(senha);
-            var response = usuarios.FirstOrDefault(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senhaCriptografada);
+            var response = usuarios.FirstOrDefault(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senha);
 
             return response;
         }
@@ -61,28 +56,12 @@ namespace NFinance.Infra.Repository
         public async Task<Cliente> CadastrarLogoutToken(Cliente cliente,string token)
         {
             var clienteToken = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == cliente.Id);
-            cliente.Senha = clienteToken.Senha;
-            cliente.LogoutToken = token;
             _context.Entry(clienteToken).CurrentValues.SetValues(cliente);
             await UnitOfWork.Commit();
             
             return cliente;
         }
 
-        static string HashValue(string value)
-        {
-            var encoding = new UnicodeEncoding();
-            byte[] hashBytes;
-            using (HashAlgorithm hash = SHA256.Create())
-                hashBytes = hash.ComputeHash(encoding.GetBytes(value));
-
-            var hashValue = new StringBuilder(hashBytes.Length * 2);
-            foreach (byte b in hashBytes)
-            {
-                hashValue.AppendFormat(CultureInfo.InvariantCulture, "{0:X2}", b);
-            }
-
-            return hashValue.ToString();
-        }
+        
     }
 }

@@ -38,7 +38,7 @@ namespace NFinance.Tests.WebApi
         }
         public static Cliente GeraCliente()
         {
-            return new Cliente("ASDASD", "12345678910", "teste@tst.com", "832911");
+            return new("ASDASD", "12345678910", "teste@tst.com", "832911");
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace NFinance.Tests.WebApi
             var listarResgates = new ConsultarResgatesViewModel.Response(listaResgate);
             _resgateApp.ConsultarResgates(Arg.Any<Guid>()).Returns(listarResgates);
             var controller = InicializarResgateController();
-            var token = TokenService.GerarToken(new Cliente { Id = Guid.NewGuid(), CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var token = TokenService.GerarToken(GeraCliente());
 
             //Act
             var teste = controller.ConsultarResgates(token,idInvestimento);

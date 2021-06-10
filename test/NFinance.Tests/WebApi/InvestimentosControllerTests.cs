@@ -135,7 +135,7 @@ namespace NFinance.Tests.WebApi
             var controller = InicializarInvestimentoController();
 
             //Act
-            var token = TokenService.GerarToken(new Cliente { Id = idCliente, CPF = "12345678910", Email = "teste@teste.com", Nome = "teste da silva" });
+            var token = TokenService.GerarToken(new Cliente(investimento.IdCliente,"Josefino teste","12345678910","teste@teste.com","senhaSuperForte"));
             var teste = controller.ConsultarInvestimentos(token,idCliente);
             var okResult = teste.Result as ObjectResult;
             var consultarInvestimentosViewModel = Assert.IsType<ConsultarInvestimentosViewModel.Response>(okResult.Value);
