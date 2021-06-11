@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.GanhoViewModel;
 
 namespace NFinance.WebApi.Controllers
@@ -16,13 +15,13 @@ namespace NFinance.WebApi.Controllers
     {
         private readonly IGanhoApp _ganhoApp;
         private readonly ILogger<GanhoController> _logger;
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
 
-        public GanhoController(ILogger<GanhoController> logger, IGanhoApp ganhoApp, IAutenticacaoService autenticacaoService)
+        public GanhoController(ILogger<GanhoController> logger, IGanhoApp ganhoApp, IAutenticacaoApp autenticacaoApp)
         {
             _logger = logger;
             _ganhoApp = ganhoApp;
-            _autenticacaoService = autenticacaoService;
+            _autenticacaoApp = autenticacaoApp;
         }
 
         [HttpGet("Ganho/Consultar/{id}")]
@@ -32,7 +31,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> ConsultarGanho([FromHeader] string authorization, Guid id)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var ganho = await _ganhoApp.ConsultarGanho(id);
             _logger.LogInformation("Ganho Encontrado Com Sucesso!");
@@ -46,7 +45,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> ConsultarGanhos([FromHeader] string authorization, Guid idCliente)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var ganhos = await _ganhoApp.ConsultarGanhos(idCliente);
             _logger.LogInformation("Ganhos Encontrados Com Sucesso!");
@@ -71,7 +70,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> AtualizarGanho([FromHeader] string authorization, Guid id, AtualizarGanhoViewModel.Request ganhoRequest)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var ganhoResponse = await _ganhoApp.AtualizarGanho(id, ganhoRequest);
             _logger.LogInformation("Ganho Atualizado Com Sucesso!");
@@ -85,7 +84,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> ExcluirGanho([FromHeader] string authorization, ExcluirGanhoViewModel.Request request)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var ganhoResponse = await _ganhoApp.ExcluirGanho(request);
             _logger.LogInformation("Ganho Excluido Com Sucesso!");

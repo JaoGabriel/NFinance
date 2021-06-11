@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.TelaInicialViewModel;
 
 namespace NFinance.WebApi.Controllers
@@ -15,14 +14,14 @@ namespace NFinance.WebApi.Controllers
     public class TelaInicialController : ControllerBase
     {
         private readonly ITelaInicialApp _telaInicialApp;
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<TelaInicialController> _logger;
 
-        public TelaInicialController(ILogger<TelaInicialController> logger, ITelaInicialApp telaInicialApp, IAutenticacaoService autenticacaoService)
+        public TelaInicialController(ILogger<TelaInicialController> logger, ITelaInicialApp telaInicialApp, IAutenticacaoApp autenticacaoApp)
         {
             _logger = logger;
             _telaInicialApp = telaInicialApp;
-            _autenticacaoService = autenticacaoService;
+            _autenticacaoApp = autenticacaoApp;
         }
 
         [HttpGet("/api/TelaInicial/{idCliente}")]
@@ -32,7 +31,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> TelaInicial([FromHeader] string authorization, Guid idCliente)
         {
                 _logger.LogInformation("Validando Bearer Token!");
-                await _autenticacaoService.ValidaTokenRequest(authorization);
+                await _autenticacaoApp.ValidaTokenRequest(authorization);
                 _logger.LogInformation("Bearer Token Validado!");
                 var response = await _telaInicialApp.TelaInicial(idCliente);
                 _logger.LogInformation("Tela Inicial Carregada Com Sucesso!");

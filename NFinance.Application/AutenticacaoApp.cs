@@ -1,46 +1,61 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using NFinance.Domain.Services;
+using NFinance.Domain.Exceptions;
 using NFinance.Application.Interfaces;
-using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Exceptions.Autenticacao;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
 
 namespace NFinance.Application
 {
     public class AutenticacaoApp : IAutenticacaoApp
     {
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IClienteApp _clienteApp;
+        private readonly IRedisApp _redisApp;
 
-        public AutenticacaoApp(IAutenticacaoService autenticacaoService)
+        public AutenticacaoApp(IClienteApp clienteApp)
         {
-            _autenticacaoService = autenticacaoService;
+            _clienteApp = clienteApp;
         }
 
         public async Task<LoginViewModel.Response> EfetuarLogin(LoginViewModel login)
         {
-            var cliente = await _autenticacaoService.RealizarLogin(login.Email,login.Senha);
-            var token = TokenService.GerarToken(cliente);
+            if (string.IsNullOrWhiteSpace(login.Email) || string.IsNullOrWhiteSpace(login.Senha)) throw new LoginException("Email ou senha invalida");
+            
+            var usuarioAutenticacao = await _clienteApp.ConsultarCredenciaisLogin(login.Email,login.Senha);
 
-            return new LoginViewModel.Response(cliente,token);
+            if (usuarioAutenticacao == null) throw new LoginException("Ocorreu um erro, tente novamente!");
+
+            var token = TokenApp.GerarToken(usuarioAutenticacao);
+
+            _redisApp.IncluiValorCache(usuarioAutenticacao);
+
+            return new LoginViewModel.Response(usuarioAutenticacao, token);
         }
 
         public async Task<LogoutViewModel.Response> EfetuarLogoff(LogoutViewModel logout)
         {
-            try
-            {
-                await _autenticacaoService.RealizarLogut(logout.IdCliente);
-                
-                return new LogoutViewModel.Response("Logout realizado com sucesso!", true);
-            }
-            catch (Exception)
-            {
-                return new LogoutViewModel.Response("Ocorreu um erro, tente novamente em instantes", false);
-            }
-        }
+            if (Guid.Empty.Equals(logout.IdCliente)) throw new IdException("Id invalido");
 
+            var valorRedis = _redisApp.RetornaValorPorChave(logout.IdCliente.ToString());
+            await _clienteApp.CadastrarLogoutToken(valorRedis);
+            var clienteExcluido = _redisApp.RemoverValorCache(logout.IdCliente.ToString());
+
+            if (clienteExcluido)
+                return new LogoutViewModel.Response("Logout realizado com sucesso!", true);
+            else
+                return new LogoutViewModel.Response("Ocorreu um erro, tente novamente em instantes", false);
+        }
         public async Task<bool> ValidaTokenRequest(string authorization)
         {
-            return await _autenticacaoService.ValidaTokenRequest(authorization);
+            var listaToken = TokenApp.LerToken(authorization);
+            var redisToken = _redisApp.RetornaValorPorChave(listaToken.FirstOrDefault()).LogoutToken;
+            var cliente = await _clienteApp.ConsultaCliente(Guid.Parse(listaToken.FirstOrDefault()));
+
+            if (cliente.LogoutToken == listaToken.FirstOrDefault(token => token == authorization[7..]) || authorization[7..] != redisToken)
+                throw new TokenException();
+            else
+                return true;
         }
     }
 }

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.ResgatesViewModel;
 
 namespace NFinance.WebApi.Controllers
@@ -16,13 +15,13 @@ namespace NFinance.WebApi.Controllers
     {
         private readonly IResgateApp _resgateApp;
         private readonly ILogger<ResgateController> _logger;
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
 
-        public ResgateController(ILogger<ResgateController> logger, IResgateApp resgateApp, IAutenticacaoService autenticacaoService)
+        public ResgateController(ILogger<ResgateController> logger, IResgateApp resgateApp, IAutenticacaoApp autenticacaoApp)
         {
             _logger = logger;
             _resgateApp = resgateApp;
-            _autenticacaoService = autenticacaoService;
+            _autenticacaoApp = autenticacaoApp;
         }
 
         [HttpGet("Resgate/Consultar/{id}")]
@@ -32,7 +31,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> ConsultarResgate([FromHeader] string authorization, Guid id)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var resgates = await _resgateApp.ConsultarResgate(id);
             _logger.LogInformation("Resgate Encontrado Com Sucesso!");
@@ -46,7 +45,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> ConsultarResgates([FromHeader] string authorization, Guid idCliente)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var resgates = await _resgateApp.ConsultarResgates(idCliente);
             _logger.LogInformation("Resgates Encontrados Com Sucesso!");
@@ -60,7 +59,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> RealizarResgate([FromHeader] string authorization, RealizarResgateViewModel.Request resgateRequest)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var resgateResponse = await _resgateApp.RealizarResgate(resgateRequest);
             _logger.LogInformation("Resgate Realizado Com Sucesso!");

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.DependencyInjection;
 using NFinance.Application.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace NFinance.Application
 {
@@ -15,6 +15,7 @@ namespace NFinance.Application
             services.AddTransient<IGastoApp, GastoApp>();
             services.AddTransient<IResgateApp, ResgateApp>();
             services.AddTransient<ITelaInicialApp, TelaInicialApp>();
+            services.AddTransient<IRedisApp, RedisApp>();
         }
     }
 }

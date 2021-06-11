@@ -1,7 +1,7 @@
 ﻿using NFinance.Application;
 using NFinance.Domain;
 using NFinance.Domain.Exceptions;
-using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Interfaces.Repository;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -13,24 +13,24 @@ namespace NFinance.Tests.Application
 {
     public class TelaInicialAppTests
     {
-        private readonly IClienteService _clienteService;
-        private readonly IGanhoService _ganhoService;
-        private readonly IGastoService _gastoService;
-        private readonly IInvestimentoService _investimentoService;
-        private readonly IResgateService _resgateService;
+        private readonly IClienteRepository _clienteRepository;
+        private readonly IGanhoRepository _ganhoRepository;
+        private readonly IGastoRepository _gastoRepository;
+        private readonly IInvestimentoRepository _investimentoRepository;
+        private readonly IResgateRepository _resgateRepository;
 
         public TelaInicialAppTests()
         {
-            _clienteService = Substitute.For<IClienteService>();
-            _gastoService = Substitute.For<IGastoService>();
-            _ganhoService = Substitute.For<IGanhoService>();
-            _investimentoService = Substitute.For<IInvestimentoService>();
-            _resgateService = Substitute.For<IResgateService>();
+            _clienteRepository = Substitute.For<IClienteRepository>();
+            _gastoRepository = Substitute.For<IGastoRepository>();
+            _ganhoRepository = Substitute.For<IGanhoRepository>();
+            _investimentoRepository = Substitute.For<IInvestimentoRepository>();
+            _resgateRepository = Substitute.For<IResgateRepository>();
         }
 
         public TelaInicialApp InicializaApplication()
         {
-            return new TelaInicialApp(_ganhoService, _investimentoService, _gastoService, _resgateService, _clienteService);
+            return new TelaInicialApp(_ganhoRepository, _investimentoRepository, _gastoRepository, _resgateRepository, _clienteRepository);
         }
 
         public static Cliente GeraCliente()
@@ -75,7 +75,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_TelaInicial_ComSucesso()
+        public async Task TelaInicialRepository_TelaInicial_ComSucesso()
         {
             //Arrange
             var cliente = GeraCliente();
@@ -83,15 +83,15 @@ namespace NFinance.Tests.Application
             var listaGastos = GeraListaGasto(cliente);
             var listaInvestimentos = GeraListaInvestimento(cliente);
             var listaResgate = GeraListaResgate(cliente, listaInvestimentos);
-            _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listaGanhos);
-            _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listaGastos);
-            _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listaResgate);
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
-            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listaInvestimentos);
-            var services = InicializaApplication();
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listaGanhos);
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listaGastos);
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listaResgate);
+            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
+            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listaInvestimentos);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.TelaInicial(cliente.Id);
+            var response = await Repositorys.TelaInicial(cliente.Id);
 
             //Assert
             Assert.NotEqual(Guid.Empty, response.Cliente.Id);
@@ -215,7 +215,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_TelaInicial_ComIdCliente_Incorreto()
+        public async Task TelaInicialRepository_TelaInicial_ComIdCliente_Incorreto()
         {
             //Arrange
             var idCliente = Guid.Empty;
@@ -266,19 +266,19 @@ namespace NFinance.Tests.Application
             listInvestimento.Add(investimento);
             listInvestimento.Add(investimento1);
             listResgate.Add(resgate);
-            _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
-            _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
-            _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente());
-            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
-            var services = InicializaApplication();
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente());
+            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            var Repositorys = InicializaApplication();
 
             //Act
-            await Assert.ThrowsAsync<IdException>(() => /*Act*/ services.TelaInicial(idCliente));
+            await Assert.ThrowsAsync<IdException>(() => /*Act*/ Repositorys.TelaInicial(idCliente));
         }
 
         [Fact]
-        public async Task TelaInicialService_GanhoMensal_ComSucesso()
+        public async Task TelaInicialRepository_GanhoMensal_ComSucesso()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -295,11 +295,11 @@ namespace NFinance.Tests.Application
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
             var listGanho = new List<Ganho> { ganho, ganho1};
-            _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
-            var services = InicializaApplication();
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.GanhoMensal(idCliente);
+            var response = await Repositorys.GanhoMensal(idCliente);
 
             //Assert
             Assert.Equal(9000, response.SaldoMensal);
@@ -322,7 +322,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_GanhoMensal_ComGanhos_Futuros()
+        public async Task TelaInicialRepository_GanhoMensal_ComGanhos_Futuros()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -339,11 +339,11 @@ namespace NFinance.Tests.Application
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
             var listGanho = new List<Ganho> { ganho, ganho1 };
-            _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
-            var services = InicializaApplication();
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.GanhoMensal(idCliente);
+            var response = await Repositorys.GanhoMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Ganhos);
@@ -351,7 +351,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_GanhoMensal_ComGanhos_Passados()
+        public async Task TelaInicialRepository_GanhoMensal_ComGanhos_Passados()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -370,11 +370,11 @@ namespace NFinance.Tests.Application
             var listGanho = new List<Ganho> { ganho, ganho1 };
             listGanho.Add(ganho);
             listGanho.Add(ganho1);
-            _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
-            var services = InicializaApplication();
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.GanhoMensal(idCliente);
+            var response = await Repositorys.GanhoMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Ganhos);
@@ -382,7 +382,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_GanhoMensal_Com_GanhoFuturoRecorrente_E_GanhoNaoRecorrente()
+        public async Task TelaInicialRepository_GanhoMensal_Com_GanhoFuturoRecorrente_E_GanhoNaoRecorrente()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -400,11 +400,11 @@ namespace NFinance.Tests.Application
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
             var listGanho = new List<Ganho> { ganho, ganho1 };
 
-            _ganhoService.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
-            var services = InicializaApplication();
+            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.GanhoMensal(idCliente);
+            var response = await Repositorys.GanhoMensal(idCliente);
 
             //Assert
             Assert.Equal(6000, response.SaldoMensal);
@@ -419,7 +419,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_GastoMensal_ComSucesso()
+        public async Task TelaInicialRepository_GastoMensal_ComSucesso()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -435,11 +435,11 @@ namespace NFinance.Tests.Application
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
             var listGasto = new List<Gasto> { gasto, gasto1 };
-            _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
-            var services = InicializaApplication();
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.GastoMensal(idCliente);
+            var response = await Repositorys.GastoMensal(idCliente);
 
             //Assert
             Assert.Equal(2, response.Gastos.Count);
@@ -463,7 +463,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_GastoMensal_Com_DataGasto_Futura()
+        public async Task TelaInicialRepository_GastoMensal_Com_DataGasto_Futura()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -479,11 +479,11 @@ namespace NFinance.Tests.Application
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
             var listGasto = new List<Gasto> { gasto, gasto1 };
-            _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
-            var services = InicializaApplication();
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.GastoMensal(idCliente);
+            var response = await Repositorys.GastoMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Gastos);
@@ -492,7 +492,7 @@ namespace NFinance.Tests.Application
 
 
         [Fact]
-        public async Task TelaInicialService_GastoMensal_Com_DataGasto_Futura_E_QuantidadeParcelas6()
+        public async Task TelaInicialRepository_GastoMensal_Com_DataGasto_Futura_E_QuantidadeParcelas6()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -509,11 +509,11 @@ namespace NFinance.Tests.Application
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
             var listGasto = new List<Gasto> { gasto, gasto1 };
-            _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
-            var services = InicializaApplication();
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.GastoMensal(idCliente);
+            var response = await Repositorys.GastoMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Gastos);
@@ -521,7 +521,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_GastoMensal_Com_DataGasto_Passado_E_DataAtual_Com_QuantidadeParcelas6()
+        public async Task TelaInicialRepository_GastoMensal_Com_DataGasto_Passado_E_DataAtual_Com_QuantidadeParcelas6()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -539,12 +539,12 @@ namespace NFinance.Tests.Application
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
             var gastoResponse = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = 1000, DataDoGasto = dataGasto, QuantidadeParcelas = 5 };
             var listGasto = new List<Gasto> { gasto, gasto1 };
-            _gastoService.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
-            _gastoService.AtualizarGasto(Arg.Any<Gasto>()).Returns(gastoResponse);
-            var services = InicializaApplication();
+            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            _gastoRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gastoResponse);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.GastoMensal(idCliente);
+            var response = await Repositorys.GastoMensal(idCliente);
 
             //Assert
             Assert.Single(response.Gastos);
@@ -560,7 +560,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_InvestimentoMensal_ComSucesso()
+        public async Task TelaInicialRepository_InvestimentoMensal_ComSucesso()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -575,11 +575,11 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
-            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
-            var services = InicializaApplication();
+            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.InvestimentoMensal(idCliente);
+            var response = await Repositorys.InvestimentoMensal(idCliente);
 
             //Assert
             Assert.Equal(2, response.Investimentos.Count);
@@ -601,7 +601,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_InvestimentoMensal_Com_DataInferior_MesAtual()
+        public async Task TelaInicialRepository_InvestimentoMensal_Com_DataInferior_MesAtual()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -616,11 +616,11 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var listInvestimento = new List<Investimento> { Investimento,Investimento1 };
-            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
-            var services = InicializaApplication();
+            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.InvestimentoMensal(idCliente);
+            var response = await Repositorys.InvestimentoMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Investimentos);
@@ -628,7 +628,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_InvestimentoMensal_Com_DataSuperior_MesAtual()
+        public async Task TelaInicialRepository_InvestimentoMensal_Com_DataSuperior_MesAtual()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -643,11 +643,11 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
-            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
-            var services = InicializaApplication();
+            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.InvestimentoMensal(idCliente);
+            var response = await Repositorys.InvestimentoMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Investimentos);
@@ -655,7 +655,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_InvestimentoMensal_Com_DataInferior_E_DataSuperior_MesAtual()
+        public async Task TelaInicialRepository_InvestimentoMensal_Com_DataInferior_E_DataSuperior_MesAtual()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -670,11 +670,11 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
-            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
-            var services = InicializaApplication();
+            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.InvestimentoMensal(idCliente);
+            var response = await Repositorys.InvestimentoMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Investimentos);
@@ -682,7 +682,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_InvestimentoMensal_Com_DataInferior_DataAtual_DataSuperior()
+        public async Task TelaInicialRepository_InvestimentoMensal_Com_DataInferior_DataAtual_DataSuperior()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -702,11 +702,11 @@ namespace NFinance.Tests.Application
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var Investimento2 = new Investimento { Id = idInvestimento2, IdCliente = idCliente, NomeInvestimento = nomeInvestimento2, Valor = valorInvestimento2, DataAplicacao = dataInvestimento2 };
             var listInvestimento = new List<Investimento> { Investimento, Investimento1, Investimento2 };
-            _investimentoService.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
-            var services = InicializaApplication();
+            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.InvestimentoMensal(idCliente);
+            var response = await Repositorys.InvestimentoMensal(idCliente);
 
             //Assert
             Assert.Single(response.Investimentos);
@@ -721,7 +721,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_ResgateMensal_ComSucesso()
+        public async Task TelaInicialRepository_ResgateMensal_ComSucesso()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -736,11 +736,11 @@ namespace NFinance.Tests.Application
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
-            _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
-            var services = InicializaApplication();
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.ResgateMensal(idCliente);
+            var response = await Repositorys.ResgateMensal(idCliente);
 
             //Assert
             Assert.Equal(2, response.Resgates.Count);
@@ -762,7 +762,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_ResgateMensal_Com_DataAnterior_E_DataAtual()
+        public async Task TelaInicialRepository_ResgateMensal_Com_DataAnterior_E_DataAtual()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -777,11 +777,11 @@ namespace NFinance.Tests.Application
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
-            _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
-            var services = InicializaApplication();
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.ResgateMensal(idCliente);
+            var response = await Repositorys.ResgateMensal(idCliente);
 
             //Assert
             Assert.Single(response.Resgates);
@@ -796,7 +796,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_ResgateMensal_Com_DataAnterior()
+        public async Task TelaInicialRepository_ResgateMensal_Com_DataAnterior()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -811,11 +811,11 @@ namespace NFinance.Tests.Application
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
-            _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
-            var services = InicializaApplication();
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.ResgateMensal(idCliente);
+            var response = await Repositorys.ResgateMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Resgates);
@@ -823,7 +823,7 @@ namespace NFinance.Tests.Application
         }
 
         [Fact]
-        public async Task TelaInicialService_ResgateMensal_Com_DataFutura()
+        public async Task TelaInicialRepository_ResgateMensal_Com_DataFutura()
         {
             //Arrange
             var idCliente = Guid.NewGuid();
@@ -838,11 +838,11 @@ namespace NFinance.Tests.Application
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
-            _resgateService.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
-            var services = InicializaApplication();
+            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            var Repositorys = InicializaApplication();
 
             //Act
-            var response = await services.ResgateMensal(idCliente);
+            var response = await Repositorys.ResgateMensal(idCliente);
 
             //Assert
             Assert.Empty(response.Resgates);

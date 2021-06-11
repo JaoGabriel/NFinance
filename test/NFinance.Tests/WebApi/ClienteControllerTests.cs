@@ -2,14 +2,13 @@
 using System;
 using NSubstitute;
 using NFinance.Domain;
-using NFinance.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
-using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.ClientesViewModel;
+using NFinance.Application;
 
 namespace NFinance.Tests.WebApi
 {
@@ -17,18 +16,18 @@ namespace NFinance.Tests.WebApi
     {
         private readonly IClienteApp _clienteApp;
         private readonly ILogger<ClienteController> _logger;
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
 
         public ClienteControllerTests()
         {
             _clienteApp = Substitute.For<IClienteApp>();
-            _autenticacaoService = Substitute.For<IAutenticacaoService>();
+            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
             _logger = Substitute.For<ILogger<ClienteController>>();
         }
 
         private ClienteController InicializarClienteController()
         {
-            return new ClienteController(_logger, _clienteApp,_autenticacaoService);
+            return new ClienteController(_logger, _clienteApp,_autenticacaoApp);
         }
 
         public Cliente GeraCliente()
@@ -66,7 +65,7 @@ namespace NFinance.Tests.WebApi
             var cliente = GeraCliente();
             _clienteApp.ConsultaCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response(cliente));
             var controller = InicializarClienteController();
-            var token = TokenService.GerarToken(cliente);
+            var token = TokenApp.GerarToken(cliente);
 
             //Act
             var teste = controller.ConsultarCliente(token,cliente.Id);
@@ -91,7 +90,7 @@ namespace NFinance.Tests.WebApi
                 .Returns(new AtualizarClienteViewModel.Response(cliente));
             var clienteRequest = new AtualizarClienteViewModel.Request(cliente);
             var controller = InicializarClienteController();
-            var token = TokenService.GerarToken(cliente);
+            var token = TokenApp.GerarToken(cliente);
 
             //Act
             var teste = controller.AtualizarCliente(token,cliente.Id, clienteRequest);

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -22,8 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NFinance.Domain\NFinance.Domain.csproj" />
-    <ProjectReference Include="..\..\src\NFinance.Infra\NFinance.Infra.csproj" />
     <ProjectReference Include="..\..\src\NFinance.WebApi\NFinance.WebApi.csproj" />
   </ItemGroup>
 

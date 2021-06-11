@@ -1,7 +1,7 @@
+using NFinance.Domain;
 using ServiceStack.Redis;
 using Microsoft.Extensions.Configuration;
 using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain;
 
 namespace NFinance.Infra.Repository
 {

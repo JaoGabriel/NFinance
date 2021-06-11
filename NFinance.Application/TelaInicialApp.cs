@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using NFinance.Domain.Exceptions;
 using System.Collections.Generic;
 using NFinance.Application.Interfaces;
-using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Application.ViewModel.GastosViewModel;
 using NFinance.Application.ViewModel.ResgatesViewModel;
@@ -16,26 +16,26 @@ namespace NFinance.Application
 {
     public class TelaInicialApp : ITelaInicialApp
     {
-        private readonly IGanhoService _ganhoService;
-        private readonly IInvestimentoService _investimentoService;
-        private readonly IGastoService _gastoService;
-        private readonly IResgateService _resgateService;
-        private readonly IClienteService _clienteService;
+        private readonly IGanhoRepository _ganhoRepository;
+        private readonly IInvestimentoRepository _investimentoRepository;
+        private readonly IGastoRepository _gastoRepository;
+        private readonly IResgateRepository _resgateRepository;
+        private readonly IClienteRepository _clienteRepository;
 
-        public TelaInicialApp(IGanhoService ganhoService, IInvestimentoService investimentoService, IGastoService gastoService, IResgateService resgateService, IClienteService clienteService)
+        public TelaInicialApp(IGanhoRepository ganhoRepository, IInvestimentoRepository investimentoRepository, IGastoRepository gastoRepository, IResgateRepository resgateRepository, IClienteRepository clienteRepository)
         {
-            _ganhoService = ganhoService;
-            _investimentoService = investimentoService;
-            _gastoService = gastoService;
-            _resgateService = resgateService;
-            _clienteService = clienteService;
+            _ganhoRepository = ganhoRepository;
+            _investimentoRepository = investimentoRepository;
+            _gastoRepository = gastoRepository;
+            _resgateRepository = resgateRepository;
+            _clienteRepository = clienteRepository;
         }
 
         public async Task<TelaInicialViewModel> TelaInicial(Guid idCliente)
         {
             if (Guid.Empty.Equals(idCliente)) throw new IdException("Id cliente invalido");
 
-            var cliente = await _clienteService.ConsultarCliente(idCliente);
+            var cliente = await _clienteRepository.ConsultarCliente(idCliente);
             var ganhoMensal = await GanhoMensal(idCliente);
             var gastoMensal = await GastoMensal(idCliente);
             var investimentoMensal = await InvestimentoMensal(idCliente);
@@ -51,7 +51,7 @@ namespace NFinance.Application
         public async Task<GanhoMensalViewModel> GanhoMensal(Guid idCliente)
         {
 
-            var ganhos = await _ganhoService.ConsultarGanhos(idCliente);
+            var ganhos = await _ganhoRepository.ConsultarGanhos(idCliente);
             var listGanho = new List<GanhoViewModel>();
             foreach (var ganho in ganhos)
                 if (ValidaGanho(ganho))
@@ -67,7 +67,7 @@ namespace NFinance.Application
 
         public async Task<GastoMensalViewModel> GastoMensal(Guid idCliente)
         {
-            var gastos = await _gastoService.ConsultarGastos(idCliente);
+            var gastos = await _gastoRepository.ConsultarGastos(idCliente);
             var listGastos = new List<GastoViewModel>();
 
             foreach (var gasto in gastos)
@@ -79,7 +79,7 @@ namespace NFinance.Application
                         if (ValidaProximoMes(DateTime.Today))
                         {
                             gasto.QuantidadeParcelas -= 1;
-                            await _gastoService.AtualizarGasto(gasto);
+                            await _gastoRepository.AtualizarGasto(gasto);
                         }
                         gasto.Valor /= gasto.QuantidadeParcelas;
                         vm.Valor = gasto.Valor;
@@ -95,7 +95,7 @@ namespace NFinance.Application
 
         public async Task<InvestimentoMensalViewModel> InvestimentoMensal(Guid idCliente)
         {
-            var investimentos = await _investimentoService.ConsultarInvestimentos(idCliente);
+            var investimentos = await _investimentoRepository.ConsultarInvestimentos(idCliente);
             var listInvestimentos = new List<InvestimentoViewModel>();
 
             foreach (var investimento in investimentos)
@@ -112,7 +112,7 @@ namespace NFinance.Application
 
         public async Task<ResgateMensalViewModel> ResgateMensal(Guid idCliente)
         {
-            var resgates = await _resgateService.ConsultarResgates(idCliente);
+            var resgates = await _resgateRepository.ConsultarResgates(idCliente);
             var listResgates = new List<ResgateViewModel>();
 
             foreach (var resgate in resgates)
@@ -164,6 +164,5 @@ namespace NFinance.Application
 
             return false;
         }
-
     }
 }

@@ -1,40 +1,39 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Xunit;
+using System.Linq;
+using NSubstitute;
+using NFinance.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Application.ViewModel.GastosViewModel;
-using NFinance.Application.ViewModel.InvestimentosViewModel;
 using NFinance.Application.ViewModel.ResgatesViewModel;
 using NFinance.Application.ViewModel.TelaInicialViewModel;
-using NFinance.Domain;
-using NFinance.Domain.Interfaces.Services;
-using NFinance.Domain.Services;
-using NFinance.WebApi.Controllers;
-using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
+using NFinance.Application.ViewModel.InvestimentosViewModel;
+using NFinance.Application;
 
 namespace NFinance.Tests.WebApi
 {
     public class TelaInicialControllerTests
     {
         private readonly ITelaInicialApp _telaInicialApp;
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<TelaInicialController> _logger;
 
         public TelaInicialControllerTests()
         {
             _telaInicialApp = Substitute.For<ITelaInicialApp>();
-            _autenticacaoService = Substitute.For<IAutenticacaoService>();
+            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
             _logger = Substitute.For<ILogger<TelaInicialController>>();
         }
 
         private TelaInicialController InicializarLoginController()
         {
-            return new TelaInicialController(_logger, _telaInicialApp,_autenticacaoService);
+            return new TelaInicialController(_logger, _telaInicialApp,_autenticacaoApp);
         }
 
         private static Cliente GeraCliente()
@@ -83,7 +82,7 @@ namespace NFinance.Tests.WebApi
             var telaInicialViewModelR = new TelaInicialViewModel(cliente,ganhoMensal,gastoMensal,investimentoMensal,resgateMensal,4000M);
             var controller = InicializarLoginController();
             _telaInicialApp.TelaInicial(Arg.Any<Guid>()).Returns(telaInicialViewModelR);
-            var token = TokenService.GerarToken(cliente);
+            var token = TokenApp.GerarToken(cliente);
 
             //Act
             var teste = controller.TelaInicial(token,cliente.Id);

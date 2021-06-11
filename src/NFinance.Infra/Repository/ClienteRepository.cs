@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Text;
 using System.Linq;
 using NFinance.Domain;
-using System.Globalization;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using NFinance.Domain.Interfaces.Repository;
 
@@ -53,15 +50,11 @@ namespace NFinance.Infra.Repository
             return response;
         }
 
-        public async Task<Cliente> CadastrarLogoutToken(Cliente cliente,string token)
+        public async Task CadastrarLogoutToken(Cliente cliente)
         {
             var clienteToken = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == cliente.Id);
             _context.Entry(clienteToken).CurrentValues.SetValues(cliente);
-            await UnitOfWork.Commit();
-            
-            return cliente;
+            await UnitOfWork.Commit(); 
         }
-
-        
     }
 }

@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
 using NFinance.Domain;
-using NFinance.Domain.Interfaces.Repository;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using NFinance.Domain.Interfaces.Repository;
 
 namespace NFinance.Infra
 {

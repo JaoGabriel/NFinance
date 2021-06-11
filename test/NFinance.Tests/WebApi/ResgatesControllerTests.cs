@@ -3,33 +3,32 @@ using System;
 using NSubstitute;
 using NFinance.Domain;
 using Microsoft.AspNetCore.Mvc;
-using NFinance.Domain.Services;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
-using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.ResgatesViewModel;
+using NFinance.Application;
 
 namespace NFinance.Tests.WebApi
 {
     public class ResgatesControllerTests
     {
         private readonly IResgateApp _resgateApp;
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<ResgateController> _logger;
 
         public ResgatesControllerTests()
         {
             _resgateApp = Substitute.For<IResgateApp>();
-            _autenticacaoService = Substitute.For<IAutenticacaoService>();
+            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
             _logger = Substitute.For<ILogger<ResgateController>>();
         }
 
         private ResgateController InicializarResgateController()
         {
-            return new ResgateController(_logger, _resgateApp, _autenticacaoService);
+            return new ResgateController(_logger, _resgateApp, _autenticacaoApp);
         }
 
         public static Resgate GeraResgate()
@@ -49,7 +48,7 @@ namespace NFinance.Tests.WebApi
             _resgateApp.RealizarResgate(Arg.Any<RealizarResgateViewModel.Request>()).Returns(new RealizarResgateViewModel.Response(resgate));
             var controller = InicializarResgateController();
             var resgateRequest = new RealizarResgateViewModel.Request();
-            var token = TokenService.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraCliente());
             
             //Act
             var teste = controller.RealizarResgate(token, resgateRequest);
@@ -75,7 +74,7 @@ namespace NFinance.Tests.WebApi
             var controller = InicializarResgateController();
 
             //Act
-            var token = TokenService.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraCliente());
             var teste = controller.ConsultarResgate(token,resgate.Id);
             var okResult = teste.Result as ObjectResult;
             var consultarResgateViewModel = Assert.IsType<ConsultarResgateViewModel.Response>(okResult.Value);
@@ -122,7 +121,7 @@ namespace NFinance.Tests.WebApi
             var listarResgates = new ConsultarResgatesViewModel.Response(listaResgate);
             _resgateApp.ConsultarResgates(Arg.Any<Guid>()).Returns(listarResgates);
             var controller = InicializarResgateController();
-            var token = TokenService.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraCliente());
 
             //Act
             var teste = controller.ConsultarResgates(token,idInvestimento);

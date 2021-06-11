@@ -1,15 +1,16 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
+using System.Text;
+using NFinance.Domain;
+using System.Security.Claims;
 using System.Collections.Generic;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
-namespace NFinance.Domain.Services
+namespace NFinance.Application
 {
     [ExcludeFromCodeCoverage]
-    public static class TokenService
+    public static class TokenApp
     {
         private readonly static string _key = "d53b997993b723080a619e8e5f575abf90df5c3c3fb332bd3cf3129f5057202f";
         public static string GerarToken(Cliente cliente)

@@ -1,17 +1,15 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using NFinance.Application;
-using NFinance.Domain;
-using NFinance.Infra;
 using NSwag;
+using System.Text;
+using System.Linq;
+using NFinance.Infra;
+using NFinance.Application;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
 using NSwag.Generation.Processors.Security;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace NFinance.WebApi
 {
@@ -46,7 +44,6 @@ namespace NFinance.WebApi
                 c.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
             services.AddInfraDataSqlServices(Configuration);
-            services.AddDomainServices(Configuration);
             services.AddApplicationServices();
 
             services.AddControllers();
@@ -72,7 +69,7 @@ namespace NFinance.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseOpenApi(c => c.DocumentName = "Nfinance.WebApi");
             app.UseSwaggerUi3();

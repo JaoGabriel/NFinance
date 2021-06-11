@@ -1,28 +1,29 @@
 ﻿using System;
-using System.Globalization;
-using System.Security.Cryptography;
 using System.Text;
 using NFinance.Domain;
+using System.Globalization;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 using NFinance.Application.Interfaces;
-using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Interfaces.Repository;
+using NFinance.Domain.Exceptions.Autenticacao;
 using NFinance.Application.ViewModel.ClientesViewModel;
 
 namespace NFinance.Application
 {
     public class ClienteApp : IClienteApp
     {
-        private readonly IClienteService _clienteService;
+        private readonly IClienteRepository _clienteRepository;
 
-        public ClienteApp(IClienteService clienteService)
+        public ClienteApp(IClienteRepository clienteRepository)
         {
-            _clienteService = clienteService;
+            _clienteRepository = clienteRepository;
         }
 
         public async Task<AtualizarClienteViewModel.Response> AtualizarCliente(Guid id,AtualizarClienteViewModel.Request request)
         {
             var dadosClienteAtualizados = new Cliente(id,request.Nome,request.Cpf,request.Email,HashValue(request.Senha),null);
-            var clienteAtualizado = await _clienteService.AtualizarCliente(dadosClienteAtualizados);
+            var clienteAtualizado = await _clienteRepository.AtualizarCliente(dadosClienteAtualizados);
             var resposta = new AtualizarClienteViewModel.Response(clienteAtualizado);
             return resposta;
         }
@@ -30,18 +31,33 @@ namespace NFinance.Application
         public async Task<CadastrarClienteViewModel.Response> CadastrarCliente(CadastrarClienteViewModel.Request request)
         {
             var clienteNovo = new Cliente(request.Nome, request.Cpf, request.Email, HashValue(request.Senha));
-            var clienteCadastrado = await _clienteService.CadastrarCliente(clienteNovo);
+            var clienteCadastrado = await _clienteRepository.CadastrarCliente(clienteNovo);
             var resposta = new CadastrarClienteViewModel.Response(clienteCadastrado);
             return resposta;
         }
 
         public async Task<ConsultarClienteViewModel.Response> ConsultaCliente(Guid id)
         {
-            var clienteAtualizado = await _clienteService.ConsultarCliente(id);
+            var clienteAtualizado = await _clienteRepository.ConsultarCliente(id);
             var resposta = new ConsultarClienteViewModel.Response(clienteAtualizado);
             return resposta;
         }
-        
+
+        public async Task<Cliente> ConsultarCredenciaisLogin(string email, string senha)
+        {
+            var cliente = await _clienteRepository.ConsultarCredenciaisLogin(email, senha);
+
+            if (cliente != null)
+                return cliente;
+            else
+                throw new LoginException("Cliente não encontrado!");
+        }
+
+        public async Task CadastrarLogoutToken(Cliente cliente)
+        {
+            await _clienteRepository.CadastrarLogoutToken(cliente);
+        }
+
         private static string HashValue(string value)
         {
             var encoding = new UnicodeEncoding();

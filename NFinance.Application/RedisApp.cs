@@ -1,13 +1,16 @@
 using System;
+using NFinance.Domain;
+using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Exceptions.Autenticacao;
 
-namespace NFinance.Domain.Interfaces.Services
+namespace NFinance.Application
 {
-    public class RedisService : IRedisService
+    public class RedisApp : IRedisApp
     {
         private readonly IRedisRepository _redisRepository;
-        public RedisService(IRedisRepository redisRepository)
+        
+        public RedisApp(IRedisRepository redisRepository)
         {
             _redisRepository = redisRepository;
         }

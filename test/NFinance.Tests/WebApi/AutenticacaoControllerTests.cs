@@ -1,13 +1,13 @@
 ﻿using Xunit;
 using NSubstitute;
 using NFinance.Domain;
-using NFinance.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
+using NFinance.Application;
 
 namespace NFinance.Tests.WebApi
 {
@@ -58,7 +58,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var cliente = GeraCliente();
-            var token = TokenService.GerarToken(cliente);
+            var token = TokenApp.GerarToken(cliente);
             var logoutVm = new LogoutViewModel(cliente.Id);
             var controller = InicializarAutenticacaoController();
             _autenticacaoApp.EfetuarLogoff(Arg.Any<LogoutViewModel>()).Returns(new LogoutViewModel.Response("Realizado com sucesso",true));

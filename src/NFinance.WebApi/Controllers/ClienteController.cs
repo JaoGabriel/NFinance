@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using NFinance.Domain.Interfaces.Services;
 using NFinance.Application.ViewModel.ClientesViewModel;
 
 namespace NFinance.WebApi.Controllers
@@ -15,14 +14,14 @@ namespace NFinance.WebApi.Controllers
     public class ClienteController : ControllerBase
     {
         private readonly IClienteApp _clienteApp;
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<ClienteController> _logger;
 
-        public ClienteController(ILogger<ClienteController> logger, IClienteApp clienteApp, IAutenticacaoService AutenticacaoService)
+        public ClienteController(ILogger<ClienteController> logger, IClienteApp clienteApp, IAutenticacaoApp AutenticacaoApp)
         {
             _logger = logger;
             _clienteApp = clienteApp;
-            _autenticacaoService = AutenticacaoService;
+            _autenticacaoApp = AutenticacaoApp;
         }
 
         [HttpGet("Cliente/Consultar/{id}")]
@@ -33,7 +32,7 @@ namespace NFinance.WebApi.Controllers
         {
 
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var cliente = await _clienteApp.ConsultaCliente(id);
             _logger.LogInformation("Clientes Encontrado Com Sucesso!");
@@ -58,7 +57,7 @@ namespace NFinance.WebApi.Controllers
         public async Task<IActionResult> AtualizarCliente([FromHeader] string authorization, Guid id, AtualizarClienteViewModel.Request request)
         {
             _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoService.ValidaTokenRequest(authorization);
+            await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
             var response = await _clienteApp.AtualizarCliente(id, request);
             _logger.LogInformation("Cliente Atualizado Com Sucesso!");

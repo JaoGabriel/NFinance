@@ -6,6 +6,8 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
     {
         public class Response : ClienteViewModel
         {
+            public string LogoutToken { get; set; }
+
             public Response(Cliente cliente) : base(cliente)
             {
             }

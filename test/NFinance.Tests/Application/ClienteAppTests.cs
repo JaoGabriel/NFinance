@@ -6,14 +6,14 @@ using NFinance.Application;
 using System.Threading.Tasks;
 using NFinance.Domain.Exceptions;
 using NFinance.Domain.Exceptions.Cliente;
-using NFinance.Domain.Interfaces.Services;
+using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.ClientesViewModel;
 
 namespace NFinance.Tests.Application
 {
     public class ClienteAppTests
     {
-        private readonly IClienteService _clienteService;
+        private readonly IClienteRepository _clienteRepository;
         private readonly string _cpf = "12345678910";
         private readonly string _email = "teste@teste.com";
         private readonly string _nome = "joaquin da zils";
@@ -21,12 +21,12 @@ namespace NFinance.Tests.Application
 
         public ClienteAppTests()
         {
-            _clienteService = Substitute.For<IClienteService>();
+            _clienteRepository = Substitute.For<IClienteRepository>();
         }
 
         public ClienteApp IniciaApplication()
         {
-            return new ClienteApp(_clienteService);
+            return new ClienteApp(_clienteRepository);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,_cpf,_email,_senha);
             var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -59,7 +59,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(nome,_cpf,_email,_senha);
             var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -75,7 +75,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,cpf,_email,_senha);
             var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -91,7 +91,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,_cpf,email,_senha);
             var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -107,7 +107,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,_cpf,_email,senha);
             var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteService.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -120,7 +120,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,_cpf,_email,_senha);
             var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteService.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -141,7 +141,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(Guid.Empty, _nome,_cpf,_email,_senha);
             var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteService.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Assert
@@ -157,7 +157,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(nome,_cpf,_email,_senha);
             var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteService.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -173,7 +173,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,cpf,_email,_senha);
             var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteService.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -189,7 +189,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,_cpf,email,_senha);
             var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteService.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -205,7 +205,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,_cpf,_email,senha);
             var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteService.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -217,7 +217,7 @@ namespace NFinance.Tests.Application
         {
             //Arrage
             var cliente = new Cliente(_nome,_cpf,_email,_senha);
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
+            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
             var app = IniciaApplication();
             
             //Act
@@ -237,7 +237,7 @@ namespace NFinance.Tests.Application
         {
             //Arrage
             var cliente = new Cliente(Guid.Empty,_nome,_cpf,_email,_senha);
-            _clienteService.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
+            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
             var app = IniciaApplication();
             
             //Assert
