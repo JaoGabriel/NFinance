@@ -5,35 +5,16 @@ namespace NFinance.Application.ViewModel.GanhoViewModel
 {
     public class CadastrarGanhoViewModel
     {
-        public class Request
+        public class Request : GanhoViewModel
         {
-            public Guid IdCliente { get; set; }
+            public Request() { }
 
-            public string NomeGanho { get; set; }
-
-            public decimal Valor { get; set; }
-
-            public bool Recorrente { get; set; }
-
-            public DateTime DataDoGanho { get; set; }
-
-            public Request(){ }
-
-            public Request(Ganho ganho)
-            {
-                IdCliente = ganho.IdCliente;
-                NomeGanho = ganho.NomeGanho;
-                Valor = ganho.Valor;
-                Recorrente = ganho.Recorrente;
-                DataDoGanho = ganho.DataDoGanho;
-            }
+            public Request(Ganho ganho) : base(ganho) { }
         }
 
         public class Response : GanhoViewModel
         {
-            public Response(Ganho ganho) : base(ganho)
-            {
-            }
+            public Response(Ganho ganho) : base(ganho) { }
         }
     }
 }

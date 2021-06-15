@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using NFinance.Domain.Exceptions;
+using NFinance.Domain.Exceptions.Ganho;
 
 namespace NFinance.Domain
 {
     public class Ganho
     {
-
         [Key] 
         [Required] 
         public Guid Id { get; set; }
@@ -34,6 +35,8 @@ namespace NFinance.Domain
 
         public Ganho(Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
         {
+            ValidaCadastroGanho(idCliente,nomeGanho,valor,dataDoGanho);
+            
             Id = Guid.NewGuid();
             IdCliente = idCliente;
             NomeGanho = nomeGanho;
@@ -44,12 +47,47 @@ namespace NFinance.Domain
 
         public Ganho(Guid id, Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
         {
+            ValidaGanho(id,idCliente,nomeGanho,valor,dataDoGanho);
+            
             Id = id;
             IdCliente = idCliente;
             NomeGanho = nomeGanho;
             Valor = valor;
             Recorrente = recorrente;
             DataDoGanho = dataDoGanho;
+        }
+
+        private static void ValidaCadastroGanho(Guid idCliente, string nomeGanho, decimal valor, DateTime dataDoGanho)
+        {
+            if (Guid.Empty.Equals(idCliente)) 
+                throw new IdException();
+            
+            if (string.IsNullOrWhiteSpace(nomeGanho)) 
+                throw new NomeGanhoException();
+            
+            if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
+                throw new ValorGanhoException();
+
+            if (dataDoGanho < DateTime.MinValue.AddYears(1949) || dataDoGanho > DateTime.MaxValue.AddYears(-7899))
+                throw new DataGanhoException();
+        }
+        
+        private static void ValidaGanho(Guid id,Guid idCliente, string nomeGanho, decimal valor, DateTime dataDoGanho)
+        {
+            if (Guid.Empty.Equals(id)) 
+                throw new IdException();
+            
+            if (Guid.Empty.Equals(idCliente)) 
+                throw new IdException();
+            
+            if (string.IsNullOrWhiteSpace(nomeGanho)) 
+                throw new NomeGanhoException();
+            
+            if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
+                throw new ValorGanhoException();
+
+            if (dataDoGanho < DateTime.MinValue || dataDoGanho > DateTime.MaxValue)
+                throw new DataGanhoException();
         }
     }
 }

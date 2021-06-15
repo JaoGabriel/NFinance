@@ -69,24 +69,41 @@ namespace NFinance.Domain
 
         private static void ValidaCadastroCliente(string nome, string cpf, string email, string senha)
         {
-            if (string.IsNullOrWhiteSpace(nome)) throw new NomeClienteException();
-            if (string.IsNullOrWhiteSpace(cpf)) throw new CpfClienteException();
-            if (string.IsNullOrWhiteSpace(email)) throw new EmailClienteException();
-            if (string.IsNullOrWhiteSpace(senha)) throw new SenhaClienteException();
+            if (string.IsNullOrWhiteSpace(nome)) 
+                throw new NomeClienteException();
+            
+            if (string.IsNullOrWhiteSpace(cpf)) 
+                throw new CpfClienteException();
+           
+            if (string.IsNullOrWhiteSpace(email)) 
+                throw new EmailClienteException();
+           
+            if (string.IsNullOrWhiteSpace(senha)) 
+                throw new SenhaClienteException();
         }
         
         private static void ValidaCliente(Guid id, string nome, string cpf, string email, string senha)
         {
-            if (Guid.Empty.Equals(id)) throw new IdException();
-            if (string.IsNullOrWhiteSpace(nome)) throw new NomeClienteException();
-            if (string.IsNullOrWhiteSpace(cpf)) throw new CpfClienteException();
-            if (string.IsNullOrWhiteSpace(email)) throw new EmailClienteException();
-            if (string.IsNullOrWhiteSpace(senha)) throw new SenhaClienteException();
+            if (Guid.Empty.Equals(id)) 
+                throw new IdException();
+            
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new NomeClienteException();
+            
+            if (string.IsNullOrWhiteSpace(cpf)) 
+                throw new CpfClienteException();
+            
+            if (string.IsNullOrWhiteSpace(email)) 
+                throw new EmailClienteException();
+            
+            if (string.IsNullOrWhiteSpace(senha))
+                throw new SenhaClienteException();
         }
 
         private static void ValidaLogoutToken(string token)
         {
-            if (string.IsNullOrWhiteSpace(token)) throw new LogoutTokenException();
+            if (string.IsNullOrWhiteSpace(token)) 
+                throw new LogoutTokenException();
         }
     }
 }

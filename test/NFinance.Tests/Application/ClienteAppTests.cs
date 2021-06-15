@@ -13,10 +13,11 @@ namespace NFinance.Tests.Application
 {
     public class ClienteAppTests
     {
-        private readonly IClienteRepository _clienteRepository;
+        private readonly IClienteRepository _clienteRepository; 
+        private readonly Guid _id = Guid.NewGuid();
+        private readonly string _nome = "joaquin da zils";
         private readonly string _cpf = "12345678910";
         private readonly string _email = "teste@teste.com";
-        private readonly string _nome = "joaquin da zils";
         private readonly string _senha = "12391ukla";
 
         public ClienteAppTests()
@@ -26,7 +27,7 @@ namespace NFinance.Tests.Application
 
         public ClienteApp IniciaApplication()
         {
-            return new ClienteApp(_clienteRepository);
+            return new(_clienteRepository);
         }
 
         [Fact]
@@ -34,12 +35,12 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var cliente = new Cliente(_nome,_cpf,_email,_senha);
-            var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
+            var cadastroClienteVm = new CadastrarClienteViewModel.Request(cliente);
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
-            var response = await app.CadastrarCliente(cadastroClienteVM);
+            var response = await app.CadastrarCliente(cadastroClienteVm);
 
             //Assert
             Assert.NotNull(response);
@@ -57,13 +58,11 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_CadastroCliente_ComNome_Invalido(string nome)
         {
             //Arrange
-            var cliente = new Cliente(nome,_cpf,_email,_senha);
-            var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var cadastroClienteVm = new CadastrarClienteViewModel.Request { Id = _id,Nome = nome, Cpf = _cpf,Email = _email, Senha = _senha };
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<NomeClienteException>(() => app.CadastrarCliente(cadastroClienteVM));
+            await Assert.ThrowsAsync<NomeClienteException>(() => app.CadastrarCliente(cadastroClienteVm));
         }
         
         [Theory]
@@ -73,9 +72,7 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_CadastroCliente_ComCPF_Invalido(string cpf)
         {
             //Arrange
-            var cliente = new Cliente(_nome,cpf,_email,_senha);
-            var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var cadastroClienteVM = new CadastrarClienteViewModel.Request { Id = _id,Nome = _nome, Cpf = cpf,Email = _email, Senha = _senha };
             var app = IniciaApplication();
 
             //Act
@@ -89,9 +86,7 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_CadastroCliente_ComEmail_Invalido(string email)
         {
             //Arrange
-            var cliente = new Cliente(_nome,_cpf,email,_senha);
-            var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var cadastroClienteVM = new CadastrarClienteViewModel.Request { Id = _id,Nome = _nome, Cpf = _cpf,Email = email, Senha = _senha };
             var app = IniciaApplication();
 
             //Act
@@ -105,9 +100,7 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_CadastroCliente_ComSenha_Invalida(string senha)
         {
             //Arrange
-            var cliente = new Cliente(_nome,_cpf,_email,senha);
-            var cadastroClienteVM = new CadastrarClienteViewModel.Request(cliente);
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var cadastroClienteVM = new CadastrarClienteViewModel.Request { Id = _id,Nome = _nome, Cpf = _cpf,Email = _email, Senha = senha };
             var app = IniciaApplication();
 
             //Act
@@ -139,13 +132,11 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_AtualizarCliente_ComIdCliente_Invalido()
         {
             //Arrange
-            var cliente = new Cliente(Guid.Empty, _nome,_cpf,_email,_senha);
-            var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var atualizarClienteVM = new AtualizarClienteViewModel.Request { Id = Guid.Empty,Nome = _nome, Cpf = _cpf,Email = _email, Senha = _senha };
             var app = IniciaApplication();
 
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => app.AtualizarCliente(cliente.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<IdException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
         }
         
         [Theory]
@@ -155,13 +146,11 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_AtualizarCliente_ComNome_Invalido(string nome)
         {
             //Arrange
-            var cliente = new Cliente(nome,_cpf,_email,_senha);
-            var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var atualizarClienteVM = new AtualizarClienteViewModel.Request { Id = _id,Nome = nome, Cpf = _cpf,Email = _email, Senha = _senha };
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<NomeClienteException>(() => app.AtualizarCliente(cliente.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<NomeClienteException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
         }
         
         [Theory]
@@ -171,13 +160,11 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_AtualizarCliente_ComCPF_Invalido(string cpf)
         {
             //Arrange
-            var cliente = new Cliente(_nome,cpf,_email,_senha);
-            var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var atualizarClienteVM = new AtualizarClienteViewModel.Request { Id = _id,Nome = _nome, Cpf = cpf,Email = _email, Senha = _senha };
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<CpfClienteException>(() => app.AtualizarCliente(cliente.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<CpfClienteException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
         }
         
         [Theory]
@@ -187,13 +174,11 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_AtualizarCliente_ComEmail_Invalido(string email)
         {
             //Arrange
-            var cliente = new Cliente(_nome,_cpf,email,_senha);
-            var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var atualizarClienteVM = new AtualizarClienteViewModel.Request { Id = _id,Nome = _nome, Cpf = _cpf,Email = email, Senha = _senha };
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<EmailClienteException>(() => app.AtualizarCliente(cliente.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<EmailClienteException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
         }
         
         [Theory]
@@ -203,13 +188,11 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_AtualizarCliente_ComSenha_Invalida(string senha)
         {
             //Arrange
-            var cliente = new Cliente(_nome,_cpf,_email,senha);
-            var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            var atualizarClienteVM = new AtualizarClienteViewModel.Request { Id = _id,Nome = _nome, Cpf = _cpf,Email = _email, Senha = senha };
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<SenhaClienteException>(() => app.AtualizarCliente(cliente.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<SenhaClienteException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
         }
 
         [Fact]
@@ -236,12 +219,10 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_ConsultaCliente_ComId_Invalido()
         {
             //Arrage
-            var cliente = new Cliente(Guid.Empty,_nome,_cpf,_email,_senha);
-            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => app.ConsultaCliente(cliente.Id));
+            await Assert.ThrowsAsync<IdException>(() => app.ConsultaCliente(Guid.Empty));
         }
     }
 }

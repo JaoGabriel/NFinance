@@ -6,6 +6,7 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
     {
         public class Request : ClienteViewModel
         {
+            public Request() { }
             public Request(Cliente cliente) : base(cliente) { }
         }
 
