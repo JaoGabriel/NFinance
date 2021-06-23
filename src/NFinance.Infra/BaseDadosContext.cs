@@ -1,12 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NFinance.Domain;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NFinance.Domain.Interfaces.Repository;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Infra
 {
-    public class BaseDadosContext : DbContext, IUnitOfWork
+    public class BaseDadosContext : IdentityDbContext<Usuario,Role,Guid>, IUnitOfWork
     {
         public BaseDadosContext(DbContextOptions<BaseDadosContext> options) : base(options){}
 
@@ -18,6 +21,8 @@ namespace NFinance.Infra
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+                
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(decimal))))
             {
@@ -25,7 +30,8 @@ namespace NFinance.Infra
                 property.SetPrecision(38);
                 property.SetDefaultValue(0);
             }
-
+            
+            
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BaseDadosContext).Assembly);
         }
 
