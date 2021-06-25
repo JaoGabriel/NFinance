@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.GanhoViewModel;
+using NFinance.Domain.Exceptions;
 
 namespace NFinance.Application
 {
@@ -34,6 +35,7 @@ namespace NFinance.Application
 
         public async Task<ConsultarGanhoViewModel.Response> ConsultarGanho(Guid idGanho)
         {
+            ValidaId(idGanho);
             var ganhoConsultado = await _ganhoRepository.ConsultarGanho(idGanho);
             var resposta = new ConsultarGanhoViewModel.Response(ganhoConsultado);
             return resposta;
@@ -41,6 +43,7 @@ namespace NFinance.Application
 
         public async Task<ConsultarGanhosViewModel.Response> ConsultarGanhos(Guid idCliente)
         {
+            ValidaId(idCliente);
             var ganhosConsultados = await _ganhoRepository.ConsultarGanhos(idCliente);
             var resposta = new ConsultarGanhosViewModel.Response(ganhosConsultados);
             return resposta;
@@ -52,6 +55,12 @@ namespace NFinance.Application
             var ganhoCadastrado = await _ganhoRepository.ExcluirGanho(request.IdGanho);
             var resposta = new ExcluirGanhoViewModel.Response(ganhoCadastrado);
             return resposta;
+        }
+
+        private static void ValidaId(Guid id)
+        {
+            if (Guid.Empty.Equals(id)) 
+                throw new IdException();
         }
     }
 }

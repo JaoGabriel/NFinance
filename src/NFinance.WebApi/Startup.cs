@@ -38,7 +38,7 @@ namespace NFinance.WebApi
                     Type = OpenApiSecuritySchemeType.ApiKey,
                     Name = "Authorization",
                     In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
+                    Description = "Insira aqui o token: Bearer {seu JWT token}."
                 });
 
                 c.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));

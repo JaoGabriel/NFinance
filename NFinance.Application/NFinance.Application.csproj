@@ -6,12 +6,15 @@
 
   <ItemGroup>
     <PackageReference Include="Cronos" Version="0.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.6" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\NFinance.Domain\NFinance.Domain.csproj" />
+    <ProjectReference Include="..\src\NFinance.Infra\NFinance.Infra.csproj" />
   </ItemGroup>
 
 </Project>

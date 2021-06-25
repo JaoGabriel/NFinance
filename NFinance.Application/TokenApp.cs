@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Application
 {
@@ -13,19 +14,19 @@ namespace NFinance.Application
     public static class TokenApp
     {
         private readonly static string _key = "d53b997993b723080a619e8e5f575abf90df5c3c3fb332bd3cf3129f5057202f";
-        public static string GerarToken(Cliente cliente)
+        public static string GerarToken(Usuario usuario)
         {
-            if (cliente == null) throw new ArgumentException("Usuario ou Senha Invalidos!");
+            if (usuario == null) throw new ArgumentException("Ocorreu um erro ao efetuar o login!");
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_key);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Hash, cliente.Id.ToString()),
-                    new Claim(ClaimTypes.Name, cliente.Nome),
-                    new Claim(ClaimTypes.Email, cliente.Email)
+                    new Claim(ClaimTypes.Hash, usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.UserName),
+                    new Claim(ClaimTypes.Email, usuario.Email)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

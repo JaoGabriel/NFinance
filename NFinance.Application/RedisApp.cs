@@ -3,6 +3,7 @@ using NFinance.Domain;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Exceptions.Autenticacao;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Application
 {
@@ -15,11 +16,11 @@ namespace NFinance.Application
             _redisRepository = redisRepository;
         }
 
-        public bool IncluiValorCache(Cliente cliente)
+        public bool IncluiValorCache(Usuario usuario)
         {
-            if (cliente == null) throw new Exception($"Nao é possivel incluir {cliente}");
+            if (usuario == null) throw new Exception($"Nao é possivel incluir {usuario.UserName}");
 
-            var resultadoInclusao = _redisRepository.IncluiValorCache(cliente);
+            var resultadoInclusao = _redisRepository.IncluiValorCache(usuario);
 
             if (!resultadoInclusao)
                 throw new LoginException("Falha ao efetuar o login, tente novamente em instantes!");

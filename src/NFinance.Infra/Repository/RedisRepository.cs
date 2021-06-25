@@ -24,13 +24,12 @@ namespace NFinance.Infra.Repository
         {
             var redis = _cliente.Set(cliente.Id.ToString(), cliente);
             
-            if(redis)
-                return true;
-            else
+            if(redis is false)
                 return false;
-
+            
+            return true;
         }
-
+        
         public bool RemoverValorCache(string chave)
         {
             var retorno = _cliente.Remove(chave);

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using NFinance.Domain.Exceptions;
 using NFinance.Domain.Exceptions.Ganho;
+using NFinance.Domain.Exceptions.Gasto;
 
 namespace NFinance.Domain
 {
@@ -31,6 +32,8 @@ namespace NFinance.Domain
         [Range(typeof(DateTime), "01/01/1950", "31/12/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataDoGanho { get; set; }
 
+        public string MotivoExclusao { get; set; }
+
         public Ganho() {}
 
         public Ganho(Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
@@ -55,6 +58,15 @@ namespace NFinance.Domain
             Valor = valor;
             Recorrente = recorrente;
             DataDoGanho = dataDoGanho;
+        }
+        
+        public Ganho(Guid id, Guid idCliente, string motivoExclusao)
+        {
+            ValidaExclusaoGanho(id,idCliente,motivoExclusao);
+            
+            Id = id;
+            IdCliente = idCliente;
+            MotivoExclusao = motivoExclusao;
         }
 
         private static void ValidaCadastroGanho(Guid idCliente, string nomeGanho, decimal valor, DateTime dataDoGanho)
@@ -86,8 +98,20 @@ namespace NFinance.Domain
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
                 throw new ValorGanhoException();
 
-            if (dataDoGanho < DateTime.MinValue || dataDoGanho > DateTime.MaxValue)
+            if (dataDoGanho <= DateTime.MinValue || dataDoGanho >= DateTime.MaxValue)
                 throw new DataGanhoException();
+        }
+        
+        private static void ValidaExclusaoGanho(Guid id, Guid idCliente,string motivoExclusao)
+        {
+            if (Guid.Empty.Equals(id)) 
+                throw new IdException();
+            
+            if (Guid.Empty.Equals(idCliente)) 
+                throw new IdException();
+            
+            if (string.IsNullOrWhiteSpace(motivoExclusao)) 
+                throw new MotivoExclusaoException();
         }
     }
 }

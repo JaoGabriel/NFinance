@@ -1,32 +1,42 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using NFinance.Domain.Exceptions;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Exceptions.Autenticacao;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Application
 {
     public class AutenticacaoApp : IAutenticacaoApp
     {
+        private readonly UserManager<Usuario> _userManager;
+        private readonly SignInManager<Usuario> _signInManager;
         private readonly IClienteApp _clienteApp;
         private readonly IRedisApp _redisApp;
 
-        public AutenticacaoApp(IClienteApp clienteApp)
+        public AutenticacaoApp(IClienteApp clienteApp, UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IRedisApp redisApp)
         {
             _clienteApp = clienteApp;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _redisApp = redisApp;
         }
 
         public async Task<LoginViewModel.Response> EfetuarLogin(LoginViewModel login)
         {
             if (string.IsNullOrWhiteSpace(login.Email) || string.IsNullOrWhiteSpace(login.Senha)) throw new LoginException("Email ou senha invalida");
-            
-            var usuarioAutenticacao = await _clienteApp.ConsultarCredenciaisLogin(login.Email,login.Senha);
 
-            if (usuarioAutenticacao == null) throw new LoginException("Ocorreu um erro, tente novamente!");
+            var loginResponse = await _signInManager.PasswordSignInAsync(login.Email, login.Senha, true, false);
 
-            var token = TokenApp.GerarToken(usuarioAutenticacao);
+            if (!loginResponse.Succeeded)
+                throw new LoginException("Usuario ou senha inválido, tente novamente");
+
+            var usuario = await _userManager.FindByEmailAsync(login.Email);
+
+            var token = TokenApp.GerarToken(usuario);
 
             _redisApp.IncluiValorCache(usuarioAutenticacao);
 

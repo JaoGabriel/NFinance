@@ -14,6 +14,7 @@ namespace NFinance.WebApi.Controllers
     [Route("[controller]")]
     public class AutenticacaoController : ControllerBase
     {
+
         private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<AutenticacaoController> _logger;
 
@@ -30,10 +31,8 @@ namespace NFinance.WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Autenticar(LoginViewModel request)
         {
-            _logger.LogInformation("Iniciando Login!");
-            var response = await _autenticacaoApp.EfetuarLogin(request);
-            _logger.LogInformation("Login Realizado Com Sucesso!");
-            return Ok(response);
+            _logger.LogInformation($"Iniciando Login de {request.Email}!");
+            return Ok(await _autenticacaoApp.EfetuarLogin(request));
         }
 
         [HttpPost("Logout/{id}")]
@@ -46,9 +45,8 @@ namespace NFinance.WebApi.Controllers
             _logger.LogInformation("Validando Bearer Token!");
             await _autenticacaoApp.ValidaTokenRequest(authorization);
             _logger.LogInformation("Bearer Token Validado!");
-            _logger.LogInformation("Iniciando Logout!");
+            _logger.LogInformation($"Iniciando Logout de {logout.IdCliente}!");
             var response = await _autenticacaoApp.EfetuarLogoff(logout);
-            _logger.LogInformation("Logot Realizado Com Sucesso!");
             return Ok(response);
         }
     }
