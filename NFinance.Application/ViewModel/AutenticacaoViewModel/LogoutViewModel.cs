@@ -6,6 +6,8 @@ namespace NFinance.Application.ViewModel.AutenticacaoViewModel
     {
         public Guid IdCliente { get; set; }
 
+        public string Token { get; set; }
+
         public LogoutViewModel(Guid idCliente)
         {
             IdCliente = idCliente;

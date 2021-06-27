@@ -1,5 +1,6 @@
 ﻿using System;
 using NFinance.Domain;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Application.ViewModel.AutenticacaoViewModel
 {
@@ -23,19 +24,11 @@ namespace NFinance.Application.ViewModel.AutenticacaoViewModel
 
             public Response() { }
 
-            public Response(Cliente cliente, string token)
+            public Response(Usuario usuario, string token)
             {
-                IdCliente = cliente.Id;
-                Nome = cliente.Nome;
+                IdCliente = usuario.Id;
+                Nome = usuario.UserName;
                 Token = token;
-            }
-
-            public Response(Cliente cliente, string token,bool autenticacao)
-            {
-                IdCliente = cliente.Id;
-                Nome = cliente.Nome;
-                Token = token;
-                Autenticado = autenticacao;
             }
 
             public Response(ErroViewModel erro,bool estado,Cliente cliente)

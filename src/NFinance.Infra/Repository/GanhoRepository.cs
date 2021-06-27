@@ -15,18 +15,11 @@ namespace NFinance.Infra.Repository
         {
             _context = baseDadosContext;
         }
-        
-        public IUnitOfWork UnitOfWork => _context;
-
-        public void Dispose()
-        {
-            _context?.Dispose();
-        }
 
         public async Task<Ganho> CadastrarGanho(Ganho ganho)
         {
             await _context.Ganho.AddAsync(ganho);
-            await UnitOfWork.Commit();
+            await _context.SaveChangesAsync();
             return ganho;
         }
 
@@ -34,7 +27,7 @@ namespace NFinance.Infra.Repository
         {
             var ganhoAtualizar = await _context.Ganho.FirstOrDefaultAsync(g => g.Id.Equals(ganho.Id));
             _context.Entry(ganhoAtualizar).CurrentValues.SetValues(ganho);
-            await UnitOfWork.Commit();
+            await _context.SaveChangesAsync();
             return ganho;
         }
 
@@ -60,7 +53,7 @@ namespace NFinance.Infra.Repository
         {
             var ganho = await _context.Ganho.FirstOrDefaultAsync(i => i.Id == id);
             _context.Ganho.Remove(ganho);
-            await UnitOfWork.Commit();
+            await _context.SaveChangesAsync();
             return true;
         }
     }

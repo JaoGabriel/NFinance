@@ -10,29 +10,23 @@ namespace NFinance.Infra.Repository
     public class ClienteRepository : IClienteRepository
     {
         private readonly BaseDadosContext _context;
-        public IUnitOfWork UnitOfWork => _context;
         public ClienteRepository(BaseDadosContext context)
         {
             _context = context;
-        }
-
-        public void Dispose()
-        {
-            _context?.Dispose();
         }
 
         public async Task<Cliente> AtualizarCliente(Cliente cliente)
         {
             var clienteAtualizar = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == cliente.Id);
             _context.Entry(clienteAtualizar).CurrentValues.SetValues(cliente);
-            await UnitOfWork.Commit();
+            await _context.SaveChangesAsync();
             return cliente;
         }
 
         public async Task<Cliente> CadastrarCliente(Cliente cliente)
         {
             await _context.Cliente.AddAsync(cliente);
-            await UnitOfWork.Commit();
+            await _context.SaveChangesAsync();
             return cliente;
         }
 
@@ -42,19 +36,12 @@ namespace NFinance.Infra.Repository
             return cliente;
         }
 
-        public async Task<Cliente> ConsultarCredenciaisLogin(string usuario, string senha)
+        public async Task CadastrarLogoutToken(Guid idCliente,string token)
         {
-            var usuarios = await _context.Cliente.ToListAsync();
-            var response = usuarios.FirstOrDefault(x => x.Email.ToLower() == usuario.ToLower() && x.Senha == senha);
-
-            return response;
-        }
-
-        public async Task CadastrarLogoutToken(Cliente cliente)
-        {
-            var clienteToken = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == cliente.Id);
+            var clienteToken = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == idCliente);
+            var cliente = new Cliente(clienteToken.Id, clienteToken.Nome, clienteToken.Email, clienteToken.Senha, token);
             _context.Entry(clienteToken).CurrentValues.SetValues(cliente);
-            await UnitOfWork.Commit(); 
+            await _context.SaveChangesAsync(); 
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace NFinance.Domain.Interfaces.Repository
 {
-    public interface IGanhoRepository : IDisposable
+    public interface IGanhoRepository
     {
         Task<Ganho> CadastrarGanho(Ganho ganho);
         Task<Ganho> AtualizarGanho(Ganho ganho);

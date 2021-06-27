@@ -10,22 +10,17 @@ namespace NFinance.Infra.Repository
     public class InvestimentoRepository : IInvestimentoRepository
     {
         private readonly BaseDadosContext _context;
-        public IUnitOfWork UnitOfWork => _context;
-
+        
         public InvestimentoRepository(BaseDadosContext context)
         {
             _context = context;
         }
 
-        public void Dispose()
-        {
-            _context?.Dispose();
-        }
         public async Task<Investimento> AtualizarInvestimento(Investimento investimento)
         {
             var investimentoAtualizar = await _context.Investimento.FirstOrDefaultAsync(i => i.Id == investimento.Id);
             _context.Entry(investimentoAtualizar).CurrentValues.SetValues(investimento);
-            await UnitOfWork.Commit();
+            await _context.SaveChangesAsync();
             return investimento;
         }
 
@@ -38,7 +33,7 @@ namespace NFinance.Infra.Repository
         public async Task<Investimento> RealizarInvestimento(Investimento investimentos)
         {
             await _context.Investimento.AddAsync(investimentos);
-            await UnitOfWork.Commit();
+            await _context.SaveChangesAsync();
             return investimentos;
         }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace NFinance.Domain.Interfaces.Repository
 {
-    public interface IGastoRepository : IDisposable
+    public interface IGastoRepository
     {
         Task<Gasto> CadastrarGasto(Gasto gastos);
         Task<Gasto> AtualizarGasto(Gasto gastos);

@@ -10,4 +10,18 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Interfaces\Repository\IUnitOfWork.cs" />
+    <Compile Remove="Interfaces\Repository\IRedisRepository.cs" />
+    <Compile Remove="Interfaces\Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Interfaces\Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Interfaces\Services\**" />
+  </ItemGroup>
+
 </Project>

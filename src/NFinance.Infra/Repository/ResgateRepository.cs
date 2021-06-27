@@ -10,16 +10,10 @@ namespace NFinance.Infra.Repository
     public class ResgateRepository : IResgateRepository
     {
         private readonly BaseDadosContext _context;
-        public IUnitOfWork UnitOfWork => _context;
-
+        
         public ResgateRepository(BaseDadosContext context)
         {
             _context = context;
-        }
-
-        public void Dispose()
-        {
-            _context?.Dispose();
         }
 
         public async Task<Resgate> ConsultarResgate(Guid id)
@@ -33,7 +27,7 @@ namespace NFinance.Infra.Repository
             var resgateResponse = new Resgate() {Valor = resgate.Valor, MotivoResgate = resgate.MotivoResgate, DataResgate = DateTime.UtcNow};
             await _context.Resgate.AddAsync(resgateResponse);
             _context.Investimento.Remove(investimento);
-            await UnitOfWork.Commit();
+            await _context.SaveChangesAsync();
             return resgateResponse;
         }
 

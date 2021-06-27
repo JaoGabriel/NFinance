@@ -9,7 +9,7 @@ using NFinance.Infra.Identidade;
 
 namespace NFinance.Infra
 {
-    public class BaseDadosContext : IdentityDbContext<Usuario,Role,Guid>, IUnitOfWork
+    public class BaseDadosContext : IdentityDbContext<Usuario,Role,Guid>
     {
         public BaseDadosContext(DbContextOptions<BaseDadosContext> options) : base(options){}
 
@@ -33,11 +33,6 @@ namespace NFinance.Infra
             
             
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BaseDadosContext).Assembly);
-        }
-
-        public async Task<int> Commit()
-        {
-            return await base.SaveChangesAsync();
         }
     }
 }

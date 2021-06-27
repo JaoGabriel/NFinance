@@ -17,4 +17,8 @@
     <ProjectReference Include="..\src\NFinance.Infra\NFinance.Infra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="RedisApp.cs" />
+  </ItemGroup>
+
 </Project>

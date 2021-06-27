@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NFinance.Domain.Interfaces.Repository
 {
-    public interface ITelaInicialRepository : IDisposable
+    public interface ITelaInicialRepository
     {
         public Task<List<Ganho>> GanhoMensal();
 

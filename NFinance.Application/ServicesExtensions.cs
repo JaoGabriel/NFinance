@@ -15,7 +15,6 @@ namespace NFinance.Application
             services.AddTransient<IGastoApp, GastoApp>();
             services.AddTransient<IResgateApp, ResgateApp>();
             services.AddTransient<ITelaInicialApp, TelaInicialApp>();
-            services.AddTransient<IRedisApp, RedisApp>();
         }
     }
 }

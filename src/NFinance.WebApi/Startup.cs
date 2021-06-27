@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using NSwag.Generation.Processors.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using NFinance.WebApi.Middleware;
 
 namespace NFinance.WebApi
 {
@@ -62,8 +63,11 @@ namespace NFinance.WebApi
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    SaveSigninToken = true,
+                    ValidAudience = "NFinance",
+                    ValidIssuer = "NFinance"
                 };
             });
         }
@@ -74,6 +78,8 @@ namespace NFinance.WebApi
             app.UseOpenApi(c => c.DocumentName = "Nfinance.WebApi");
             app.UseSwaggerUi3();
 
+            app.UseMiddleware<UsuarioInfoMiddleware>();
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();

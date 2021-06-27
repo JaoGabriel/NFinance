@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NFinance.Domain.Interfaces.Repository
 {
-    public interface IResgateRepository : IDisposable
+    public interface IResgateRepository
     {
         Task<Resgate> RealizarResgate(Resgate resgate);
         Task<Resgate> ConsultarResgate(Guid id);

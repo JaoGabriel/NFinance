@@ -3,13 +3,13 @@ using System.Text;
 using NFinance.Domain;
 using System.Globalization;
 using System.Threading.Tasks;
+using NFinance.Domain.Exceptions;
 using System.Security.Cryptography;
 using NFinance.Application.Interfaces;
-using NFinance.Domain.Interfaces.Repository;
-using NFinance.Domain.Exceptions.Autenticacao;
-using NFinance.Application.ViewModel.ClientesViewModel;
-using NFinance.Domain.Exceptions;
 using NFinance.Domain.Exceptions.Cliente;
+using NFinance.Domain.Interfaces.Repository;
+using NFinance.Application.ViewModel.ClientesViewModel;
+using NFinance.Application.ViewModel.AutenticacaoViewModel;
 
 namespace NFinance.Application
 {
@@ -30,6 +30,11 @@ namespace NFinance.Application
             return resposta;
         }
 
+        public async Task CadastraLogoutToken(LogoutViewModel logout)
+        {
+            await _clienteRepository.CadastrarLogoutToken(logout.IdCliente,logout.Token);
+        }
+
         public async Task<CadastrarClienteViewModel.Response> CadastrarCliente(CadastrarClienteViewModel.Request request)
         {
             var clienteNovo = new Cliente(request.Nome, request.Cpf, request.Email, HashValue(request.Senha));
@@ -45,21 +50,6 @@ namespace NFinance.Application
             var clienteAtualizado = await _clienteRepository.ConsultarCliente(id);
             var resposta = new ConsultarClienteViewModel.Response(clienteAtualizado);
             return resposta;
-        }
-
-        public async Task<Cliente> ConsultarCredenciaisLogin(string email, string senha)
-        {
-            var cliente = await _clienteRepository.ConsultarCredenciaisLogin(email, senha);
-
-            if (cliente != null)
-                return cliente;
-            else
-                throw new LoginException("Cliente não encontrado!");
-        }
-
-        public async Task CadastrarLogoutToken(Cliente cliente)
-        {
-            await _clienteRepository.CadastrarLogoutToken(cliente);
         }
 
         private static string HashValue(string value)

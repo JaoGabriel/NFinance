@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace NFinance.Domain.Interfaces.Repository
 {
-    public interface IInvestimentoRepository : IDisposable
+    public interface IInvestimentoRepository
     {
         Task<Investimento> RealizarInvestimento(Investimento investimentos);
         Task<Investimento> ConsultarInvestimento(Guid id);

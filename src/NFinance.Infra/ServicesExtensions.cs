@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using NFinance.Domain.Interfaces.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using NFinance.Infra.Identidade;
+using NFinance.Infra.Options;
 
 namespace NFinance.Infra
 {
@@ -17,6 +18,9 @@ namespace NFinance.Infra
         {
             services.AddDbContext<BaseDadosContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("BancoDeDados")).EnableSensitiveDataLogging());
+
+            services.Configure<ConnectionStringsOptions>(options => { configuration.GetSection("ConnectionStrings"); });
+            services.Configure<TokenSettingsOptions>(options => { configuration.GetSection("TokenSettings"); });
             
             services.AddIdentity<Usuario, Role>().AddEntityFrameworkStores<BaseDadosContext>().AddDefaultTokenProviders();
 
@@ -65,7 +69,6 @@ namespace NFinance.Infra
             services.AddTransient<IInvestimentoRepository, InvestimentoRepository>();
             services.AddTransient<IResgateRepository, ResgateRepository>();
             services.AddTransient<IGastoRepository, GastoRepository>();
-            services.AddTransient<IRedisRepository,RedisRepository>();
             services.AddScoped<BaseDadosContext, BaseDadosContext>();
         }
     }

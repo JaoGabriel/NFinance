@@ -44,6 +44,7 @@ namespace NFinance.WebApi.Controllers
         {
             _logger.LogInformation("Validando Bearer Token!");
             await _autenticacaoApp.ValidaTokenRequest(authorization);
+            logout.Token = authorization;
             _logger.LogInformation("Bearer Token Validado!");
             _logger.LogInformation($"Iniciando Logout de {logout.IdCliente}!");
             var response = await _autenticacaoApp.EfetuarLogoff(logout);
