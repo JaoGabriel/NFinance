@@ -42,8 +42,6 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> Deslogar([FromHeader] string authorization, LogoutViewModel logout)
         {
-            _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoApp.ValidaTokenRequest(authorization);
             logout.Token = authorization;
             _logger.LogInformation("Bearer Token Validado!");
             _logger.LogInformation($"Iniciando Logout de {logout.IdCliente}!");

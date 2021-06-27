@@ -1,11 +1,11 @@
-﻿namespace NFinance.Domain.ObjetosDeValor
+﻿using System;
+
+namespace NFinance.Domain.ObjetosDeValor
 {
     public class UsuarioInfo
     {
-        public string IdUsuario { get; set; }
+        public Guid IdUsuario { get; set; }
 
         public string Email { get; set; }
-
-        public string Senha { get; set; }
     }
 }

@@ -10,36 +10,40 @@ using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.InvestimentosViewModel;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
     public class InvestimentosControllerTests
     {
         private readonly IInvestimentoApp _investimentoApp;
-        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<InvestimentoController> _logger;
         public InvestimentosControllerTests()
         {
             _investimentoApp = Substitute.For<IInvestimentoApp>();
-            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
             _logger = Substitute.For<ILogger<InvestimentoController>>();
         }
 
         private InvestimentoController InicializarInvestimentoController()
         {
-            return new InvestimentoController(_logger, _investimentoApp,_autenticacaoApp);
+            return new(_logger, _investimentoApp);
         }
 
         public static Investimento GeraInvestimento()
         {
-            return new Investimento(Guid.NewGuid(),"asdygaygsd",37219783.09M,DateTime.Today);
+            return new(Guid.NewGuid(),"asdygaygsd",37219783.09M,DateTime.Today);
         }
 
         public static Cliente GeraCliente()
         {
-            return new Cliente("asuhdahusd","31237123712","teste@teste.com","dhuasudha");
+            return new("asuhdahusd","31237123712","teste@teste.com","dhuasudha");
         }
 
+        private static Usuario GeraUsuario()
+        {
+            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
+        }
+        
         [Fact]
         public void InvestimentosController_RealizarInvestimento_ComSucesso()
         {
@@ -48,7 +52,7 @@ namespace NFinance.Tests.WebApi
             _investimentoApp.RealizarInvestimento(Arg.Any<RealizarInvestimentoViewModel.Request>()).Returns(new RealizarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
             var investimentoRequest = new RealizarInvestimentoViewModel.Request();
-            var token = TokenApp.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.RealizarInvestimento(token, investimentoRequest);
@@ -73,7 +77,7 @@ namespace NFinance.Tests.WebApi
             _investimentoApp.AtualizarInvestimento(Arg.Any<Guid>(),Arg.Any<AtualizarInvestimentoViewModel.Request>()).Returns(new AtualizarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request();
-            var token = TokenApp.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.AtualizarInvestimento(token,investimento.Id,investimentoRequest);
@@ -97,7 +101,7 @@ namespace NFinance.Tests.WebApi
             var investimento = GeraInvestimento();
             _investimentoApp.ConsultarInvestimento(Arg.Any<Guid>()).Returns(new ConsultarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
-            var token = TokenApp.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.ConsultarInvestimento(token,investimento.Id);
@@ -134,7 +138,7 @@ namespace NFinance.Tests.WebApi
             var controller = InicializarInvestimentoController();
 
             //Act
-            var token = TokenApp.GerarToken(new Cliente(investimento.IdCliente,"Josefino teste","12345678910","teste@teste.com","senhaSuperForte"));
+            var token = TokenApp.GerarToken(GeraUsuario());
             var teste = controller.ConsultarInvestimentos(token,idCliente);
             var okResult = teste.Result as ObjectResult;
             var consultarInvestimentosViewModel = Assert.IsType<ConsultarInvestimentosViewModel.Response>(okResult.Value);

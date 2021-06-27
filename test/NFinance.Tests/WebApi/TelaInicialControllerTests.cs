@@ -15,50 +15,54 @@ using NFinance.Application.ViewModel.ResgatesViewModel;
 using NFinance.Application.ViewModel.TelaInicialViewModel;
 using NFinance.Application.ViewModel.InvestimentosViewModel;
 using NFinance.Application;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
     public class TelaInicialControllerTests
     {
         private readonly ITelaInicialApp _telaInicialApp;
-        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<TelaInicialController> _logger;
 
         public TelaInicialControllerTests()
         {
             _telaInicialApp = Substitute.For<ITelaInicialApp>();
-            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
             _logger = Substitute.For<ILogger<TelaInicialController>>();
         }
 
         private TelaInicialController InicializarLoginController()
         {
-            return new TelaInicialController(_logger, _telaInicialApp,_autenticacaoApp);
+            return new(_logger, _telaInicialApp);
         }
 
+        private static Usuario GeraUsuario()
+        {
+            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
+        }
+        
         private static Cliente GeraCliente()
         {
-            return new Cliente("Teste@Sucesso", "123.654.987-96", "teste@teste.com", "aaaaaa");
+            return new("Teste@Sucesso", "123.654.987-96", "teste@teste.com", "aaaaaa");
         }
 
         private static Gasto GeraGasto(Cliente cliente)
         {
-            return new Gasto(cliente.Id, "Caixas", 1000M, 3, DateTime.Today.AddDays(3));
+            return new(cliente.Id, "Caixas", 1000M, 3, DateTime.Today.AddDays(3));
         }
 
         private static Investimento GeraInvestimento(Cliente cliente)
         {
-            return new Investimento(cliente.Id, "CDB", 10000M, DateTime.Today);
+            return new(cliente.Id, "CDB", 10000M, DateTime.Today);
         }
 
         private static Resgate GeraResgate(Investimento investimento, Cliente cliente)
         {
-            return new Resgate(investimento.Id, cliente.Id, 5000M, "Necessidade", DateTime.Today.AddDays(-2));
+            return new(investimento.Id, cliente.Id, 5000M, "Necessidade", DateTime.Today.AddDays(-2));
         }
 
         private static Ganho GeraGanho(Cliente cliente)
         {
-            return new Ganho(cliente.Id, "Salario", 5000M, true, DateTime.Today);
+            return new(cliente.Id, "Salario", 5000M, true, DateTime.Today);
         }
 
         [Fact]
@@ -82,7 +86,7 @@ namespace NFinance.Tests.WebApi
             var telaInicialViewModelR = new TelaInicialViewModel(cliente,ganhoMensal,gastoMensal,investimentoMensal,resgateMensal,4000M);
             var controller = InicializarLoginController();
             _telaInicialApp.TelaInicial(Arg.Any<Guid>()).Returns(telaInicialViewModelR);
-            var token = TokenApp.GerarToken(cliente);
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.TelaInicial(token,cliente.Id);

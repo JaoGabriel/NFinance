@@ -56,11 +56,7 @@ namespace NFinance.Infra
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-                options.LoginPath = "/Autenticacao/Conectar";
-                options.LogoutPath = "/Autenticacao/Desconectar";
-                options.AccessDeniedPath = "/Autenticacao/AcessoNegado";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
                 options.SlidingExpiration = true;
             });
 

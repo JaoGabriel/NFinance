@@ -1,5 +1,4 @@
-﻿using NFinance.Domain.ObjetosDeValor;
-using NFinance.Infra;
+﻿using NFinance.Infra;
 
 namespace NFinance.WebApi
 {

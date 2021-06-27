@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using NFinance.Infra.Identidade;
 using NFinance.Domain.Exceptions;
@@ -12,9 +11,9 @@ namespace NFinance.Application
 {
     public class AutenticacaoApp : IAutenticacaoApp
     {
+        private readonly IClienteApp _clienteApp;
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
-        private readonly IClienteApp _clienteApp;
 
         public AutenticacaoApp(IClienteApp clienteApp, UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
         {
@@ -47,21 +46,10 @@ namespace NFinance.Application
             
             var logoutToken = _clienteApp.CadastraLogoutToken(logout).IsCompleted;
 
-            if (logoutToken)
-                return new LogoutViewModel.Response("Logout realizado com sucesso!", true);
-            else
+            if (logoutToken is false)
                 return new LogoutViewModel.Response("Ocorreu um erro, tente novamente em instantes", false);
-        }
-        public async Task<bool> ValidaTokenRequest(string authorization)
-        {
-            var listaToken = TokenApp.LerToken(authorization);
-            var redisToken = _redisApp.RetornaValorPorChave(listaToken.FirstOrDefault()).LogoutToken;
-            var cliente = await _clienteApp.ConsultaCliente(Guid.Parse(listaToken.FirstOrDefault()));
 
-            if (cliente.LogoutToken == listaToken.FirstOrDefault(token => token == authorization[7..]) || authorization[7..] != redisToken)
-                throw new TokenException();
-            else
-                return true;
+            return new LogoutViewModel.Response("Logout realizado com sucesso!", true);
         }
     }
 }

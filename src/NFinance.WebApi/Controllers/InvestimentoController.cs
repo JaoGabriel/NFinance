@@ -15,12 +15,10 @@ namespace NFinance.WebApi.Controllers
     {
         private readonly ILogger<InvestimentoController> _logger;
         private readonly IInvestimentoApp _investimentoApp;
-        private readonly IAutenticacaoApp _autenticacaoApp;
 
-        public InvestimentoController(ILogger<InvestimentoController> logger, IInvestimentoApp investimentoApp, IAutenticacaoApp autenticacaoApp)
+        public InvestimentoController(ILogger<InvestimentoController> logger, IInvestimentoApp investimentoApp)
         {
             _logger = logger;
-            _autenticacaoApp = autenticacaoApp;
             _investimentoApp = investimentoApp;
         }
 
@@ -30,9 +28,6 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> ConsultarInvestimento([FromHeader] string authorization, Guid id)
         {
-            _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoApp.ValidaTokenRequest(authorization);
-            _logger.LogInformation("Bearer Token Validado!");
             var investimento = await _investimentoApp.ConsultarInvestimento(id);
             _logger.LogInformation("Investimento Encontrado Com Sucesso!");
             return Ok(investimento);
@@ -44,9 +39,6 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> ConsultarInvestimentos([FromHeader] string authorization, Guid idCliente)
         {
-            _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoApp.ValidaTokenRequest(authorization);
-            _logger.LogInformation("Bearer Token Validado!");
             var investimentos = await _investimentoApp.ConsultarInvestimentos(idCliente);
             _logger.LogInformation("Investimentos Encontrados Com Sucesso!");
             return Ok(investimentos);
@@ -58,9 +50,6 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> RealizarInvestimento([FromHeader] string authorization, RealizarInvestimentoViewModel.Request investimentosRequest)
         {
-            _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoApp.ValidaTokenRequest(authorization);
-            _logger.LogInformation("Bearer Token Validado!");
             var investimentoResponse = await _investimentoApp.RealizarInvestimento(investimentosRequest);
             _logger.LogInformation("Investimento Realizado Com Sucesso!");
             return Ok(investimentoResponse);
@@ -72,9 +61,6 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> AtualizarInvestimento([FromHeader] string authorization, Guid id, AtualizarInvestimentoViewModel.Request investimentosRequest)
         {
-            _logger.LogInformation("Validando Bearer Token!");
-            await _autenticacaoApp.ValidaTokenRequest(authorization);
-            _logger.LogInformation("Bearer Token Validado!");
             var investimentoResponse = await _investimentoApp.AtualizarInvestimento(id, investimentosRequest);
             _logger.LogInformation("Investimento Atualizado Com Sucesso!");
             return Ok(investimentoResponse);

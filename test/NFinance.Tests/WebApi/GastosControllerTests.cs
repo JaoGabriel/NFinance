@@ -10,34 +10,38 @@ using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.GastosViewModel;
 using NFinance.Application;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
     public class GastosControllerTests
     {
         private readonly IGastoApp _gastosApp;
-        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<GastosController> _logger;
         public GastosControllerTests()
         {
             _gastosApp = Substitute.For<IGastoApp>();
-            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
             _logger = Substitute.For<ILogger<GastosController>>();
         }
 
         private GastosController InicializarGastosController()
         {
-            return new GastosController(_logger, _gastosApp, _autenticacaoApp);
+            return new(_logger, _gastosApp);
         }
 
         public static Gasto GeraGasto()
         {
-            return new Gasto(Guid.NewGuid(),"uhsdauhsduh",237891289.0923M,10,DateTime.Today);
+            return new(Guid.NewGuid(),"uhsdauhsduh",237891289.0923M,10,DateTime.Today);
         }
 
         public static Cliente GeraCliente()
         {
-            return new Cliente("ASDASD", "12345678910","teste@tst.com","832911");
+            return new("ASDASD", "12345678910","teste@tst.com","832911");
+        }
+        
+        private static Usuario GeraUsuario()
+        {
+            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
         }
 
         [Fact]
@@ -48,7 +52,7 @@ namespace NFinance.Tests.WebApi
             _gastosApp.CadastrarGasto(Arg.Any<CadastrarGastoViewModel.Request>()).Returns(new CadastrarGastoViewModel.Response(gasto));
             var controller = InicializarGastosController();
             var gastoRequest = new CadastrarGastoViewModel.Request();
-            var token = TokenApp.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.CadastrarGasto(token,gastoRequest);
@@ -74,7 +78,7 @@ namespace NFinance.Tests.WebApi
             _gastosApp.AtualizarGasto(Arg.Any<Guid>(),Arg.Any<AtualizarGastoViewModel.Request>()).Returns(new AtualizarGastoViewModel.Response(gasto));
             var controller = InicializarGastosController();
             var gastoRequest = new AtualizarGastoViewModel.Request();
-            var token = TokenApp.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.AtualizarGasto(token,gasto.Id,gastoRequest);
@@ -99,7 +103,7 @@ namespace NFinance.Tests.WebApi
             var gasto = GeraGasto();
             _gastosApp.ConsultarGasto(Arg.Any<Guid>()).Returns(new ConsultarGastoViewModel.Response(gasto));
             var controller = InicializarGastosController();
-            var token = TokenApp.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.ConsultarGasto(token,gasto.Id);
@@ -127,7 +131,7 @@ namespace NFinance.Tests.WebApi
             _gastosApp.ExcluirGasto(Arg.Any<ExcluirGastoViewModel.Request>()).Returns(new ExcluirGastoViewModel.Response { Mensagem = "Excluido Com Sucesso", StatusCode = 200, DataExclusao = dataExclusao });
             var controller = InicializarGastosController();
             var gasto = new ExcluirGastoViewModel.Request { IdGasto = id, MotivoExclusao = "Finalizado Pagamento", IdCliente = idCliente };
-            var token = TokenApp.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.ExcluirGasto(token,gasto);
@@ -160,7 +164,7 @@ namespace NFinance.Tests.WebApi
             var listarGastos = new ConsultarGastosViewModel.Response(listaGasto);
             _gastosApp.ConsultarGastos(Arg.Any<Guid>()).Returns(listarGastos);
             var controller = InicializarGastosController();
-            var token = TokenApp.GerarToken(GeraCliente());
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.ConsultarGastos(token,idCliente);

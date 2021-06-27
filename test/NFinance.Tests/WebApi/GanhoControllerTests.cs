@@ -10,30 +10,34 @@ using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Application;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
     public class GanhoControllerTests
     {
         private readonly IGanhoApp _ganhoApp;
-        private readonly IAutenticacaoApp _autenticacaoApp;
         private readonly ILogger<GanhoController> _logger;
 
         public GanhoControllerTests()
         {
             _ganhoApp = Substitute.For<IGanhoApp>();
-            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
             _logger = Substitute.For<ILogger<GanhoController>>();
         }
 
         private GanhoController InicializarGanhoController()
         {
-            return new GanhoController(_logger, _ganhoApp, _autenticacaoApp);
+            return new(_logger, _ganhoApp);
         }
 
         public static Ganho GeraGanho()
         {
-            return new Ganho(Guid.NewGuid(),"Salario",231207983.201983M,true,DateTime.Today);
+            return new(Guid.NewGuid(),"Salario",231207983.201983M,true,DateTime.Today);
+        }
+        
+        private static Usuario GeraUsuario()
+        {
+            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
         }
 
         [Fact]
@@ -69,7 +73,7 @@ namespace NFinance.Tests.WebApi
             _ganhoApp.AtualizarGanho(Arg.Any<Guid>(),Arg.Any<AtualizarGanhoViewModel.Request>()).Returns(new AtualizarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
             var ganhoRequest = new AtualizarGanhoViewModel.Request(ganho);
-            var token = TokenApp.GerarToken(new Cliente(ganho.IdCliente,"Josefino teste","12345678910","teste@teste.com","senhaSuperForte"));
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.AtualizarGanho(token,ganho.Id,ganhoRequest);
@@ -94,7 +98,7 @@ namespace NFinance.Tests.WebApi
             var ganho = GeraGanho();
             _ganhoApp.ConsultarGanho(Arg.Any<Guid>()).Returns(new ConsultarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
-            var token = TokenApp.GerarToken(new Cliente(ganho.IdCliente,"Josefino teste","12345678910","teste@teste.com","senhaSuperForte"));
+            var token = TokenApp.GerarToken(GeraUsuario());
             
             //Act
             var teste = controller.ConsultarGanho(token,ganho.Id);
@@ -134,7 +138,7 @@ namespace NFinance.Tests.WebApi
                 IdGanho = idGanho,
                 MotivoExclusao = motivo
             };
-            var token = TokenApp.GerarToken(new Cliente(ganho.IdCliente,"Josefino teste","12345678910","teste@teste.com","senhaSuperForte"));
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.ExcluirGanho(token,ganho);
@@ -180,7 +184,7 @@ namespace NFinance.Tests.WebApi
             var listarGanhos = new ConsultarGanhosViewModel.Response(listaGanho);
             _ganhoApp.ConsultarGanhos(Arg.Any<Guid>()).Returns(listarGanhos);
             var controller = InicializarGanhoController();
-            var token = TokenApp.GerarToken(new Cliente(ganho.IdCliente,"Josefino teste","12345678910","teste@teste.com","senhaSuperForte"));
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.ConsultarGanhos(token,idCliente);

@@ -7,6 +7,5 @@ namespace NFinance.Application.Interfaces
     {
         Task<LoginViewModel.Response> EfetuarLogin(LoginViewModel login);
         Task<LogoutViewModel.Response> EfetuarLogoff(LogoutViewModel logout);
-        Task<bool> ValidaTokenRequest(string authorization);
     }
 }

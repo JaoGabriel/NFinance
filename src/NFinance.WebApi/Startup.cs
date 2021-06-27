@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using NSwag.Generation.Processors.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using NFinance.Domain.ObjetosDeValor;
 using NFinance.WebApi.Middleware;
 
 namespace NFinance.WebApi
@@ -47,6 +48,8 @@ namespace NFinance.WebApi
             services.AddInfraDataSqlServices(Configuration);
             services.AddApplicationServices();
 
+            services.AddScoped<UsuarioInfo>();
+            
             services.AddControllers();
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("TokenSettings").Value);

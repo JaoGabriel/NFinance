@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using NFinance.Domain.ObjetosDeValor;
 
 namespace NFinance.WebApi.Middleware
 {
@@ -23,6 +24,9 @@ namespace NFinance.WebApi.Middleware
 
         public async Task Invoke(HttpContext context, BaseDadosContext dataContext)
         {
+            if (context.Request.Path.Value.Contains("/Autenticacao/Login") || context.Request.Path.Value.Contains("/Cliente/Cliente/Cadastrar"))
+                await _next(context);
+            
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
@@ -41,15 +45,17 @@ namespace NFinance.WebApi.Middleware
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
                 
-                context.Items["Account"] = await dataContext.Users.FindAsync(accountId);
+                var accountId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "IdUsuario").Value);
+                var user = await dataContext.Users.FindAsync(accountId);
+                var userInfo = new UsuarioInfo {IdUsuario = accountId, Email = user.Email};
+                context.Items["Usuario"] = userInfo;
             }
             catch
             {

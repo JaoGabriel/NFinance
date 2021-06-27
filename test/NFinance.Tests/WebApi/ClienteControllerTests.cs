@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.ClientesViewModel;
 using NFinance.Application;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
@@ -16,23 +17,26 @@ namespace NFinance.Tests.WebApi
     {
         private readonly IClienteApp _clienteApp;
         private readonly ILogger<ClienteController> _logger;
-        private readonly IAutenticacaoApp _autenticacaoApp;
 
         public ClienteControllerTests()
         {
             _clienteApp = Substitute.For<IClienteApp>();
-            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
             _logger = Substitute.For<ILogger<ClienteController>>();
         }
 
         private ClienteController InicializarClienteController()
         {
-            return new ClienteController(_logger, _clienteApp,_autenticacaoApp);
+            return new(_logger, _clienteApp);
         }
 
         public Cliente GeraCliente()
         {
-            return new Cliente("Jorgin da Lages", "12345678910", "aloha@teste.com", "123456");
+            return new("Jorgin da Lages", "12345678910", "aloha@teste.com", "123456");
+        }
+        
+        private static Usuario GeraUsuario()
+        {
+            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
         }
 
         [Fact]
@@ -65,7 +69,7 @@ namespace NFinance.Tests.WebApi
             var cliente = GeraCliente();
             _clienteApp.ConsultaCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response(cliente));
             var controller = InicializarClienteController();
-            var token = TokenApp.GerarToken(cliente);
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.ConsultarCliente(token,cliente.Id);
@@ -90,7 +94,7 @@ namespace NFinance.Tests.WebApi
                 .Returns(new AtualizarClienteViewModel.Response(cliente));
             var clienteRequest = new AtualizarClienteViewModel.Request(cliente);
             var controller = InicializarClienteController();
-            var token = TokenApp.GerarToken(cliente);
+            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
             var teste = controller.AtualizarCliente(token,cliente.Id, clienteRequest);
