@@ -45,10 +45,10 @@ namespace NFinance.WebApi
 
                 c.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
-            services.AddInfraDataSqlServices(Configuration);
+            services.AddInfraServices(Configuration);
             services.AddApplicationServices();
 
-            services.AddScoped<UsuarioInfo>();
+            services.AddScoped<UsuarioInfoMiddleware>();
             
             services.AddControllers();
 
@@ -81,7 +81,7 @@ namespace NFinance.WebApi
             app.UseOpenApi(c => c.DocumentName = "Nfinance.WebApi");
             app.UseSwaggerUi3();
 
-            app.UseMiddleware<UsuarioInfoMiddleware>();
+            app.UseMiddleware(typeof(UsuarioInfoMiddleware));
             
             app.UseHttpsRedirection();
 

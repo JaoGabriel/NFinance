@@ -14,7 +14,7 @@ namespace NFinance.Infra
     [ExcludeFromCodeCoverage]
     public static class ServicesExtensions
     {
-        public static void AddInfraDataSqlServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddInfraServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<BaseDadosContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("BancoDeDados")).EnableSensitiveDataLogging());
