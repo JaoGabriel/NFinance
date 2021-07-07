@@ -11,6 +11,7 @@ using NSwag.Generation.Processors.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NFinance.Domain.ObjetosDeValor;
+using NFinance.Infra.Options;
 using NFinance.WebApi.Middleware;
 
 namespace NFinance.WebApi
@@ -23,7 +24,7 @@ namespace NFinance.WebApi
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -48,11 +49,12 @@ namespace NFinance.WebApi
             services.AddInfraServices(Configuration);
             services.AddApplicationServices();
 
-            services.AddScoped<UsuarioInfoMiddleware>();
+            services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<TokenSettingsOptions>(Configuration.GetSection("TokenSettings"));
             
             services.AddControllers();
 
-            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("TokenSettings").Value);
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("TokenSettings:TokenSecret").Value);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

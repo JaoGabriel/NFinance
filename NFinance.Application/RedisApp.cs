@@ -18,7 +18,7 @@ namespace NFinance.Application
 
         public bool IncluiValorCache(Usuario usuario)
         {
-            if (usuario == null) throw new Exception($"Nao é possivel incluir {usuario.UserName}");
+            if (usuario == null) throw new Exception($"Nao é possivel incluir {usuario.IdUsuario}");
 
             var resultadoInclusao = _redisRepository.IncluiValorCache(usuario);
 

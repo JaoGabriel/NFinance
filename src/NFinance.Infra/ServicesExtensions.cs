@@ -19,9 +19,6 @@ namespace NFinance.Infra
             services.AddDbContext<BaseDadosContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("BancoDeDados")).EnableSensitiveDataLogging());
 
-            services.Configure<ConnectionStringsOptions>(options => { configuration.GetSection("ConnectionStrings"); });
-            services.Configure<TokenSettingsOptions>(options => { configuration.GetSection("TokenSettings"); });
-            
             services.AddIdentity<Usuario, Role>().AddEntityFrameworkStores<BaseDadosContext>().AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>

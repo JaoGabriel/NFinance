@@ -5,11 +5,13 @@ using System.Globalization;
 using System.Threading.Tasks;
 using NFinance.Domain.Exceptions;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Identity;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Exceptions.Cliente;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.ClientesViewModel;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
+using NFinance.Infra.Identidade;
 
 namespace NFinance.Application
 {
@@ -37,6 +39,8 @@ namespace NFinance.Application
 
         public async Task<CadastrarClienteViewModel.Response> CadastrarCliente(CadastrarClienteViewModel.Request request)
         {
+            //var user = new Usuario {Email = request.Email, UserName = request.Email};
+            //var userResult = await _userManager.CreateAsync(user, request.Senha);
             var clienteNovo = new Cliente(request.Nome, request.Cpf, request.Email, HashValue(request.Senha));
             var clienteCadastrado = await _clienteRepository.CadastrarCliente(clienteNovo);
             var resposta = new CadastrarClienteViewModel.Response(clienteCadastrado);

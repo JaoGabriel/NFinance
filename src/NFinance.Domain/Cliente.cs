@@ -11,6 +11,9 @@ namespace NFinance.Domain
         [Required]
         public Guid Id { get; private set; }
 
+        // Mover o usuario para o domain e relacionar com o cliente
+        //public Usuario Usuario { get; set; }
+        
         [Required]
         [StringLength(100,MinimumLength = 10)]
         public string Nome { get; private set; }
@@ -27,6 +30,7 @@ namespace NFinance.Domain
         [StringLength(120, MinimumLength = 10)]
         public string Senha { get; private set; }
 
+        // remover logout token
         [StringLength(400)]
         public string LogoutToken { get; private set; }
 
