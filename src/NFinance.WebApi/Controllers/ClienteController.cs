@@ -51,7 +51,7 @@ namespace NFinance.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> AtualizarCliente([FromHeader] string authorization, Guid id, AtualizarClienteViewModel.Request request)
         {
-            var response = await _clienteApp.AtualizarCliente(id, request);
+            var response = await _clienteApp.AtualizarDadosCadastrais(id, request);
             _logger.LogInformation("Cliente Atualizado Com Sucesso!");
             return Ok(response);
         }

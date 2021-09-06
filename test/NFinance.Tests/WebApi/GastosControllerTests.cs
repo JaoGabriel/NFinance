@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.GastosViewModel;
 using NFinance.Application;
-using NFinance.Infra.Identidade;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
@@ -34,14 +34,14 @@ namespace NFinance.Tests.WebApi
             return new(Guid.NewGuid(),"uhsdauhsduh",237891289.0923M,10,DateTime.Today);
         }
 
-        public static Cliente GeraCliente()
-        {
-            return new("ASDASD", "12345678910","teste@tst.com","832911");
-        }
-        
         private static Usuario GeraUsuario()
         {
-            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
+            return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
+        }
+
+        public static Cliente GeraCliente()
+        {
+            return new("ASDASD", "12345678910","teste@tst.com", GeraUsuario());
         }
 
         [Fact]

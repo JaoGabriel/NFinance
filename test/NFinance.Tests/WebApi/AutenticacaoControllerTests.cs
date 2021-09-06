@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
 using NFinance.Application;
-using NFinance.Infra.Identidade;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
@@ -29,14 +29,14 @@ namespace NFinance.Tests.WebApi
             return new(_logger, _autenticacaoApp);
         }
 
-        public static Cliente GeraCliente()
-        {
-            return new("Jorgin da Lages", "12345678910", "aloha@teste.com", "123456");
-        }
-        
         private static Usuario GeraUsuario()
         {
-            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
+            return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
+        }
+
+        public static Cliente GeraCliente()
+        {
+            return new("Jorgin da Lages", "12345678910", "aloha@teste.com", GeraUsuario());
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace NFinance.Tests.WebApi
             var cliente = GeraCliente();
             var usuario = GeraUsuario();
             var token = TokenApp.GerarToken(usuario);
-            var loginViewModel = new LoginViewModel { Email = cliente.Email, Senha = cliente.Senha};
+            var loginViewModel = new LoginViewModel { Email = cliente.Email, Senha = "123456"};
             var controller = InicializarAutenticacaoController();
             _autenticacaoApp.EfetuarLogin(Arg.Any<LoginViewModel>()).Returns(new LoginViewModel.Response(usuario,token));
 

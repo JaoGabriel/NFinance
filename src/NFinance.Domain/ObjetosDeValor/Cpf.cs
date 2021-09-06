@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NFinance.Domain.Exceptions.ObjetosDeValor;
+using System;
 using System.Collections.Generic;
 
 namespace NFinance.Domain.ObjetosDeValor
@@ -9,8 +10,6 @@ namespace NFinance.Domain.ObjetosDeValor
 
         public Cpf(string numero)
         {
-
-
             AtribuiCpf(numero);
         }
 
@@ -25,7 +24,7 @@ namespace NFinance.Domain.ObjetosDeValor
         private static void VerificaSeNumeroEstaVazioNuloOuEmpacoEmBranco(string numero)
         {
             if (string.IsNullOrWhiteSpace(numero))
-                throw new DomainException("Número do CPF não pode ser nulo,vazio ou em branco");
+                throw new CpfException("Número do CPF não pode ser nulo,vazio ou em branco");
         }
 
         private static string RemoveFormatacao(string numero)
@@ -44,7 +43,7 @@ namespace NFinance.Domain.ObjetosDeValor
         private static void VerificaSeNumeroTemOnzeDigitos(string numero)
         {
             if (numero.Length != 11)
-                throw new DomainException("CPF deve conter 11 digitos");
+                throw new CpfException("CPF deve conter 11 digitos");
         }
 
         private static void ValidaNumeroCpf(string cpf)
@@ -60,7 +59,7 @@ namespace NFinance.Domain.ObjetosDeValor
         private static void ValidaQueNaoDeveSerSequenciaNumerica(string cpf)
         {
             if (cpf == "12345678909")
-                throw new DomainException("Número de CPF inválido.");
+                throw new CpfException("Número de CPF inválido.");
         }
 
         private static void ValidaQueTodosNumerosNaoDevemSerIguais(string cpf)
@@ -72,7 +71,7 @@ namespace NFinance.Domain.ObjetosDeValor
                     todosNumerosIguais = false;
 
             if (todosNumerosIguais)
-                throw new DomainException("Número de CPF inválido.");
+                throw new CpfException("Número de CPF inválido.");
         }
         private static int[] ConvertCpfSemDigitosParaIntArray(string cpf)
         {
@@ -122,7 +121,7 @@ namespace NFinance.Domain.ObjetosDeValor
             string segundoDigito = resto.ToString();
 
             if (cpf.EndsWith(primeiroDigito + segundoDigito) is not true)
-                throw new DomainException("Número de CPF inválido.");
+                throw new CpfException("Número de CPF inválido.");
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

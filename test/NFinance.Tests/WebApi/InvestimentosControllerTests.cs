@@ -10,7 +10,7 @@ using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.InvestimentosViewModel;
-using NFinance.Infra.Identidade;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
@@ -34,16 +34,16 @@ namespace NFinance.Tests.WebApi
             return new(Guid.NewGuid(),"asdygaygsd",37219783.09M,DateTime.Today);
         }
 
-        public static Cliente GeraCliente()
-        {
-            return new("asuhdahusd","31237123712","teste@teste.com","dhuasudha");
-        }
-
         private static Usuario GeraUsuario()
         {
-            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
+            return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
         }
-        
+
+        public static Cliente GeraCliente()
+        {
+            return new("ASDASD", "12345678910", "teste@tst.com", GeraUsuario());
+        }
+
         [Fact]
         public void InvestimentosController_RealizarInvestimento_ComSucesso()
         {

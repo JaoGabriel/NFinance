@@ -15,7 +15,7 @@ using NFinance.Application.ViewModel.ResgatesViewModel;
 using NFinance.Application.ViewModel.TelaInicialViewModel;
 using NFinance.Application.ViewModel.InvestimentosViewModel;
 using NFinance.Application;
-using NFinance.Infra.Identidade;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
@@ -37,12 +37,12 @@ namespace NFinance.Tests.WebApi
 
         private static Usuario GeraUsuario()
         {
-            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
+            return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
         }
-        
-        private static Cliente GeraCliente()
+
+        public static Cliente GeraCliente()
         {
-            return new("Teste@Sucesso", "123.654.987-96", "teste@teste.com", "aaaaaa");
+            return new("ASDASD", "12345678910", "teste@tst.com", GeraUsuario());
         }
 
         private static Gasto GeraGasto(Cliente cliente)

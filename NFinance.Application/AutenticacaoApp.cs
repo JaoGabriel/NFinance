@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NFinance.Infra.Identidade;
 using NFinance.Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Exceptions.Autenticacao;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Application
 {
     public class AutenticacaoApp : IAutenticacaoApp
     {
-        private readonly IClienteApp _clienteApp;
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
 
-        public AutenticacaoApp(IClienteApp clienteApp, UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
+        public AutenticacaoApp(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
         {
-            _clienteApp = clienteApp;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -44,11 +42,6 @@ namespace NFinance.Application
 
             await _signInManager.SignOutAsync();
             
-            var logoutToken = _clienteApp.CadastraLogoutToken(logout).IsCompleted;
-
-            if (logoutToken is false)
-                return new LogoutViewModel.Response("Ocorreu um erro, tente novamente em instantes", false);
-
             return new LogoutViewModel.Response("Logout realizado com sucesso!", true);
         }
     }

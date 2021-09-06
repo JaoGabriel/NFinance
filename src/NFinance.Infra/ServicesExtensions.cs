@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using NFinance.Domain.Interfaces.Repository;
 using Microsoft.Extensions.DependencyInjection;
-using NFinance.Infra.Identidade;
-using NFinance.Infra.Options;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Infra
 {

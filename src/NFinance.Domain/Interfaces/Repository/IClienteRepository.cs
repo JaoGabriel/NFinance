@@ -10,7 +10,5 @@ namespace NFinance.Domain.Interfaces.Repository
         Task<Cliente> CadastrarCliente(Cliente cliente);
         
         Task<Cliente> AtualizarCliente(Cliente cliente);
-        
-        Task CadastrarLogoutToken(Guid idCliente, string token);
     }
 }

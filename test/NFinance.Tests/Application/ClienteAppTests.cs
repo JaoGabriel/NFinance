@@ -8,12 +8,15 @@ using NFinance.Domain.Exceptions;
 using NFinance.Domain.Exceptions.Cliente;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.ClientesViewModel;
+using Microsoft.AspNetCore.Identity;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.Application
 {
     public class ClienteAppTests
     {
         private readonly IClienteRepository _clienteRepository; 
+        private readonly UserManager<Usuario> _userManager; 
         private readonly Guid _id = Guid.NewGuid();
         private readonly string _nome = "joaquin da zils";
         private readonly string _cpf = "12345678910";
@@ -27,14 +30,19 @@ namespace NFinance.Tests.Application
 
         public ClienteApp IniciaApplication()
         {
-            return new(_clienteRepository);
+            return new(_clienteRepository, _userManager);
+        }
+
+        private static Usuario GeraUsuario()
+        {
+            return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
         }
 
         [Fact]
         public async Task ClienteApp_CadastroCliente_ComSucesso()
         {
             //Arrange
-            var cliente = new Cliente(_nome,_cpf,_email,_senha);
+            var cliente = new Cliente(_nome,_cpf,_email, GeraUsuario());
             var cadastroClienteVm = new CadastrarClienteViewModel.Request(cliente);
             _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
@@ -48,7 +56,7 @@ namespace NFinance.Tests.Application
             Assert.Equal(cliente.Nome, response.Nome);
             Assert.Equal(cliente.CPF, response.Cpf);
             Assert.Equal(cliente.Email, response.Email);
-            Assert.Equal(cliente.Senha, response.Senha);
+            Assert.NotNull(cliente.Usuario.PasswordHash);
         }
 
         [Theory]
@@ -111,13 +119,13 @@ namespace NFinance.Tests.Application
         public async Task ClienteApp_AtualizarCliente_ComSucesso()
         {
             //Arrange
-            var cliente = new Cliente(_nome,_cpf,_email,_senha);
+            var cliente = new Cliente(_nome, _cpf, _email, GeraUsuario());
             var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
             _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
             var app = IniciaApplication();
 
             //Act
-            var response = await app.AtualizarCliente(cliente.Id,atualizarClienteVM);
+            var response = await app.AtualizarDadosCadastrais(cliente.Id,atualizarClienteVM);
 
             //Assert
             Assert.NotNull(response);
@@ -125,7 +133,7 @@ namespace NFinance.Tests.Application
             Assert.Equal(cliente.Nome, response.Nome);
             Assert.Equal(cliente.CPF, response.Cpf);
             Assert.Equal(cliente.Email, response.Email);
-            Assert.Equal(cliente.Senha, response.Senha);
+            Assert.NotNull(cliente.Usuario.PasswordHash);
         }
         
         [Fact]
@@ -136,7 +144,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
 
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<IdException>(() => app.AtualizarDadosCadastrais(atualizarClienteVM.Id, atualizarClienteVM));
         }
         
         [Theory]
@@ -150,7 +158,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<NomeClienteException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<NomeClienteException>(() => app.AtualizarDadosCadastrais(atualizarClienteVM.Id, atualizarClienteVM));
         }
         
         [Theory]
@@ -164,7 +172,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<CpfClienteException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<CpfClienteException>(() => app.AtualizarDadosCadastrais(atualizarClienteVM.Id, atualizarClienteVM));
         }
         
         [Theory]
@@ -178,7 +186,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<EmailClienteException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<EmailClienteException>(() => app.AtualizarDadosCadastrais(atualizarClienteVM.Id, atualizarClienteVM));
         }
         
         [Theory]
@@ -192,14 +200,14 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
 
             //Act
-            await Assert.ThrowsAsync<SenhaClienteException>(() => app.AtualizarCliente(atualizarClienteVM.Id, atualizarClienteVM));
+            await Assert.ThrowsAsync<SenhaClienteException>(() => app.AtualizarDadosCadastrais(atualizarClienteVM.Id, atualizarClienteVM));
         }
 
         [Fact]
         public async Task ClienteApp_ConsultaCliente_ComSucesso()
         {
             //Arrage
-            var cliente = new Cliente(_nome,_cpf,_email,_senha);
+            var cliente = new Cliente(_nome,_cpf,_email,GeraUsuario());
             _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
             var app = IniciaApplication();
             
@@ -212,7 +220,7 @@ namespace NFinance.Tests.Application
             Assert.Equal(cliente.Nome, response.Nome);
             Assert.Equal(cliente.CPF, response.Cpf);
             Assert.Equal(cliente.Email, response.Email);
-            Assert.Equal(cliente.Senha, response.Senha);
+            Assert.NotNull(cliente.Usuario.PasswordHash);
         }
 
         [Fact]

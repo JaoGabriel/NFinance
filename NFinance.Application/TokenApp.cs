@@ -2,10 +2,10 @@
 using System.Text;
 using NFinance.Infra;
 using System.Security.Claims;
-using NFinance.Infra.Identidade;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Application
 {

@@ -13,7 +13,6 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
                 Nome = request.Nome;
                 Cpf = request.CPF;
                 Email = request.Email;
-                Senha = request.Senha;
             }
         }
 

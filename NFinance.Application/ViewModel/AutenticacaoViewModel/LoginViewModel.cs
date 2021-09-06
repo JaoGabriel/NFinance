@@ -1,6 +1,6 @@
 ﻿using System;
 using NFinance.Domain;
-using NFinance.Infra.Identidade;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Application.ViewModel.AutenticacaoViewModel
 {

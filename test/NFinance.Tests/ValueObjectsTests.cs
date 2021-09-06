@@ -1,8 +1,6 @@
-﻿using System;
+﻿using NFinance.Domain.ObjetosDeValor;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace NFinance.Tests
 {
@@ -73,5 +71,4 @@ namespace NFinance.Tests
             yield return Teste2;
         }
     }
-}
 }

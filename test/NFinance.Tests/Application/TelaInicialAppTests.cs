@@ -1,6 +1,7 @@
 ﻿using NFinance.Application;
 using NFinance.Domain;
 using NFinance.Domain.Exceptions;
+using NFinance.Domain.Identidade;
 using NFinance.Domain.Interfaces.Repository;
 using NSubstitute;
 using System;
@@ -33,9 +34,14 @@ namespace NFinance.Tests.Application
             return new TelaInicialApp(_ganhoRepository, _investimentoRepository, _gastoRepository, _resgateRepository, _clienteRepository);
         }
 
+        private static Usuario GeraUsuario()
+        {
+            return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
+        }
+
         public static Cliente GeraCliente()
         {
-            return new Cliente("Claudiosmar Santos", "123.654.987-96", "teste@teste.com", "SenhaSuperForte");
+            return new Cliente("Claudiosmar Santos", "123.654.987-96", "teste@teste.com", GeraUsuario());
         }
 
         public static List<Ganho> GeraListaGanho(Cliente cliente)
@@ -109,7 +115,7 @@ namespace NFinance.Tests.Application
             Assert.Equal(cliente.Nome, response.Cliente.Nome);
             Assert.Equal(cliente.CPF, response.Cliente.CPF);
             Assert.Equal(cliente.Email, response.Cliente.Email);
-            Assert.Equal(cliente.Senha, response.Cliente.Senha);
+            Assert.NotNull(cliente.Usuario.PasswordHash);
             //Assert Ganho
             var ganho = listaGanhos[0];
             var ganhoTest = response.GanhoMensal.Ganhos.FirstOrDefault(g => g.Id == ganho.Id);
@@ -269,7 +275,7 @@ namespace NFinance.Tests.Application
             _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
             _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
             _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
-            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente());
+            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente(Guid.Empty, "123.654.987-96", "teste","teste@teste.com"));
             _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
             var Repositorys = InicializaApplication();
 

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.ClientesViewModel;
 using NFinance.Application;
-using NFinance.Infra.Identidade;
+using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
 {
@@ -29,14 +29,14 @@ namespace NFinance.Tests.WebApi
             return new(_logger, _clienteApp);
         }
 
-        public Cliente GeraCliente()
-        {
-            return new("Jorgin da Lages", "12345678910", "aloha@teste.com", "123456");
-        }
-        
         private static Usuario GeraUsuario()
         {
-            return new() {Id = Guid.NewGuid(), Email = "teste@teste.com", Senha = "senhaForte", Login = "login"};
+            return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
+        }
+
+        public static Cliente GeraCliente()
+        {
+            return new("Jorgin da Lages", "12345678910", "aloha@teste.com", GeraUsuario());
         }
 
         [Fact]
@@ -90,8 +90,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var cliente = GeraCliente();
-            _clienteApp.AtualizarCliente(Arg.Any<Guid>(),Arg.Any<AtualizarClienteViewModel.Request>())
-                .Returns(new AtualizarClienteViewModel.Response(cliente));
+            _clienteApp.AtualizarDadosCadastrais(Arg.Any<Guid>(),Arg.Any<AtualizarClienteViewModel.Request>()).Returns(new AtualizarClienteViewModel.Response(cliente));
             var clienteRequest = new AtualizarClienteViewModel.Request(cliente);
             var controller = InicializarClienteController();
             var token = TokenApp.GerarToken(GeraUsuario());

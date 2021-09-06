@@ -35,13 +35,5 @@ namespace NFinance.Infra.Repository
             var cliente = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == id);
             return cliente;
         }
-
-        public async Task CadastrarLogoutToken(Guid idCliente,string token)
-        {
-            var clienteToken = await _context.Cliente.FirstOrDefaultAsync(i => i.Id == idCliente);
-            var cliente = new Cliente(clienteToken.Id, clienteToken.Nome, clienteToken.Email, clienteToken.Senha, token);
-            _context.Entry(clienteToken).CurrentValues.SetValues(cliente);
-            await _context.SaveChangesAsync(); 
-        }
     }
 }
