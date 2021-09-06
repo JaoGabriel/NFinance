@@ -72,13 +72,13 @@ namespace NFinance.Tests.WebApi
             //Act
             var teste = controller.Deslogar(token, id);
             var okResult = teste.Result as ObjectResult;
-            var autenticarViewModel = Assert.IsType<LoginViewModel.Response>(okResult.Value);
+            var autenticarViewModel = Assert.IsType<LogoutViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(nome, autenticarViewModel.Nome);
-            Assert.NotNull(autenticarViewModel.Token);
+            Assert.NotNull(autenticarViewModel.Message);
+            Assert.True(autenticarViewModel.Deslogado);
         }
     }
 }
