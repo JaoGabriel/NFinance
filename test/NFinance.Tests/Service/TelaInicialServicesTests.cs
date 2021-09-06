@@ -62,8 +62,8 @@ namespace NFinance.Tests.Service
             var dataGasto = DateTime.Today.AddDays(3);
             var dataGasto1 = DateTime.Today.AddDays(5);
             var nomeGasto = "CAixas";
-            var qtdParcelas = 3;
-            var qtdParcelas1 = 6;
+            var qtdParcelas = 12;
+            var qtdParcelas1 = 12;
             var valorInvestimento = 10000M;
             var nomeInvestimento = "CDB";
             var dataAplicacao = DateTime.Today;
@@ -109,10 +109,10 @@ namespace NFinance.Tests.Service
             Assert.NotEmpty(response.ResgateMensal.Resgates);
             Assert.NotEmpty(response.InvestimentoMensal.Investimentos);
             Assert.Equal(5000, response.GanhoMensal.SaldoMensal);
-            Assert.Equal(500, response.GastoMensal.SaldoMensal);
+            Assert.Equal(166.66666666666666666666666666M, response.GastoMensal.SaldoMensal);
             Assert.Equal(10000, response.ResgateMensal.SaldoMensal);
             Assert.Equal(20000, response.InvestimentoMensal.SaldoMensal);
-            Assert.Equal(4500, response.ResumoMensal);
+            Assert.Equal(4833.3333333333333333333333333M, response.ResumoMensal);
             //Assert Cliente
             Assert.Equal(idCliente, response.Cliente.Id);
             Assert.Equal(nomeCliente, response.Cliente.Nome);
@@ -131,7 +131,7 @@ namespace NFinance.Tests.Service
             Assert.Equal(idGasto, gastoTest.Id);
             Assert.Equal(idCliente, gastoTest.IdCliente);
             Assert.Equal(nomeGasto, gastoTest.NomeGasto);
-            Assert.Equal(333.33333333333333333333333333M, gastoTest.Valor);
+            Assert.Equal(83.33333333333333333333333333M, gastoTest.Valor);
             Assert.Equal(qtdParcelas, gastoTest.QuantidadeParcelas);
             Assert.Equal(dataGasto, gastoTest.DataDoGasto);
             //Assert Gasto 1
@@ -139,7 +139,7 @@ namespace NFinance.Tests.Service
             Assert.Equal(idGasto1, gastoTest1.Id);
             Assert.Equal(idCliente, gastoTest1.IdCliente);
             Assert.Equal(nomeGasto, gastoTest1.NomeGasto);
-            Assert.Equal(166.66666666666666666666666667M, gastoTest1.Valor);
+            Assert.Equal(83.33333333333333333333333333M, gastoTest1.Valor);
             Assert.Equal(qtdParcelas1, gastoTest1.QuantidadeParcelas);
             Assert.Equal(dataGasto1, gastoTest1.DataDoGasto);
             //Assert Investimento
@@ -499,7 +499,7 @@ namespace NFinance.Tests.Service
             var nomeGasto1 = "Gasto1";
             var dataGasto1 = DateTime.Today.AddMonths(-5);
             var dataGasto = DateTime.Today;
-            var qtdParcelas = 6;
+            var qtdParcelas = 12;
             var qtdParcelas1 = 0;
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
@@ -516,13 +516,13 @@ namespace NFinance.Tests.Service
 
             //Assert
             Assert.Single(response.Gastos);
-            Assert.Equal(1000, response.SaldoMensal);
+            Assert.Equal(500, response.SaldoMensal);
             //Assert Gasto
             var gastoTest = response.Gastos.FirstOrDefault(g => g.Id == idGasto);
             Assert.Equal(idGasto, gastoTest.Id);
             Assert.Equal(idCliente, gastoTest.IdCliente);
             Assert.Equal(nomeGasto, gastoTest.NomeGasto);
-            Assert.Equal(1000, gastoTest.Valor);
+            Assert.Equal(500, gastoTest.Valor);
             Assert.Equal(qtdParcelas, gastoTest.QuantidadeParcelas);
             Assert.Equal(dataGasto, gastoTest.DataDoGasto);
         }

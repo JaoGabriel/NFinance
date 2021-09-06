@@ -67,18 +67,18 @@ namespace NFinance.Tests.WebApi
             var response = new LogoutViewModel.Response { Deslogado = true, Message = "Logout com sucesso" };
             var logoutViewModel = new LogoutViewModel(id);
             var controller = InicializarAutenticacaoController();
-            _autenticacaoService.RealizarLogut(Arg.Any<LogoutViewModel>()).Returns(response);
+            _autenticacaoService.RealizarLogut(Arg.Any<Guid>()).Returns(response);
 
             //Act
-            var teste = controller.Deslogar(token, logoutViewModel);
+            var teste = controller.Deslogar(token, id);
             var okResult = teste.Result as ObjectResult;
-            var autenticarViewModel = Assert.IsType<LoginViewModel.Response>(okResult.Value);
+            var autenticarViewModel = Assert.IsType<LogoutViewModel.Response>(okResult.Value);
 
             //Assert
             Assert.NotNull(teste);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-            Assert.Equal(nome, autenticarViewModel.Nome);
-            Assert.NotNull(autenticarViewModel.Token);
+            Assert.NotNull(autenticarViewModel.Message);
+            Assert.True(autenticarViewModel.Deslogado);
         }
     }
 }
