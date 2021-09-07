@@ -28,11 +28,6 @@ steps:
     scannerMode: 'MSBuild'
     projectKey: 'JaoGabriel_NFinance'
     projectName: 'NFinance'
-- task: SonarCloudAnalyze@1
-
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
     
 - task: DotNetCoreCLI@2
   inputs:
@@ -41,3 +36,9 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
