@@ -2,25 +2,24 @@
 using NFinance.Domain;
 using System.Threading.Tasks;
 using NFinance.Domain.Exceptions;
-using NFinance.Domain.Identidade;
-using Microsoft.AspNetCore.Identity;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.ClientesViewModel;
+using NFinance.Domain.Repository;
 
 namespace NFinance.Application
 {
     public class ClienteApp : IClienteApp
     {
         private readonly IClienteRepository _clienteRepository;
-        private readonly UserManager<Usuario> _userManager;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public ClienteApp(IClienteRepository clienteRepository, UserManager<Usuario> userManager)
+        public ClienteApp(IClienteRepository clienteRepository, IUsuarioRepository usuarioRepository)
         {
             _clienteRepository = clienteRepository;
-            _userManager = userManager;
+            _usuarioRepository = usuarioRepository;
         }
-        
+
         public async Task<AtualizarClienteViewModel.Response> AtualizarDadosCadastrais(Guid id, AtualizarClienteViewModel.Request request)
         {
             var dadosClienteAtualizados = new Cliente(id, request.Nome, request.Cpf, request.Email);
@@ -31,8 +30,7 @@ namespace NFinance.Application
 
         public async Task<CadastrarClienteViewModel.Response> CadastrarCliente(CadastrarClienteViewModel.Request request)
         {
-            var user = new Usuario {Email = request.Email,UserName = request.Email};
-            await _userManager.CreateAsync(user, request.Senha);
+            var user = await _usuarioRepository.CadastrarUsuario(request.Email,request.Senha);
             var clienteNovo = new Cliente(request.Nome, request.Cpf, request.Email,user);
             var clienteCadastrado = await _clienteRepository.CadastrarCliente(clienteNovo);
             var resposta = new CadastrarClienteViewModel.Response(clienteCadastrado);

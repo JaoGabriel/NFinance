@@ -8,15 +8,15 @@ using NFinance.Domain.Exceptions;
 using NFinance.Domain.Exceptions.Cliente;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.ClientesViewModel;
-using Microsoft.AspNetCore.Identity;
 using NFinance.Domain.Identidade;
+using NFinance.Domain.Repository;
 
 namespace NFinance.Tests.Application
 {
     public class ClienteAppTests
     {
-        private readonly IClienteRepository _clienteRepository; 
-        private readonly UserManager<Usuario> _userManager; 
+        private readonly IClienteRepository _clienteRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
         private readonly Guid _id = Guid.NewGuid();
         private readonly string _nome = "joaquin da zils";
         private readonly string _cpf = "12345678910";
@@ -26,11 +26,12 @@ namespace NFinance.Tests.Application
         public ClienteAppTests()
         {
             _clienteRepository = Substitute.For<IClienteRepository>();
+            _usuarioRepository = Substitute.For<IUsuarioRepository>();
         }
 
         public ClienteApp IniciaApplication()
         {
-            return new(_clienteRepository, _userManager);
+            return new(_clienteRepository, _usuarioRepository);
         }
 
         private static Usuario GeraUsuario()
