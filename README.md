@@ -14,7 +14,7 @@ O objetivo desta API é ser integrada com um front mobile, e no fim se torne um 
 - EF Core 5
 - Codacy
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/eaca3d9ab78143729c38430b5ab69810)](https://www.codacy.com/gh/Snexs/NFinance/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Snexs/NFinance&amp;utm_campaign=Badge_Grade)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=JaoGabriel_NFinance&metric=coverage)](https://sonarcloud.io/dashboard?id=JaoGabriel_NFinance)
 
 ## Contribuição 
 Contribuição e Sugestões são bem vindas, basta criar uma branch nova e fazer PR para master.
