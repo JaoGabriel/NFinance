@@ -1,7 +1,6 @@
 ﻿using System;
 using Xunit;
 using System.Linq;
-using NSubstitute;
 using NFinance.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;

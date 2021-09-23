@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NFinance.Domain;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;

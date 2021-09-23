@@ -1,5 +1,4 @@
-﻿using System;
-using NFinance.Domain;
+﻿using NFinance.Domain;
 
 namespace NFinance.Application.ViewModel.GanhoViewModel
 {

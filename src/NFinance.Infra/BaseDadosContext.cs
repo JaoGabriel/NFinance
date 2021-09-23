@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using NFinance.Domain;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NFinance.Domain.Identidade;
-using NFinance.Domain.Interfaces.Repository;
 
 namespace NFinance.Infra
 {

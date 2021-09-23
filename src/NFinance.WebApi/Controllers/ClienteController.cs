@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NFinance.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using NFinance.Application;
 using NFinance.Application.ViewModel.ClientesViewModel;
 
 namespace NFinance.WebApi.Controllers

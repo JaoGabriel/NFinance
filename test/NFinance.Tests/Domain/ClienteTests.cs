@@ -1,5 +1,4 @@
-﻿using NFinance.Domain;
-using Xunit;
+﻿using Xunit;
 
 namespace NFinance.Tests.Domain
 {

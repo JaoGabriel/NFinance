@@ -3,7 +3,6 @@ using NFinance.Domain;
 using NFinance.Domain.Exceptions;
 using NFinance.Domain.Identidade;
 using NFinance.Domain.Interfaces.Repository;
-using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;

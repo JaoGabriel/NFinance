@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using NSubstitute;
 using NFinance.Application;
 using System.Threading.Tasks;
 using NFinance.Application.ViewModel.GanhoViewModel;
