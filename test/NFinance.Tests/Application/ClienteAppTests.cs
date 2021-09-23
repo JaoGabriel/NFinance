@@ -3,6 +3,7 @@ using System;
 using NFinance.Domain;
 using NFinance.Application;
 using System.Threading.Tasks;
+using Moq;
 using NFinance.Domain.Exceptions;
 using NFinance.Domain.Exceptions.Cliente;
 using NFinance.Domain.Interfaces.Repository;
@@ -14,8 +15,8 @@ namespace NFinance.Tests.Application
 {
     public class ClienteAppTests
     {
-        private readonly IClienteRepository _clienteRepository;
-        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly Mock<IClienteRepository> _clienteRepository;
+        private readonly Mock<IUsuarioRepository> _usuarioRepository;
         private readonly Guid _id = Guid.NewGuid();
         private readonly string _nome = "joaquin da zils";
         private readonly string _cpf = "12345678910";
@@ -24,13 +25,13 @@ namespace NFinance.Tests.Application
 
         public ClienteAppTests()
         {
-            _clienteRepository = Substitute.For<IClienteRepository>();
-            _usuarioRepository = Substitute.For<IUsuarioRepository>();
+            _clienteRepository = new Mock<IClienteRepository>();
+            _usuarioRepository = new Mock<IUsuarioRepository>();
         }
 
         public ClienteApp IniciaApplication()
         {
-            return new(_clienteRepository, _usuarioRepository);
+            return new(_clienteRepository.Object, _usuarioRepository.Object);
         }
 
         private static Usuario GeraUsuario()
@@ -44,7 +45,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,_cpf,_email, GeraUsuario());
             var cadastroClienteVm = new CadastrarClienteViewModel.Request(cliente);
-            _clienteRepository.CadastrarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.Setup(x => x.CadastrarCliente(It.IsAny<Cliente>())).ReturnsAsync(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -121,7 +122,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome, _cpf, _email, GeraUsuario());
             var atualizarClienteVM = new AtualizarClienteViewModel.Request(cliente);
-            _clienteRepository.AtualizarCliente(Arg.Any<Cliente>()).Returns(cliente);
+            _clienteRepository.Setup(x => x.AtualizarCliente(It.IsAny<Cliente>())).ReturnsAsync(cliente);
             var app = IniciaApplication();
 
             //Act
@@ -208,7 +209,7 @@ namespace NFinance.Tests.Application
         {
             //Arrage
             var cliente = new Cliente(_nome,_cpf,_email,GeraUsuario());
-            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
+            _clienteRepository.Setup(x => x.ConsultarCliente(It.IsAny<Guid>())).ReturnsAsync(cliente);
             var app = IniciaApplication();
             
             //Act

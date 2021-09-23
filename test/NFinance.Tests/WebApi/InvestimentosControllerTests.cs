@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.InvestimentosViewModel;
 using NFinance.Domain.Identidade;
@@ -15,17 +16,17 @@ namespace NFinance.Tests.WebApi
 {
     public class InvestimentosControllerTests
     {
-        private readonly IInvestimentoApp _investimentoApp;
-        private readonly ILogger<InvestimentoController> _logger;
+        private readonly Mock<IInvestimentoApp> _investimentoApp;
+        private readonly Mock<ILogger<InvestimentoController>> _logger;
         public InvestimentosControllerTests()
         {
-            _investimentoApp = Substitute.For<IInvestimentoApp>();
-            _logger = Substitute.For<ILogger<InvestimentoController>>();
+            _investimentoApp = new Mock<IInvestimentoApp>();
+            _logger = new Mock<ILogger<InvestimentoController>>();
         }
 
         private InvestimentoController InicializarInvestimentoController()
         {
-            return new(_logger, _investimentoApp);
+            return new(_logger.Object, _investimentoApp.Object);
         }
 
         public static Investimento GeraInvestimento()
@@ -48,7 +49,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var investimento = GeraInvestimento();
-            _investimentoApp.RealizarInvestimento(Arg.Any<RealizarInvestimentoViewModel.Request>()).Returns(new RealizarInvestimentoViewModel.Response(investimento));
+            _investimentoApp.Setup(x => x.RealizarInvestimento(It.IsAny<RealizarInvestimentoViewModel.Request>())).ReturnsAsync(new RealizarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
             var investimentoRequest = new RealizarInvestimentoViewModel.Request();
             var token = TokenApp.GerarToken(GeraUsuario());
@@ -73,7 +74,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var investimento = GeraInvestimento();
-            _investimentoApp.AtualizarInvestimento(Arg.Any<Guid>(),Arg.Any<AtualizarInvestimentoViewModel.Request>()).Returns(new AtualizarInvestimentoViewModel.Response(investimento));
+            _investimentoApp.Setup(x => x.AtualizarInvestimento(It.IsAny<Guid>(),It.IsAny<AtualizarInvestimentoViewModel.Request>())).ReturnsAsync(new AtualizarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request();
             var token = TokenApp.GerarToken(GeraUsuario());
@@ -98,7 +99,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var investimento = GeraInvestimento();
-            _investimentoApp.ConsultarInvestimento(Arg.Any<Guid>()).Returns(new ConsultarInvestimentoViewModel.Response(investimento));
+            _investimentoApp.Setup(x => x.ConsultarInvestimento(It.IsAny<Guid>())).ReturnsAsync(new ConsultarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
             var token = TokenApp.GerarToken(GeraUsuario());
 
@@ -133,7 +134,7 @@ namespace NFinance.Tests.WebApi
             listaInvestimento.Add(investimento);
             listaInvestimento.Add(investimento1);
             var listarInvestimentos = new ConsultarInvestimentosViewModel.Response(listaInvestimento);
-            _investimentoApp.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listarInvestimentos);
+            _investimentoApp.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listarInvestimentos);
             var controller = InicializarInvestimentoController();
 
             //Act

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.ResgatesViewModel;
 using NFinance.Application;
@@ -15,19 +16,18 @@ namespace NFinance.Tests.WebApi
 {
     public class ResgatesControllerTests
     {
-        private readonly IResgateApp _resgateApp;
-        private readonly ILogger<ResgateController> _logger;
+        private readonly Mock<IResgateApp> _resgateApp;
+        private readonly Mock<ILogger<ResgateController>> _logger;
 
         public ResgatesControllerTests()
         {
-            _resgateApp = Substitute.For<IResgateApp>();
-            Substitute.For<IAutenticacaoApp>();
-            _logger = Substitute.For<ILogger<ResgateController>>();
+            _resgateApp = new Mock<IResgateApp>();
+            _logger = new Mock<ILogger<ResgateController>>();
         }
 
         private ResgateController InicializarResgateController()
         {
-            return new(_logger, _resgateApp);
+            return new(_logger.Object, _resgateApp.Object);
         }
 
         public static Resgate GeraResgate()
@@ -50,7 +50,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var resgate = GeraResgate();
-            _resgateApp.RealizarResgate(Arg.Any<RealizarResgateViewModel.Request>()).Returns(new RealizarResgateViewModel.Response(resgate));
+            _resgateApp.Setup(x => x.RealizarResgate(It.IsAny<RealizarResgateViewModel.Request>())).ReturnsAsync(new RealizarResgateViewModel.Response(resgate));
             var controller = InicializarResgateController();
             var resgateRequest = new RealizarResgateViewModel.Request();
             var token = TokenApp.GerarToken(GeraUsuario());
@@ -75,7 +75,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var resgate = GeraResgate();
-            _resgateApp.ConsultarResgate(Arg.Any<Guid>()).Returns(new ConsultarResgateViewModel.Response(resgate));
+            _resgateApp.Setup(x => x.ConsultarResgate(It.IsAny<Guid>())).ReturnsAsync(new ConsultarResgateViewModel.Response(resgate));
             var controller = InicializarResgateController();
 
             //Act
@@ -124,7 +124,7 @@ namespace NFinance.Tests.WebApi
             listaResgate.Add(gasto);
             listaResgate.Add(gasto1);
             var listarResgates = new ConsultarResgatesViewModel.Response(listaResgate);
-            _resgateApp.ConsultarResgates(Arg.Any<Guid>()).Returns(listarResgates);
+            _resgateApp.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listarResgates);
             var controller = InicializarResgateController();
             var token = TokenApp.GerarToken(GeraUsuario());
 

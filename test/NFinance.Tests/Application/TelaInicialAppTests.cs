@@ -7,30 +7,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Moq;
 using Xunit;
 
 namespace NFinance.Tests.Application
 {
     public class TelaInicialAppTests
     {
-        private readonly IClienteRepository _clienteRepository;
-        private readonly IGanhoRepository _ganhoRepository;
-        private readonly IGastoRepository _gastoRepository;
-        private readonly IInvestimentoRepository _investimentoRepository;
-        private readonly IResgateRepository _resgateRepository;
+        private readonly Mock<IClienteRepository> _clienteRepository;
+        private readonly Mock<IGanhoRepository> _ganhoRepository;
+        private readonly Mock<IGastoRepository> _gastoRepository;
+        private readonly Mock<IInvestimentoRepository> _investimentoRepository;
+        private readonly Mock<IResgateRepository> _resgateRepository;
 
         public TelaInicialAppTests()
         {
-            _clienteRepository = Substitute.For<IClienteRepository>();
-            _gastoRepository = Substitute.For<IGastoRepository>();
-            _ganhoRepository = Substitute.For<IGanhoRepository>();
-            _investimentoRepository = Substitute.For<IInvestimentoRepository>();
-            _resgateRepository = Substitute.For<IResgateRepository>();
+            _clienteRepository = new Mock<IClienteRepository>();
+            _gastoRepository = new Mock<IGastoRepository>();
+            _ganhoRepository = new Mock<IGanhoRepository>();
+            _investimentoRepository = new Mock<IInvestimentoRepository>();
+            _resgateRepository = new Mock<IResgateRepository>();
         }
 
         public TelaInicialApp InicializaApplication()
         {
-            return new TelaInicialApp(_ganhoRepository, _investimentoRepository, _gastoRepository, _resgateRepository, _clienteRepository);
+            return new TelaInicialApp(_ganhoRepository.Object, _investimentoRepository.Object, _gastoRepository.Object, _resgateRepository.Object, _clienteRepository.Object);
         }
 
         private static Usuario GeraUsuario()
@@ -88,11 +89,11 @@ namespace NFinance.Tests.Application
             var listaGastos = GeraListaGasto(cliente);
             var listaInvestimentos = GeraListaInvestimento(cliente);
             var listaResgate = GeraListaResgate(cliente, listaInvestimentos);
-            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listaGanhos);
-            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listaGastos);
-            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listaResgate);
-            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(cliente);
-            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listaInvestimentos);
+            _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listaGanhos);
+            _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listaGastos);
+            _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listaResgate);
+            _clienteRepository.Setup(x => x.ConsultarCliente(It.IsAny<Guid>())).ReturnsAsync(cliente);
+            _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listaInvestimentos);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -271,11 +272,11 @@ namespace NFinance.Tests.Application
             listInvestimento.Add(investimento);
             listInvestimento.Add(investimento1);
             listResgate.Add(resgate);
-            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
-            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
-            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
-            _clienteRepository.ConsultarCliente(Arg.Any<Guid>()).Returns(new Cliente(Guid.Empty, "123.654.987-96", "teste","teste@teste.com"));
-            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
+            _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
+            _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
+            _clienteRepository.Setup(x => x.ConsultarCliente(It.IsAny<Guid>())).ReturnsAsync(new Cliente(Guid.Empty, "123.654.987-96", "teste","teste@teste.com"));
+            _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -300,7 +301,7 @@ namespace NFinance.Tests.Application
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
             var listGanho = new List<Ganho> { ganho, ganho1};
-            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -344,7 +345,7 @@ namespace NFinance.Tests.Application
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
             var listGanho = new List<Ganho> { ganho, ganho1 };
-            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -375,7 +376,7 @@ namespace NFinance.Tests.Application
             var listGanho = new List<Ganho> { ganho, ganho1 };
             listGanho.Add(ganho);
             listGanho.Add(ganho1);
-            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -404,8 +405,7 @@ namespace NFinance.Tests.Application
             var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
             var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
             var listGanho = new List<Ganho> { ganho, ganho1 };
-
-            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(listGanho);
+            _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -440,7 +440,7 @@ namespace NFinance.Tests.Application
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
             var listGasto = new List<Gasto> { gasto, gasto1 };
-            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -484,7 +484,7 @@ namespace NFinance.Tests.Application
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
             var listGasto = new List<Gasto> { gasto, gasto1 };
-            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -514,7 +514,7 @@ namespace NFinance.Tests.Application
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
             var listGasto = new List<Gasto> { gasto, gasto1 };
-            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
+            _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -544,8 +544,8 @@ namespace NFinance.Tests.Application
             var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
             var gastoResponse = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = 1000, DataDoGasto = dataGasto, QuantidadeParcelas = 5 };
             var listGasto = new List<Gasto> { gasto, gasto1 };
-            _gastoRepository.ConsultarGastos(Arg.Any<Guid>()).Returns(listGasto);
-            _gastoRepository.AtualizarGasto(Arg.Any<Gasto>()).Returns(gastoResponse);
+            _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
+            _gastoRepository.Setup(x => x.AtualizarGasto(It.IsAny<Gasto>())).ReturnsAsync(gastoResponse);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -580,7 +580,7 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
-            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -621,7 +621,7 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var listInvestimento = new List<Investimento> { Investimento,Investimento1 };
-            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -648,7 +648,7 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
-            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -675,7 +675,7 @@ namespace NFinance.Tests.Application
             var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
-            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -707,7 +707,7 @@ namespace NFinance.Tests.Application
             var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
             var Investimento2 = new Investimento { Id = idInvestimento2, IdCliente = idCliente, NomeInvestimento = nomeInvestimento2, Valor = valorInvestimento2, DataAplicacao = dataInvestimento2 };
             var listInvestimento = new List<Investimento> { Investimento, Investimento1, Investimento2 };
-            _investimentoRepository.ConsultarInvestimentos(Arg.Any<Guid>()).Returns(listInvestimento);
+            _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -741,7 +741,7 @@ namespace NFinance.Tests.Application
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
-            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -782,7 +782,7 @@ namespace NFinance.Tests.Application
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
-            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -816,7 +816,7 @@ namespace NFinance.Tests.Application
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
-            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
             var Repositorys = InicializaApplication();
 
             //Act
@@ -843,7 +843,7 @@ namespace NFinance.Tests.Application
             var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
             var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
-            _resgateRepository.ConsultarResgates(Arg.Any<Guid>()).Returns(listResgate);
+            _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
             var Repositorys = InicializaApplication();
 
             //Act

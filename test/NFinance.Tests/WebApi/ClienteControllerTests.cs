@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.ClientesViewModel;
 using NFinance.Application;
@@ -14,18 +15,18 @@ namespace NFinance.Tests.WebApi
 {
     public class ClienteControllerTests
     {
-        private readonly IClienteApp _clienteApp;
-        private readonly ILogger<ClienteController> _logger;
+        private readonly Mock<IClienteApp> _clienteApp;
+        private readonly Mock<ILogger<ClienteController>> _logger;
 
         public ClienteControllerTests()
         {
-            _clienteApp = Substitute.For<IClienteApp>();
-            _logger = Substitute.For<ILogger<ClienteController>>();
+            _clienteApp = new Mock<IClienteApp>();
+            _logger = new Mock<ILogger<ClienteController>>();
         }
 
         private ClienteController InicializarClienteController()
         {
-            return new(_logger, _clienteApp);
+            return new(_logger.Object, _clienteApp.Object);
         }
 
         private static Usuario GeraUsuario()
@@ -43,7 +44,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var cliente = GeraCliente();
-            _clienteApp.CadastrarCliente(Arg.Any<CadastrarClienteViewModel.Request>()).Returns(new CadastrarClienteViewModel.Response(cliente));
+            _clienteApp.Setup(x => x.CadastrarCliente(It.IsAny<CadastrarClienteViewModel.Request>())).ReturnsAsync(new CadastrarClienteViewModel.Response(cliente));
             var controller = InicializarClienteController();
             var clienteRequest = new CadastrarClienteViewModel.Request(cliente);
 
@@ -66,7 +67,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var cliente = GeraCliente();
-            _clienteApp.ConsultaCliente(Arg.Any<Guid>()).Returns(new ConsultarClienteViewModel.Response(cliente));
+            _clienteApp.Setup(x => x.ConsultaCliente(It.IsAny<Guid>())).ReturnsAsync(new ConsultarClienteViewModel.Response(cliente));
             var controller = InicializarClienteController();
             var token = TokenApp.GerarToken(GeraUsuario());
 
@@ -89,7 +90,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var cliente = GeraCliente();
-            _clienteApp.AtualizarDadosCadastrais(Arg.Any<Guid>(),Arg.Any<AtualizarClienteViewModel.Request>()).Returns(new AtualizarClienteViewModel.Response(cliente));
+            _clienteApp.Setup(x => x.AtualizarDadosCadastrais(It.IsAny<Guid>(),It.IsAny<AtualizarClienteViewModel.Request>())).ReturnsAsync(new AtualizarClienteViewModel.Response(cliente));
             var clienteRequest = new AtualizarClienteViewModel.Request(cliente);
             var controller = InicializarClienteController();
             var token = TokenApp.GerarToken(GeraUsuario());

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Application.ViewModel.GastosViewModel;
@@ -20,18 +21,18 @@ namespace NFinance.Tests.WebApi
 {
     public class TelaInicialControllerTests
     {
-        private readonly ITelaInicialApp _telaInicialApp;
-        private readonly ILogger<TelaInicialController> _logger;
+        private readonly Mock<ITelaInicialApp> _telaInicialApp;
+        private readonly Mock<ILogger<TelaInicialController>> _logger;
 
         public TelaInicialControllerTests()
         {
-            _telaInicialApp = Substitute.For<ITelaInicialApp>();
-            _logger = Substitute.For<ILogger<TelaInicialController>>();
+            _telaInicialApp = new Mock<ITelaInicialApp>();
+            _logger = new Mock<ILogger<TelaInicialController>>();
         }
 
         private TelaInicialController InicializarLoginController()
         {
-            return new(_logger, _telaInicialApp);
+            return new(_logger.Object, _telaInicialApp.Object);
         }
 
         private static Usuario GeraUsuario()
@@ -84,7 +85,7 @@ namespace NFinance.Tests.WebApi
             var resgateMensal = new ResgateMensalViewModel(listResgate);
             var telaInicialViewModelR = new TelaInicialViewModel(cliente,ganhoMensal,gastoMensal,investimentoMensal,resgateMensal,4000M);
             var controller = InicializarLoginController();
-            _telaInicialApp.TelaInicial(Arg.Any<Guid>()).Returns(telaInicialViewModelR);
+            _telaInicialApp.Setup(x => x.TelaInicial(It.IsAny<Guid>())).ReturnsAsync(telaInicialViewModelR);
             var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Application;
@@ -15,18 +16,18 @@ namespace NFinance.Tests.WebApi
 {
     public class GanhoControllerTests
     {
-        private readonly IGanhoApp _ganhoApp;
-        private readonly ILogger<GanhoController> _logger;
+        private readonly Mock<IGanhoApp> _ganhoApp;
+        private readonly Mock<ILogger<GanhoController>> _logger;
 
         public GanhoControllerTests()
         {
-            _ganhoApp = Substitute.For<IGanhoApp>();
-            _logger = Substitute.For<ILogger<GanhoController>>();
+            _ganhoApp = new Mock<IGanhoApp>();
+            _logger = new Mock<ILogger<GanhoController>>();
         }
 
         private GanhoController InicializarGanhoController()
         {
-            return new(_logger, _ganhoApp);
+            return new(_logger.Object, _ganhoApp.Object);
         }
 
         public static Ganho GeraGanho()
@@ -44,7 +45,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var ganho = GeraGanho();
-            _ganhoApp.CadastrarGanho(Arg.Any<CadastrarGanhoViewModel.Request>()).Returns(new CadastrarGanhoViewModel.Response(ganho));
+            _ganhoApp.Setup(x => x.CadastrarGanho(It.IsAny<CadastrarGanhoViewModel.Request>())).ReturnsAsync(new CadastrarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
             var ganhoRequest = new CadastrarGanhoViewModel.Request();
 
@@ -69,7 +70,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var ganho = GeraGanho();
-            _ganhoApp.AtualizarGanho(Arg.Any<Guid>(),Arg.Any<AtualizarGanhoViewModel.Request>()).Returns(new AtualizarGanhoViewModel.Response(ganho));
+            _ganhoApp.Setup(x => x.AtualizarGanho(It.IsAny<Guid>(),It.IsAny<AtualizarGanhoViewModel.Request>())).ReturnsAsync(new AtualizarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
             var ganhoRequest = new AtualizarGanhoViewModel.Request(ganho);
             var token = TokenApp.GerarToken(GeraUsuario());
@@ -95,7 +96,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var ganho = GeraGanho();
-            _ganhoApp.ConsultarGanho(Arg.Any<Guid>()).Returns(new ConsultarGanhoViewModel.Response(ganho));
+            _ganhoApp.Setup(x => x.ConsultarGanho(It.IsAny<Guid>())).ReturnsAsync(new ConsultarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
             var token = TokenApp.GerarToken(GeraUsuario());
             
@@ -123,20 +124,9 @@ namespace NFinance.Tests.WebApi
             var idCliente = Guid.NewGuid();
             var motivo = "Perdio money";
             var mensagemSucesso = "Excluido com sucesso";
-            _ganhoApp.ExcluirGanho(Arg.Any<ExcluirGanhoViewModel.Request>())
-                .Returns(new ExcluirGanhoViewModel.Response
-                {
-                    StatusCode = 200,
-                    DataExclusao = DateTime.Today,
-                    Mensagem = mensagemSucesso,
-                });
+            _ganhoApp.Setup(x => x.ExcluirGanho(It.IsAny<ExcluirGanhoViewModel.Request>())).ReturnsAsync(new ExcluirGanhoViewModel.Response {StatusCode = 200, DataExclusao = DateTime.Today, Mensagem = mensagemSucesso});
             var controller = InicializarGanhoController();
-            var ganho = new ExcluirGanhoViewModel.Request
-            {
-                IdCliente = idCliente,
-                IdGanho = idGanho,
-                MotivoExclusao = motivo
-            };
+            var ganho = new ExcluirGanhoViewModel.Request {IdCliente = idCliente, IdGanho = idGanho, MotivoExclusao = motivo};
             var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
@@ -181,7 +171,7 @@ namespace NFinance.Tests.WebApi
             listaGanho.Add(ganho);
             listaGanho.Add(ganho1);
             var listarGanhos = new ConsultarGanhosViewModel.Response(listaGanho);
-            _ganhoApp.ConsultarGanhos(Arg.Any<Guid>()).Returns(listarGanhos);
+            _ganhoApp.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listarGanhos);
             var controller = InicializarGanhoController();
             var token = TokenApp.GerarToken(GeraUsuario());
 

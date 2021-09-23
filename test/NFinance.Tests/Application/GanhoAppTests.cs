@@ -4,6 +4,7 @@ using System.Linq;
 using Xunit;
 using NFinance.Application;
 using System.Threading.Tasks;
+using Moq;
 using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Domain;
 using NFinance.Domain.Exceptions;
@@ -14,7 +15,7 @@ namespace NFinance.Tests.Application
 {
     public class GanhoAppTests
     {
-        private readonly IGanhoRepository _ganhoRepository;
+        private readonly Mock<IGanhoRepository> _ganhoRepository;
         private readonly Guid _id = Guid.NewGuid();
         private readonly Guid _idCliente = Guid.NewGuid();
         private readonly string _nomeGanho = "ganho";
@@ -24,12 +25,12 @@ namespace NFinance.Tests.Application
 
         public GanhoAppTests()
         {
-            _ganhoRepository = Substitute.For<IGanhoRepository>();
+            _ganhoRepository = new Mock<IGanhoRepository>();
         }
         
         private GanhoApp IniciaApplication()
         {
-            return new(_ganhoRepository);
+            return new(_ganhoRepository.Object);
         }
 
         public static IEnumerable<object[]> Valor =>
@@ -54,7 +55,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
             var cadastrarGanhoVm = new CadastrarGanhoViewModel.Request(ganho);
-            _ganhoRepository.CadastrarGanho(Arg.Any<Ganho>()).Returns(ganho);
+            _ganhoRepository.Setup(x => x.CadastrarGanho(It.IsAny<Ganho>())).ReturnsAsync(ganho);
             var app = IniciaApplication();
             
             //Act
@@ -125,7 +126,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
             var atualizaGanhoVm = new AtualizarGanhoViewModel.Request(ganho);
-            _ganhoRepository.AtualizarGanho(Arg.Any<Ganho>()).Returns(ganho);
+            _ganhoRepository.Setup(x => x.AtualizarGanho(It.IsAny<Ganho>())).ReturnsAsync(ganho);
             var app = IniciaApplication();
             
             //Act
@@ -147,7 +148,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
             var atualizaGanhoVm = new AtualizarGanhoViewModel.Request(ganho);
-            _ganhoRepository.AtualizarGanho(Arg.Any<Ganho>()).Returns(ganho);
+            _ganhoRepository.Setup(x => x.AtualizarGanho(It.IsAny<Ganho>())).ReturnsAsync(ganho);
             var app = IniciaApplication();
             
             //Assert
@@ -218,7 +219,7 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
-            _ganhoRepository.ConsultarGanho(Arg.Any<Guid>()).Returns(ganho);
+            _ganhoRepository.Setup(x => x.ConsultarGanho(It.IsAny<Guid>())).ReturnsAsync(ganho);
             var app = IniciaApplication();
             
             //Act
@@ -239,7 +240,7 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
-            _ganhoRepository.ConsultarGanhos(Arg.Any<Guid>()).Returns(new List<Ganho> { ganho });
+            _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(new List<Ganho> { ganho });
             var app = IniciaApplication();
             
             //Act
@@ -270,9 +271,9 @@ namespace NFinance.Tests.Application
         public async Task GanhoApp_ExcluirGanho_ComSucesso()
         {
             //Arrange
-            var ganho = new Ganho(_id,_idCliente,"TEste");
+            var ganho = new Ganho(_id,_idCliente,"Teste");
             var excluirGanhoVm = new ExcluirGanhoViewModel.Request(ganho);
-            _ganhoRepository.ExcluirGanho(Arg.Any<Guid>()).Returns(true);
+            _ganhoRepository.Setup(x => x.ExcluirGanho(It.IsAny<Guid>())).ReturnsAsync(true);
             var app = IniciaApplication();
             
             //Act

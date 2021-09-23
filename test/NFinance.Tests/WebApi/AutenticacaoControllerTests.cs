@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
 using NFinance.Application;
@@ -14,18 +15,18 @@ namespace NFinance.Tests.WebApi
 {
     public class AutenticacaoControllerTests
     {
-        private readonly IAutenticacaoApp _autenticacaoApp;
-        private readonly ILogger<AutenticacaoController> _logger;
+        private readonly Mock<IAutenticacaoApp> _autenticacaoApp;
+        private readonly Mock<ILogger<AutenticacaoController>> _logger;
 
         public AutenticacaoControllerTests()
         {
-            _logger = Substitute.For<ILogger<AutenticacaoController>>();
-            _autenticacaoApp = Substitute.For<IAutenticacaoApp>();
+            _logger = new Mock<ILogger<AutenticacaoController>>();
+            _autenticacaoApp = new Mock<IAutenticacaoApp>();
         }
 
         private AutenticacaoController InicializarAutenticacaoController()
         {
-            return new(_logger, _autenticacaoApp);
+            return new(_logger.Object, _autenticacaoApp.Object);
         }
 
         private static Usuario GeraUsuario()
@@ -47,7 +48,7 @@ namespace NFinance.Tests.WebApi
             var token = TokenApp.GerarToken(usuario);
             var loginViewModel = new LoginViewModel { Email = cliente.Email, Senha = "123456"};
             var controller = InicializarAutenticacaoController();
-            _autenticacaoApp.EfetuarLogin(Arg.Any<LoginViewModel>()).Returns(new LoginViewModel.Response(usuario,token));
+            _autenticacaoApp.Setup(x => x. EfetuarLogin(It.IsAny<LoginViewModel>())).ReturnsAsync(new LoginViewModel.Response(usuario,token));
 
             //Act
             var teste = controller.Autenticar(loginViewModel);
@@ -69,7 +70,7 @@ namespace NFinance.Tests.WebApi
             var token = TokenApp.GerarToken(GeraUsuario());
             var logoutVm = new LogoutViewModel(cliente.Id);
             var controller = InicializarAutenticacaoController();
-            _autenticacaoApp.EfetuarLogoff(Arg.Any<LogoutViewModel>()).Returns(new LogoutViewModel.Response("Realizado com sucesso",true));
+            _autenticacaoApp.Setup(x => x. EfetuarLogoff(It.IsAny<LogoutViewModel>())).ReturnsAsync(new LogoutViewModel.Response("Realizado com sucesso",true));
 
             //Act
             var teste = controller.Deslogar(token,logoutVm);

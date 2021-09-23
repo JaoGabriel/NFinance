@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NFinance.Application.Interfaces;
 using NFinance.Application.ViewModel.GastosViewModel;
 using NFinance.Application;
@@ -15,17 +16,17 @@ namespace NFinance.Tests.WebApi
 {
     public class GastosControllerTests
     {
-        private readonly IGastoApp _gastosApp;
-        private readonly ILogger<GastosController> _logger;
+        private readonly Mock<IGastoApp> _gastosApp;
+        private readonly Mock<ILogger<GastosController>> _logger;
         public GastosControllerTests()
         {
-            _gastosApp = Substitute.For<IGastoApp>();
-            _logger = Substitute.For<ILogger<GastosController>>();
+            _gastosApp = new Mock<IGastoApp>();
+            _logger = new Mock<ILogger<GastosController>>();
         }
 
         private GastosController InicializarGastosController()
         {
-            return new(_logger, _gastosApp);
+            return new(_logger.Object, _gastosApp.Object);
         }
 
         public static Gasto GeraGasto()
@@ -48,7 +49,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var gasto = GeraGasto();
-            _gastosApp.CadastrarGasto(Arg.Any<CadastrarGastoViewModel.Request>()).Returns(new CadastrarGastoViewModel.Response(gasto));
+            _gastosApp.Setup(x => x.CadastrarGasto(It.IsAny<CadastrarGastoViewModel.Request>())).ReturnsAsync(new CadastrarGastoViewModel.Response(gasto));
             var controller = InicializarGastosController();
             var gastoRequest = new CadastrarGastoViewModel.Request();
             var token = TokenApp.GerarToken(GeraUsuario());
@@ -74,7 +75,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var gasto = GeraGasto();
-            _gastosApp.AtualizarGasto(Arg.Any<Guid>(),Arg.Any<AtualizarGastoViewModel.Request>()).Returns(new AtualizarGastoViewModel.Response(gasto));
+            _gastosApp.Setup(x => x.AtualizarGasto(It.IsAny<Guid>(),It.IsAny<AtualizarGastoViewModel.Request>())).ReturnsAsync(new AtualizarGastoViewModel.Response(gasto));
             var controller = InicializarGastosController();
             var gastoRequest = new AtualizarGastoViewModel.Request();
             var token = TokenApp.GerarToken(GeraUsuario());
@@ -100,7 +101,7 @@ namespace NFinance.Tests.WebApi
         {
             //Arrange
             var gasto = GeraGasto();
-            _gastosApp.ConsultarGasto(Arg.Any<Guid>()).Returns(new ConsultarGastoViewModel.Response(gasto));
+            _gastosApp.Setup(x => x.ConsultarGasto(It.IsAny<Guid>())).ReturnsAsync(new ConsultarGastoViewModel.Response(gasto));
             var controller = InicializarGastosController();
             var token = TokenApp.GerarToken(GeraUsuario());
 
@@ -127,7 +128,7 @@ namespace NFinance.Tests.WebApi
             var id = Guid.NewGuid();
             var dataExclusao = DateTime.UtcNow;
             var idCliente = Guid.NewGuid();
-            _gastosApp.ExcluirGasto(Arg.Any<ExcluirGastoViewModel.Request>()).Returns(new ExcluirGastoViewModel.Response { Mensagem = "Excluido Com Sucesso", StatusCode = 200, DataExclusao = dataExclusao });
+            _gastosApp.Setup(x => x.ExcluirGasto(It.IsAny<ExcluirGastoViewModel.Request>())).ReturnsAsync(new ExcluirGastoViewModel.Response { Mensagem = "Excluido Com Sucesso", StatusCode = 200, DataExclusao = dataExclusao });
             var controller = InicializarGastosController();
             var gasto = new ExcluirGastoViewModel.Request { IdGasto = id, MotivoExclusao = "Finalizado Pagamento", IdCliente = idCliente };
             var token = TokenApp.GerarToken(GeraUsuario());
@@ -161,7 +162,7 @@ namespace NFinance.Tests.WebApi
             listaGasto.Add(gasto);
             listaGasto.Add(gasto1);
             var listarGastos = new ConsultarGastosViewModel.Response(listaGasto);
-            _gastosApp.ConsultarGastos(Arg.Any<Guid>()).Returns(listarGastos);
+            _gastosApp.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listarGastos);
             var controller = InicializarGastosController();
             var token = TokenApp.GerarToken(GeraUsuario());
 
