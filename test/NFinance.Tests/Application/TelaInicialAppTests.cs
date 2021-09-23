@@ -3,7 +3,6 @@ using NFinance.Domain.Identidade;
 using NFinance.Domain.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using Xunit;
@@ -536,6 +535,7 @@ namespace NFinance.Tests.Application
             var nomeGasto1 = "Gasto1";
             var dataGasto = DateTime.Today;
             var dataGasto1 = DateTime.Today.AddMonths(-5);
+            var dataGasto = DateTime.Today;
             var qtdParcelas = 6;
             var qtdParcelas1 = 0;
             var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
