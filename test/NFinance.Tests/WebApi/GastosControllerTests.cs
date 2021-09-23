@@ -7,9 +7,6 @@ using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NFinance.Application.Interfaces;
-using NFinance.Application.ViewModel.GastosViewModel;
-using NFinance.Application;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi

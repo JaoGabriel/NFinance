@@ -1,8 +1,8 @@
 ﻿using System;
-using NFinance.Domain.Exceptions;
 using NFinance.Domain.Identidade;
-using NFinance.Domain.Exceptions.Cliente;
 using System.ComponentModel.DataAnnotations;
+using NFinance.Domain.Exceptions;
+using NFinance.Domain.ObjetosDeValor;
 
 namespace NFinance.Domain
 {
@@ -19,60 +19,61 @@ namespace NFinance.Domain
         public string Nome { get; private set; }
 
         [Required]
-        public string CPF { get; private set; }
+        public Cpf Cpf { get; private set; }
         
         [Required]
-        public string Email { get; private set; }
+        public Email Email { get; private set; }
 
-        public Cliente(string nome, string cpf, string email, Usuario usuario)
+        [Required]
+        public Celular Celular { get; set; }
+
+        public void CadastrarCliente(string nome, string cpf, string email,string celular)
         {
-            ValidaCadastroCliente(nome,cpf,email,usuario);
-                
+            ValidaDadosCliente(nome,cpf,email,celular);
+            
             Id = Guid.NewGuid();
             Nome = nome;
-            CPF = cpf;
-            Email = email;
+            Cpf = new Cpf(cpf);
+            Email = new Email(email);
+            Celular = new Celular(celular);
+        }
+        
+        public void AtualizarDadosCliente(string nome, string cpf, string email,string celular)
+        {
+            ValidaDadosCliente(nome,cpf,email,celular);
+            
+            Nome = nome;
+            Cpf = new Cpf(cpf);
+            Email = new Email(email);
+            Celular = new Celular(celular);
+        }
+
+        public void AtruibiUsuarioCliente(Usuario usuario)
+        {
+            ValidaUsuarioCliente(usuario);
+
             Usuario = usuario;
         }
-        
-        public Cliente(Guid id,string nome, string cpf, string email)
-        {
-            ValidaCliente(id,nome,cpf,email);
-                
-            Id = id;
-            Nome = nome;
-            CPF = cpf;
-            Email = email;
-        }
 
-        private static void ValidaCadastroCliente(string nome, string cpf, string email,Usuario usuario)
+        private static void ValidaDadosCliente(string nome, string cpf, string email,string celular)
         {
             if (string.IsNullOrWhiteSpace(nome)) 
-                throw new NomeClienteException();
+                throw new DomainException("Nome inválido.");
             
             if (string.IsNullOrWhiteSpace(cpf)) 
-                throw new CpfClienteException();
+                throw new DomainException("Cpf inválido.");
            
             if (string.IsNullOrWhiteSpace(email)) 
-                throw new EmailClienteException();
-
-            if (usuario is null)
-                throw new UsuarioException();
+                throw new DomainException("Email inválido.");
+            
+            if (string.IsNullOrWhiteSpace(celular)) 
+                throw new DomainException("Telefone Celular inválido.");
         }
         
-        private static void ValidaCliente(Guid id, string nome, string cpf, string email)
+        private static void ValidaUsuarioCliente(Usuario usuario)
         {
-            if (Guid.Empty.Equals(id)) 
-                throw new IdException();
-            
-            if (string.IsNullOrWhiteSpace(nome))
-                throw new NomeClienteException();
-            
-            if (string.IsNullOrWhiteSpace(cpf)) 
-                throw new CpfClienteException();
-            
-            if (string.IsNullOrWhiteSpace(email)) 
-                throw new EmailClienteException();
+            if (usuario is null) 
+                throw new DomainException("Usuário inválido.");
         }
     }
 }

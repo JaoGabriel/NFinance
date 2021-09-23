@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
-using NFinance.Application;
 using System.Threading.Tasks;
 using Moq;
-using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Domain;
-using NFinance.Domain.Exceptions;
-using NFinance.Domain.Exceptions.Ganho;
 using NFinance.Domain.Interfaces.Repository;
 
 namespace NFinance.Tests.Application

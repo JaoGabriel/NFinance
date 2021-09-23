@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using NFinance.Domain.Exceptions;
-using NFinance.Domain.Exceptions.Autenticacao;
 using NFinance.Domain.Identidade;
 using NFinance.Domain.Repository;
 using System.Diagnostics.CodeAnalysis;

@@ -2,7 +2,6 @@ using NSwag;
 using System.Text;
 using System.Linq;
 using NFinance.Infra;
-using NFinance.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.CodeAnalysis;

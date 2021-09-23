@@ -21,7 +21,7 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
         {
             Id = cliente.Id;
             Nome = cliente.Nome;
-            Cpf = cliente.CPF;
+            Cpf = cliente.Cpf;
             Email = cliente.Email;
         }
 
@@ -41,7 +41,7 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
             {
                 Id = cliente.Id;
                 Nome = cliente.Nome;
-                Cpf = cliente.CPF;
+                Cpf = cliente.Cpf;
                 Email = cliente.Email;
             }
         }

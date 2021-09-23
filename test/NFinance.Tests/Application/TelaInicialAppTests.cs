@@ -1,6 +1,4 @@
-﻿using NFinance.Application;
-using NFinance.Domain;
-using NFinance.Domain.Exceptions;
+﻿using NFinance.Domain;
 using NFinance.Domain.Identidade;
 using NFinance.Domain.Interfaces.Repository;
 using System;
@@ -113,7 +111,7 @@ namespace NFinance.Tests.Application
             //Assert Cliente
             Assert.Equal(cliente.Id, response.Cliente.Id);
             Assert.Equal(cliente.Nome, response.Cliente.Nome);
-            Assert.Equal(cliente.CPF, response.Cliente.CPF);
+            Assert.Equal(cliente.Cpf, response.Cliente.Cpf);
             Assert.Equal(cliente.Email, response.Cliente.Email);
             Assert.NotNull(cliente.Usuario.PasswordHash);
             //Assert Ganho

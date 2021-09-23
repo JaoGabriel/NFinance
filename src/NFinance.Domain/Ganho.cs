@@ -1,9 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using NFinance.Domain.Exceptions;
-using NFinance.Domain.Exceptions.Ganho;
-using NFinance.Domain.Exceptions.Gasto;
 
 namespace NFinance.Domain
 {

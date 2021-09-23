@@ -1,15 +1,12 @@
 ﻿using Xunit;
 using System;
 using NFinance.Domain;
-using NFinance.Application;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NFinance.Application.Interfaces;
-using NFinance.Application.ViewModel.InvestimentosViewModel;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi

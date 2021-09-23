@@ -3,9 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NFinance.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using NFinance.Application.ViewModel.TelaInicialViewModel;
 
 namespace NFinance.WebApi.Controllers
 {

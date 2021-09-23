@@ -1,13 +1,9 @@
 ﻿using Xunit;
 using System;
 using NFinance.Domain;
-using NFinance.Application;
 using System.Threading.Tasks;
 using Moq;
-using NFinance.Domain.Exceptions;
-using NFinance.Domain.Exceptions.Cliente;
 using NFinance.Domain.Interfaces.Repository;
-using NFinance.Application.ViewModel.ClientesViewModel;
 using NFinance.Domain.Identidade;
 using NFinance.Domain.Repository;
 
@@ -55,7 +51,7 @@ namespace NFinance.Tests.Application
             Assert.NotNull(response);
             Assert.IsType<CadastrarClienteViewModel.Response>(response);
             Assert.Equal(cliente.Nome, response.Nome);
-            Assert.Equal(cliente.CPF, response.Cpf);
+            Assert.Equal(cliente.Cpf, response.Cpf);
             Assert.Equal(cliente.Email, response.Email);
             Assert.NotNull(cliente.Usuario.PasswordHash);
         }
@@ -132,7 +128,7 @@ namespace NFinance.Tests.Application
             Assert.NotNull(response);
             Assert.IsType<AtualizarClienteViewModel.Response>(response);
             Assert.Equal(cliente.Nome, response.Nome);
-            Assert.Equal(cliente.CPF, response.Cpf);
+            Assert.Equal(cliente.Cpf, response.Cpf);
             Assert.Equal(cliente.Email, response.Email);
             Assert.NotNull(cliente.Usuario.PasswordHash);
         }
@@ -219,7 +215,7 @@ namespace NFinance.Tests.Application
             Assert.NotNull(response);
             Assert.IsType<ConsultarClienteViewModel.Response>(response);
             Assert.Equal(cliente.Nome, response.Nome);
-            Assert.Equal(cliente.CPF, response.Cpf);
+            Assert.Equal(cliente.Cpf, response.Cpf);
             Assert.Equal(cliente.Email, response.Email);
             Assert.NotNull(cliente.Usuario.PasswordHash);
         }

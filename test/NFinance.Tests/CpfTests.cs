@@ -1,5 +1,4 @@
-﻿using NFinance.Domain.Exceptions.ObjetosDeValor;
-using NFinance.Domain.ObjetosDeValor;
+﻿using NFinance.Domain.ObjetosDeValor;
 using Xunit;
 
 namespace NFinance.Tests

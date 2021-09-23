@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Http;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NFinance.Application.Interfaces;
-using NFinance.Application.ViewModel.ClientesViewModel;
-using NFinance.Application;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
@@ -81,7 +78,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
             Assert.Equal(cliente.Id, consultarClienteViewModel.Id);
             Assert.Equal(cliente.Nome, consultarClienteViewModel.Nome);
-            Assert.Equal(cliente.CPF, consultarClienteViewModel.Cpf);
+            Assert.Equal(cliente.Cpf, consultarClienteViewModel.Cpf);
             Assert.Equal(cliente.Email, consultarClienteViewModel.Email);
         }
 
@@ -105,7 +102,7 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
             Assert.Equal(cliente.Id, AtualizarClienteViewModel.Id);
             Assert.Equal(cliente.Nome, AtualizarClienteViewModel.Nome);
-            Assert.Equal(cliente.CPF, AtualizarClienteViewModel.Cpf);
+            Assert.Equal(cliente.Cpf, AtualizarClienteViewModel.Cpf);
             Assert.Equal(cliente.Email, AtualizarClienteViewModel.Email);
         }
     }

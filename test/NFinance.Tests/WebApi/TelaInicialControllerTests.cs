@@ -1,6 +1,5 @@
 ﻿using System;
 using Xunit;
-using System.Linq;
 using NFinance.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -8,13 +7,6 @@ using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NFinance.Application.Interfaces;
-using NFinance.Application.ViewModel.GanhoViewModel;
-using NFinance.Application.ViewModel.GastosViewModel;
-using NFinance.Application.ViewModel.ResgatesViewModel;
-using NFinance.Application.ViewModel.TelaInicialViewModel;
-using NFinance.Application.ViewModel.InvestimentosViewModel;
-using NFinance.Application;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
@@ -109,7 +101,7 @@ namespace NFinance.Tests.WebApi
             //Assert Cliente
             Assert.Equal(cliente.Id, telaInicialViewModel.Cliente.Id);
             Assert.Equal(cliente.Nome, telaInicialViewModel.Cliente.Nome);
-            Assert.Equal(cliente.CPF, telaInicialViewModel.Cliente.CPF);
+            Assert.Equal(cliente.Cpf, telaInicialViewModel.Cliente.Cpf);
             Assert.Equal(cliente.Email, telaInicialViewModel.Cliente.Email);
             //Assert Ganho
             var ganhoTest = telaInicialViewModel.GanhoMensal.Ganhos.FirstOrDefault(g => g.Id == ganho.Id);

@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Http;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NFinance.Application.Interfaces;
-using NFinance.Application.ViewModel.AutenticacaoViewModel;
-using NFinance.Application;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
