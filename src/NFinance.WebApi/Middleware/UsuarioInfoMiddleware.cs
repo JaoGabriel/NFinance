@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
 using NFinance.Domain.ObjetosDeValor;
 
 namespace NFinance.WebApi.Middleware
@@ -14,12 +15,12 @@ namespace NFinance.WebApi.Middleware
     public class UsuarioInfoMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly AppSettings _appSettings;
+        private IConfiguration Configuration { get; }
 
-        public UsuarioInfoMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+        public UsuarioInfoMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
-            _appSettings = appSettings.Value;
+            Configuration = configuration;
         }
 
         public async Task Invoke(HttpContext context, BaseDadosContext dataContext)
@@ -40,7 +41,7 @@ namespace NFinance.WebApi.Middleware
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.TokenSettings.ToString());
+                var key = Encoding.ASCII.GetBytes(Configuration.GetSection("TokenSettings:TokenSecret").Value);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -48,7 +49,7 @@ namespace NFinance.WebApi.Middleware
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                }, out var validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 

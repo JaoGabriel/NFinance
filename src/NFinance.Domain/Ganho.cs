@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using NFinance.Domain.Exceptions;
 
 namespace NFinance.Domain
 {
@@ -29,10 +30,6 @@ namespace NFinance.Domain
         [Range(typeof(DateTime), "01/01/1950", "31/12/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataDoGanho { get; set; }
 
-        public string MotivoExclusao { get; set; }
-
-        public Ganho() {}
-
         public Ganho(Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
         {
             ValidaCadastroGanho(idCliente,nomeGanho,valor,dataDoGanho);
@@ -45,70 +42,41 @@ namespace NFinance.Domain
             DataDoGanho = dataDoGanho;
         }
 
-        public Ganho(Guid id, Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
+        public void AtualizaGanho(string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
         {
-            ValidaGanho(id,idCliente,nomeGanho,valor,dataDoGanho);
+            ValidaGanho(nomeGanho,valor,dataDoGanho);
             
-            Id = id;
-            IdCliente = idCliente;
             NomeGanho = nomeGanho;
             Valor = valor;
             Recorrente = recorrente;
             DataDoGanho = dataDoGanho;
         }
-        
-        public Ganho(Guid id, Guid idCliente, string motivoExclusao)
-        {
-            ValidaExclusaoGanho(id,idCliente,motivoExclusao);
-            
-            Id = id;
-            IdCliente = idCliente;
-            MotivoExclusao = motivoExclusao;
-        }
 
         private static void ValidaCadastroGanho(Guid idCliente, string nomeGanho, decimal valor, DateTime dataDoGanho)
         {
             if (Guid.Empty.Equals(idCliente)) 
-                throw new IdException();
+                throw new DomainException();
             
             if (string.IsNullOrWhiteSpace(nomeGanho)) 
-                throw new NomeGanhoException();
+                throw new DomainException();
             
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
-                throw new ValorGanhoException();
+                throw new DomainException();
 
             if (dataDoGanho < DateTime.MinValue.AddYears(1949) || dataDoGanho > DateTime.MaxValue.AddYears(-7899))
-                throw new DataGanhoException();
+                throw new DomainException();
         }
         
-        private static void ValidaGanho(Guid id,Guid idCliente, string nomeGanho, decimal valor, DateTime dataDoGanho)
+        private static void ValidaGanho(string nomeGanho, decimal valor, DateTime dataDoGanho)
         {
-            if (Guid.Empty.Equals(id)) 
-                throw new IdException();
-            
-            if (Guid.Empty.Equals(idCliente)) 
-                throw new IdException();
-            
             if (string.IsNullOrWhiteSpace(nomeGanho)) 
-                throw new NomeGanhoException();
+                throw new DomainException();
             
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
-                throw new ValorGanhoException();
+                throw new DomainException();
 
             if (dataDoGanho <= DateTime.MinValue || dataDoGanho >= DateTime.MaxValue)
-                throw new DataGanhoException();
-        }
-        
-        private static void ValidaExclusaoGanho(Guid id, Guid idCliente,string motivoExclusao)
-        {
-            if (Guid.Empty.Equals(id)) 
-                throw new IdException();
-            
-            if (Guid.Empty.Equals(idCliente)) 
-                throw new IdException();
-            
-            if (string.IsNullOrWhiteSpace(motivoExclusao)) 
-                throw new MotivoExclusaoException();
+                throw new DomainException();
         }
     }
 }

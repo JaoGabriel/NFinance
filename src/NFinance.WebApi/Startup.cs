@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using NSwag.Generation.Processors.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using NFinance.Application;
 using NFinance.Infra.Options;
 using NFinance.WebApi.Middleware;
 

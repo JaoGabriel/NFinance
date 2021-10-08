@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.ClientesViewModel;
 
 namespace NFinance.WebApi.Controllers
 {

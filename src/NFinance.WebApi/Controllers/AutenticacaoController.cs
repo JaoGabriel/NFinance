@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using NFinance.Domain.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.AutenticacaoViewModel;
 
 namespace NFinance.WebApi.Controllers
 {

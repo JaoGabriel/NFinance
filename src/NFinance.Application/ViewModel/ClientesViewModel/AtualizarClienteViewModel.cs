@@ -11,8 +11,8 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
             public Request(Cliente request)
             {
                 Nome = request.Nome;
-                Cpf = request.Cpf;
-                Email = request.Email;
+                Cpf = request.Cpf.ToString();
+                Email = request.Email.ToString();
             }
         }
 

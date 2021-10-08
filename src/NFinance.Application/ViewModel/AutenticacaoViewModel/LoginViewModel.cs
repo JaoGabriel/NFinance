@@ -24,7 +24,7 @@ namespace NFinance.Application.ViewModel.AutenticacaoViewModel
 
             public Response() { }
 
-            public Response(Usuario usuario, string token)
+            public Response(Usuario usuario,string token)
             {
                 IdCliente = usuario.Id;
                 Nome = usuario.UserName;
@@ -35,7 +35,6 @@ namespace NFinance.Application.ViewModel.AutenticacaoViewModel
             {
                 IdCliente = cliente.Id;
                 Nome = cliente.Nome;
-                Token = null;
                 Autenticado = estado;
                 Erro = erro;
             }

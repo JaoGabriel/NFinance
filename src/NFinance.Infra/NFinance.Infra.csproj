@@ -19,8 +19,4 @@
     <ProjectReference Include="..\NFinance.Domain\NFinance.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Repository\RedisRepository.cs" />
-  </ItemGroup>
-
 </Project>

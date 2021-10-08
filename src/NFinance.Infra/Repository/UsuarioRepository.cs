@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using NFinance.Domain.Identidade;
-using NFinance.Domain.Repository;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using NFinance.Infra.Exceptions;
+using NFinance.Infra.Token;
+using NFinance.Domain.Interfaces.Repository;
 
 namespace NFinance.Infra.Repository
 {
@@ -20,10 +22,10 @@ namespace NFinance.Infra.Repository
 
         public async Task<Usuario> CadastrarUsuario(string email, string senha)
         {
-            var user = new Usuario { Email = email };
+            var user = new Usuario() { Email = email };
             var resultadoCadastro = await _userManager.CreateAsync(user, senha);
 
-            if (!resultadoCadastro.Succeeded) throw new UsuarioException("Ocorreu um erro, tente novamente mais tarde.");
+            if (!resultadoCadastro.Succeeded) throw new InfraException("Ocorreu um erro, tente novamente mais tarde.");
 
             return user;
         }
@@ -33,9 +35,9 @@ namespace NFinance.Infra.Repository
             var loginResponse = await _signInManager.PasswordSignInAsync(email, senha, false, true);
 
             if (!loginResponse.Succeeded)
-                throw new LoginException("Usuario ou senha inválido, tente novamente");
-
-            return await _userManager.FindByEmailAsync(email);            
+                throw new InfraException("Usuario ou senha inválido, tente novamente");
+            
+            return await _userManager.FindByEmailAsync(email);
         }
 
         public async Task Desconectar()

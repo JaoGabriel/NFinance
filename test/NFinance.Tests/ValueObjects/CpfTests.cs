@@ -1,4 +1,5 @@
-﻿using NFinance.Domain.ObjetosDeValor;
+﻿using NFinance.Domain.Exceptions;
+using NFinance.Domain.ObjetosDeValor;
 using Xunit;
 
 namespace NFinance.Tests.ValueObjects
@@ -11,7 +12,7 @@ namespace NFinance.Tests.ValueObjects
         [InlineData(" ")]
         public void DeveLancarUmaDomainException_QuandoNumeroCpfVazioNullOuEspacoEmBranco(string numeroCpf)
         {
-            Assert.Throws<CpfException>(() => new Cpf(numeroCpf));
+            Assert.Throws<DomainException>(() => new Cpf(numeroCpf));
         }
 
         [Theory]
@@ -19,14 +20,14 @@ namespace NFinance.Tests.ValueObjects
         [InlineData("1234567891")]
         public void DeveLancarUmaDomainException_QuandoForDiferenteDeOnzeCaracteres(string numeroCpf)
         {
-            Assert.Throws<CpfException>(() => new Cpf(numeroCpf));
+            Assert.Throws<DomainException>(() => new Cpf(numeroCpf));
         }
 
         [Fact]
         public void DeveLancarUmaDomainException_QuandoForUmNumeroCpfInvalido()
         {
             var numeroCpfInvalido = "11111111111";
-            Assert.Throws<CpfException>(() => new Cpf(numeroCpfInvalido));
+            Assert.Throws<DomainException>(() => new Cpf(numeroCpfInvalido));
         }
 
         [Theory]
@@ -51,8 +52,8 @@ namespace NFinance.Tests.ValueObjects
             var cpfComPrimeiroDigitoVerificadorInvalido = "32312312312";
             var cpfComPrimeiroDigitoVerificadorInvalidoComRestoMaiorQueUm = "04522139928";
 
-            Assert.Throws<CpfException>(() => new Cpf(cpfComPrimeiroDigitoVerificadorInvalido));
-            Assert.Throws<CpfException>(() => new Cpf(cpfComPrimeiroDigitoVerificadorInvalidoComRestoMaiorQueUm));
+            Assert.Throws<DomainException>(() => new Cpf(cpfComPrimeiroDigitoVerificadorInvalido));
+            Assert.Throws<DomainException>(() => new Cpf(cpfComPrimeiroDigitoVerificadorInvalidoComRestoMaiorQueUm));
         }
 
         [Fact]
@@ -61,8 +62,8 @@ namespace NFinance.Tests.ValueObjects
             var cpfComSegundoDigitoVerificadorInvalido = "48855856511";
             var cpfComSegundoDigitoVerificadorInvalidoComRestoMaiorQueUm = "04522139910";
 
-            Assert.Throws<CpfException>(() => new Cpf(cpfComSegundoDigitoVerificadorInvalido));
-            Assert.Throws<CpfException>(() => new Cpf(cpfComSegundoDigitoVerificadorInvalidoComRestoMaiorQueUm));
+            Assert.Throws<DomainException>(() => new Cpf(cpfComSegundoDigitoVerificadorInvalido));
+            Assert.Throws<DomainException>(() => new Cpf(cpfComSegundoDigitoVerificadorInvalidoComRestoMaiorQueUm));
         }
 
         [Fact]
@@ -81,7 +82,7 @@ namespace NFinance.Tests.ValueObjects
         {
             var cpfComSequenciaDeNumeros = "12345678909";
 
-            Assert.Throws<CpfException>(() => new Cpf(cpfComSequenciaDeNumeros));
+            Assert.Throws<DomainException>(() => new Cpf(cpfComSequenciaDeNumeros));
         }
 
         [Fact]

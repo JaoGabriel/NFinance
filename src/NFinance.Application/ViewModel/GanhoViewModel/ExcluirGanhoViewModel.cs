@@ -1,5 +1,4 @@
 ﻿using System;
-using NFinance.Domain;
 
 namespace NFinance.Application.ViewModel.GanhoViewModel
 {
@@ -9,21 +8,10 @@ namespace NFinance.Application.ViewModel.GanhoViewModel
         {
             public Guid IdGanho { get; set; }
 
-            public Guid IdCliente { get; set; }
-
             public string MotivoExclusao { get; set; }
-
-            public Request() { }
-            
-            public Request(Ganho ganho)
-            {
-                IdGanho = ganho.Id;
-                IdCliente = ganho.IdCliente;
-                MotivoExclusao = ganho.MotivoExclusao;
-            }
         }
-
-        public class Response
+        
+       public class Response
         {
             public int StatusCode { get; set; }
 

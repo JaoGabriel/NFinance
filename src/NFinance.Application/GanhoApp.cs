@@ -1,10 +1,10 @@
 ﻿using System;
 using NFinance.Domain;
 using System.Threading.Tasks;
+using NFinance.Application.Exceptions;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.GanhoViewModel;
-using NFinance.Domain.Exceptions;
 
 namespace NFinance.Application
 {
@@ -19,8 +19,9 @@ namespace NFinance.Application
 
         public async Task<AtualizarGanhoViewModel.Response> AtualizarGanho(Guid idGanho, AtualizarGanhoViewModel.Request request)
         {
-            var ganhoDadosAtualizados = new Ganho(idGanho,request.IdCliente,request.NomeGanho,request.Valor,request.Recorrente,request.DataDoGanho);
-            var ganhoAtualizado = await _ganhoRepository.AtualizarGanho(ganhoDadosAtualizados);
+            var ganho = await _ganhoRepository.ConsultarGanho(idGanho);
+            ganho.AtualizaGanho(request.NomeGanho,request.Valor,request.Recorrente,request.DataDoGanho);
+            var ganhoAtualizado = await _ganhoRepository.AtualizarGanho(ganho);
             var resposta = new AtualizarGanhoViewModel.Response(ganhoAtualizado);
             return resposta;        
         }
@@ -60,7 +61,7 @@ namespace NFinance.Application
         private static void ValidaId(Guid id)
         {
             if (Guid.Empty.Equals(id)) 
-                throw new IdException();
+                throw new GanhoException();
         }
     }
 }

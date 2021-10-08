@@ -3,9 +3,12 @@ using NFinance.Domain.Identidade;
 using NFinance.Domain.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Moq;
+using NFinance.Application;
 using Xunit;
+using NFinance.Domain.Exceptions;
 
 namespace NFinance.Tests.Application
 {
@@ -38,7 +41,7 @@ namespace NFinance.Tests.Application
 
         public static Cliente GeraCliente()
         {
-            return new Cliente("Claudiosmar Santos", "123.654.987-96", "teste@teste.com", GeraUsuario());
+            return new Cliente("Claudiosmar Santos", "123.654.987-96", "teste@teste.com", "41986541574");
         }
 
         public static List<Ganho> GeraListaGanho(Cliente cliente)
@@ -253,14 +256,14 @@ namespace NFinance.Tests.Application
             var listResgate = new List<Resgate>();
             var listGanho = new List<Ganho>();
             var listGasto = new List<Gasto>();
-            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
-            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
-            var ganho2 = new Ganho { Id = idGanho2, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho2, Recorrente = recorrente };
-            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
-            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
-            var investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataAplicacao };
-            var investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataAplicacao1 };
-            var resgate = new Resgate { Id = idResgate, IdCliente = idCliente, IdInvestimento = idInvestimento, Valor = valorInvestimento, DataResgate = dataResgate, MotivoResgate = motivoResgate };
+            var ganho = new Ganho(idCliente, nomeGanho, valorGanho, recorrente, dataGanho);
+            var ganho1 = new Ganho(idCliente, nomeGanho, valorGanho, recorrente1, dataGanho1);
+            var ganho2 = new Ganho(idCliente, nomeGanho, valorGanho, recorrente, dataGanho2);
+            var gasto = new Gasto(idCliente, nomeGasto, valorGasto, qtdParcelas, dataGasto);
+            var gasto1 = new Gasto(idCliente, nomeGasto, valorGasto, qtdParcelas1, dataGasto1);
+            var investimento = new Investimento(idCliente, nomeInvestimento, valorInvestimento, dataAplicacao);
+            var investimento1 = new Investimento(idCliente, nomeInvestimento, valorInvestimento, dataAplicacao1);
+            var resgate = new Resgate(idInvestimento, idCliente, valorInvestimento, motivoResgate, dataResgate);
             listGanho.Add(ganho);
             listGanho.Add(ganho1);
             listGanho.Add(ganho2);
@@ -272,12 +275,12 @@ namespace NFinance.Tests.Application
             _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
             _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
             _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
-            _clienteRepository.Setup(x => x.ConsultarCliente(It.IsAny<Guid>())).ReturnsAsync(new Cliente(Guid.Empty, "123.654.987-96", "teste","teste@teste.com"));
+            _clienteRepository.Setup(x => x.ConsultarCliente(It.IsAny<Guid>())).ReturnsAsync(new Cliente("123.654.987-96", "teste","teste@teste.com","41987651325"));
             _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
 
             //Act
-            await Assert.ThrowsAsync<IdException>(() => /*Act*/ Repositorys.TelaInicial(idCliente));
+            await Assert.ThrowsAsync<DomainException>(() => /*Act*/ Repositorys.TelaInicial(idCliente));
         }
 
         [Fact]
@@ -295,8 +298,8 @@ namespace NFinance.Tests.Application
             var dataGanho1 = DateTime.Today.AddDays(-3);
             var recorrente = false;
             var recorrente1 = true;
-            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
-            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var ganho = new Ganho(idCliente, nomeGanho, valorGanho, recorrente, dataGanho);
+            var ganho1 = new Ganho(idCliente, nomeGanho1, valorGanho1, recorrente1, dataGanho1);
             var listGanho = new List<Ganho> { ganho, ganho1};
             _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
             var Repositorys = InicializaApplication();
@@ -339,8 +342,8 @@ namespace NFinance.Tests.Application
             var dataGanho1 = DateTime.Today.AddMonths(3);
             var recorrente = false;
             var recorrente1 = true;
-            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
-            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var ganho = new Ganho(idCliente, nomeGanho, valorGanho, recorrente, dataGanho);
+            var ganho1 = new Ganho(idCliente, nomeGanho1, valorGanho1, recorrente1, dataGanho1);
             var listGanho = new List<Ganho> { ganho, ganho1 };
             _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
             var Repositorys = InicializaApplication();
@@ -368,8 +371,8 @@ namespace NFinance.Tests.Application
             var dataGanho1 = DateTime.Today.AddMonths(-3);
             var recorrente = false;
             var recorrente1 = true;
-            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
-            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var ganho = new Ganho(idCliente, nomeGanho, valorGanho, recorrente, dataGanho);
+            var ganho1 = new Ganho(idCliente, nomeGanho1, valorGanho1, recorrente1, dataGanho1);
             var listGanho = new List<Ganho> { ganho, ganho1 };
             listGanho.Add(ganho);
             listGanho.Add(ganho1);
@@ -399,8 +402,8 @@ namespace NFinance.Tests.Application
             var dataGanho1 = DateTime.Today.AddMonths(5);
             var recorrente = false;
             var recorrente1 = true;
-            var ganho = new Ganho { Id = idGanho, IdCliente = idCliente, Valor = valorGanho, NomeGanho = nomeGanho, DataDoGanho = dataGanho, Recorrente = recorrente };
-            var ganho1 = new Ganho { Id = idGanho1, IdCliente = idCliente, Valor = valorGanho1, NomeGanho = nomeGanho1, DataDoGanho = dataGanho1, Recorrente = recorrente1 };
+            var ganho = new Ganho(idCliente, nomeGanho, valorGanho, recorrente, dataGanho);
+            var ganho1 = new Ganho(idCliente, nomeGanho1, valorGanho1, recorrente1, dataGanho1);
             var listGanho = new List<Ganho> { ganho, ganho1 };
             _ganhoRepository.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listGanho);
             var Repositorys = InicializaApplication();
@@ -434,8 +437,9 @@ namespace NFinance.Tests.Application
             var dataGasto1 = DateTime.Today;
             var dataGasto = DateTime.Today.AddDays(-1);
             var qtdParcelas = 0;
-            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
-            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
+
+            var gasto = new Gasto(idCliente, nomeGasto, valorGasto, qtdParcelas, dataGasto);
+            var gasto1 = new Gasto(idCliente, nomeGasto1, valorGasto1, qtdParcelas, dataGasto1);
             var listGasto = new List<Gasto> { gasto, gasto1 };
             _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
             var Repositorys = InicializaApplication();
@@ -478,8 +482,8 @@ namespace NFinance.Tests.Application
             var dataGasto1 = DateTime.Today.AddMonths(5);
             var dataGasto = DateTime.Today.AddMonths(10);
             var qtdParcelas = 0;
-            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
-            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas };
+            var gasto = new Gasto (idCliente, nomeGasto, valorGasto, qtdParcelas, dataGasto);
+            var gasto1 = new Gasto (idCliente, nomeGasto1, valorGasto1, qtdParcelas, dataGasto1);
             var listGasto = new List<Gasto> { gasto, gasto1 };
             _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
             var Repositorys = InicializaApplication();
@@ -508,8 +512,8 @@ namespace NFinance.Tests.Application
             var dataGasto = DateTime.Today.AddMonths(9);
             var qtdParcelas = 6;
             var qtdParcelas1 = 0;
-            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
-            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
+            var gasto = new Gasto (idCliente, nomeGasto, valorGasto, qtdParcelas, dataGasto);
+            var gasto1 = new Gasto(idCliente, nomeGasto1, valorGasto1, qtdParcelas1, dataGasto1);
             var listGasto = new List<Gasto> { gasto, gasto1 };
             _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
             var Repositorys = InicializaApplication();
@@ -535,12 +539,11 @@ namespace NFinance.Tests.Application
             var nomeGasto1 = "Gasto1";
             var dataGasto = DateTime.Today;
             var dataGasto1 = DateTime.Today.AddMonths(-5);
-            var dataGasto = DateTime.Today;
             var qtdParcelas = 6;
             var qtdParcelas1 = 0;
-            var gasto = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = valorGasto, DataDoGasto = dataGasto, QuantidadeParcelas = qtdParcelas };
-            var gasto1 = new Gasto { Id = idGasto1, IdCliente = idCliente, NomeGasto = nomeGasto1, Valor = valorGasto1, DataDoGasto = dataGasto1, QuantidadeParcelas = qtdParcelas1 };
-            var gastoResponse = new Gasto { Id = idGasto, IdCliente = idCliente, NomeGasto = nomeGasto, Valor = 1000, DataDoGasto = dataGasto, QuantidadeParcelas = 5 };
+            var gasto = new Gasto (idCliente, nomeGasto, valorGasto, qtdParcelas, dataGasto);
+            var gasto1 = new Gasto (idCliente, nomeGasto1, valorGasto1, qtdParcelas1, dataGasto1);
+            var gastoResponse = new Gasto(idCliente, nomeGasto, 1000, 5,dataGasto);
             var listGasto = new List<Gasto> { gasto, gasto1 };
             _gastoRepository.Setup(x => x.ConsultarGastos(It.IsAny<Guid>())).ReturnsAsync(listGasto);
             _gastoRepository.Setup(x => x.AtualizarGasto(It.IsAny<Gasto>())).ReturnsAsync(gastoResponse);
@@ -575,8 +578,8 @@ namespace NFinance.Tests.Application
             var nomeInvestimento1 = "Investimento1";
             var dataInvestimento1 = DateTime.Today.AddDays(-4);
             var dataInvestimento = DateTime.Today;
-            var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
-            var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
+            var Investimento = new Investimento(idCliente,nomeInvestimento,valorInvestimento,dataInvestimento);
+            var Investimento1 = new Investimento(idCliente,nomeInvestimento,valorInvestimento1,dataInvestimento1);
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
             _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
@@ -616,8 +619,8 @@ namespace NFinance.Tests.Application
             var nomeInvestimento1 = "Investimento1";
             var dataInvestimento1 = DateTime.Today.AddMonths(-4);
             var dataInvestimento = DateTime.Today.AddMonths(-2);
-            var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
-            var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
+            var Investimento = new Investimento (idCliente, nomeInvestimento, valorInvestimento, dataInvestimento);
+            var Investimento1 = new Investimento (idCliente, nomeInvestimento1, valorInvestimento1, dataInvestimento1);
             var listInvestimento = new List<Investimento> { Investimento,Investimento1 };
             _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
@@ -643,8 +646,8 @@ namespace NFinance.Tests.Application
             var nomeInvestimento1 = "Investimento1";
             var dataInvestimento1 = DateTime.Today.AddMonths(4);
             var dataInvestimento = DateTime.Today.AddMonths(2);
-            var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
-            var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
+            var Investimento = new Investimento (idCliente, nomeInvestimento, valorInvestimento, dataInvestimento);
+            var Investimento1 = new Investimento (idCliente, nomeInvestimento1, valorInvestimento1, dataInvestimento1);
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
             _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
@@ -670,8 +673,8 @@ namespace NFinance.Tests.Application
             var nomeInvestimento1 = "Investimento1";
             var dataInvestimento1 = DateTime.Today.AddMonths(4);
             var dataInvestimento = DateTime.Today.AddMonths(-2);
-            var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
-            var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
+            var Investimento = new Investimento (idCliente, nomeInvestimento, valorInvestimento, dataInvestimento);
+            var Investimento1 = new Investimento (idCliente, nomeInvestimento1, valorInvestimento1, dataInvestimento1);
             var listInvestimento = new List<Investimento> { Investimento, Investimento1 };
             _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
@@ -701,9 +704,9 @@ namespace NFinance.Tests.Application
             var dataInvestimento = DateTime.Today.AddMonths(-4);
             var dataInvestimento1 = DateTime.Today.AddMonths(4);
             var dataInvestimento2 = DateTime.Today;
-            var Investimento = new Investimento { Id = idInvestimento, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valorInvestimento, DataAplicacao = dataInvestimento };
-            var Investimento1 = new Investimento { Id = idInvestimento1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento1, Valor = valorInvestimento1, DataAplicacao = dataInvestimento1 };
-            var Investimento2 = new Investimento { Id = idInvestimento2, IdCliente = idCliente, NomeInvestimento = nomeInvestimento2, Valor = valorInvestimento2, DataAplicacao = dataInvestimento2 };
+            var Investimento = new Investimento (idCliente, nomeInvestimento, valorInvestimento, dataInvestimento);
+            var Investimento1 = new Investimento (idCliente, nomeInvestimento1, valorInvestimento1, dataInvestimento1);
+            var Investimento2 = new Investimento (idCliente, nomeInvestimento2, valorInvestimento2, dataInvestimento2);
             var listInvestimento = new List<Investimento> { Investimento, Investimento1, Investimento2 };
             _investimentoRepository.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listInvestimento);
             var Repositorys = InicializaApplication();
@@ -728,16 +731,16 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var idCliente = Guid.NewGuid();
-            var idResgate = Guid.NewGuid();
-            var idResgate1 = Guid.NewGuid();
+            var idInvestimento = Guid.NewGuid();
+            var idInvestimento1 = Guid.NewGuid();
             var valorResgate = 6000M;
             var valorResgate1 = 3000M;
-            var nomeResgate = "Resgate";
-            var nomeResgate1 = "Resgate1";
+            var motivoResgate = "Resgate";
+            var motivoResgate1 = "Resgate1";
             var dataResgate = DateTime.Today;
             var dataResgate1 = DateTime.Today;
-            var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
-            var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
+            var Resgate = new Resgate(idInvestimento, idCliente,valorResgate,motivoResgate,dataResgate);
+            var Resgate1 = new Resgate(idInvestimento1,idCliente,valorResgate1,motivoResgate1,dataResgate1);
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
             _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
             var Repositorys = InicializaApplication();
@@ -748,20 +751,6 @@ namespace NFinance.Tests.Application
             //Assert
             Assert.Equal(2, response.Resgates.Count);
             Assert.Equal(9000, response.SaldoMensal);
-            //Assert Resgate
-            var ResgateTest = response.Resgates.FirstOrDefault(g => g.Id == idResgate);
-            Assert.Equal(idResgate, ResgateTest.Id);
-            Assert.Equal(idCliente, ResgateTest.IdCliente);
-            Assert.Equal(nomeResgate, ResgateTest.MotivoResgate);
-            Assert.Equal(valorResgate, ResgateTest.Valor);
-            Assert.Equal(dataResgate, ResgateTest.DataResgate);
-            //Assert Resgate 1
-            var ResgateTest1 = response.Resgates.FirstOrDefault(g => g.Id == idResgate1);
-            Assert.Equal(idResgate1, ResgateTest1.Id);
-            Assert.Equal(idCliente, ResgateTest1.IdCliente);
-            Assert.Equal(nomeResgate1, ResgateTest1.MotivoResgate);
-            Assert.Equal(valorResgate1, ResgateTest1.Valor);
-            Assert.Equal(dataResgate1, ResgateTest1.DataResgate);
         }
 
         [Fact]
@@ -769,16 +758,16 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var idCliente = Guid.NewGuid();
-            var idResgate = Guid.NewGuid();
-            var idResgate1 = Guid.NewGuid();
+            var idInvestimento = Guid.NewGuid();
+            var idInvestimento1 = Guid.NewGuid();
             var valorResgate = 6000M;
             var valorResgate1 = 3000M;
-            var nomeResgate = "Resgate";
-            var nomeResgate1 = "Resgate1";
+            var motivoResgate = "Resgate";
+            var motivoResgate1 = "Resgate1";
             var dataResgate = DateTime.Today.AddMonths(-5);
             var dataResgate1 = DateTime.Today;
-            var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
-            var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
+            var Resgate = new Resgate(idInvestimento, idCliente, valorResgate, motivoResgate, dataResgate);
+            var Resgate1 = new Resgate(idInvestimento1, idCliente, valorResgate1, motivoResgate1, dataResgate1);
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
             _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
             var Repositorys = InicializaApplication();
@@ -789,13 +778,6 @@ namespace NFinance.Tests.Application
             //Assert
             Assert.Single(response.Resgates);
             Assert.Equal(3000, response.SaldoMensal);
-            //Assert Resgate 
-            var ResgateTest1 = response.Resgates.FirstOrDefault(g => g.Id == idResgate1);
-            Assert.Equal(idResgate1, ResgateTest1.Id);
-            Assert.Equal(idCliente, ResgateTest1.IdCliente);
-            Assert.Equal(nomeResgate1, ResgateTest1.MotivoResgate);
-            Assert.Equal(valorResgate1, ResgateTest1.Valor);
-            Assert.Equal(dataResgate1, ResgateTest1.DataResgate);
         }
 
         [Fact]
@@ -803,16 +785,16 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var idCliente = Guid.NewGuid();
-            var idResgate = Guid.NewGuid();
-            var idResgate1 = Guid.NewGuid();
+            var idInvestimento = Guid.NewGuid();
+            var idInvestimento1 = Guid.NewGuid();
             var valorResgate = 6000M;
             var valorResgate1 = 3000M;
-            var nomeResgate = "Resgate";
-            var nomeResgate1 = "Resgate1";
+            var motivoResgate = "Resgate";
+            var motivoResgate1 = "Resgate1";
             var dataResgate = DateTime.Today.AddMonths(-5);
             var dataResgate1 = DateTime.Today.AddMonths(-6);
-            var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
-            var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
+            var Resgate = new Resgate(idInvestimento, idCliente, valorResgate, motivoResgate, dataResgate);
+            var Resgate1 = new Resgate(idInvestimento1, idCliente, valorResgate1, motivoResgate1, dataResgate1);
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
             _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
             var Repositorys = InicializaApplication();
@@ -830,16 +812,16 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var idCliente = Guid.NewGuid();
-            var idResgate = Guid.NewGuid();
-            var idResgate1 = Guid.NewGuid();
+            var idInvestimento = Guid.NewGuid();
+            var idInvestimento1 = Guid.NewGuid();
             var valorResgate = 6000M;
             var valorResgate1 = 3000M;
-            var nomeResgate = "Resgate";
-            var nomeResgate1 = "Resgate1";
+            var motivoResgate = "Resgate";
+            var motivoResgate1 = "Resgate1";
             var dataResgate = DateTime.Today.AddMonths(5);
             var dataResgate1 = DateTime.Today.AddMonths(6);
-            var Resgate = new Resgate { Id = idResgate, IdCliente = idCliente, MotivoResgate = nomeResgate, Valor = valorResgate, DataResgate = dataResgate };
-            var Resgate1 = new Resgate { Id = idResgate1, IdCliente = idCliente, MotivoResgate = nomeResgate1, Valor = valorResgate1, DataResgate = dataResgate1 };
+            var Resgate = new Resgate(idInvestimento, idCliente, valorResgate, motivoResgate, dataResgate);
+            var Resgate1 = new Resgate(idInvestimento1, idCliente, valorResgate1, motivoResgate1, dataResgate1);
             var listResgate = new List<Resgate> { Resgate, Resgate1 };
             _resgateRepository.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listResgate);
             var Repositorys = InicializaApplication();

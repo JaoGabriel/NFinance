@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using NFinance.Domain.Exceptions;
 
 namespace NFinance.Domain
 {
@@ -30,16 +31,55 @@ namespace NFinance.Domain
         [Range(typeof(DateTime), "01/01/1950", "12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataResgate { get; set; }
 
-        public Resgate() { }
-
         public Resgate(Guid idInvestimento, Guid idCliente, decimal valor, string motivoResgate, DateTime dataResgate)
         {
+            ValidaDadosResgate(idInvestimento,idCliente,valor,motivoResgate,dataResgate);
+            
             Id = Guid.NewGuid();
             IdInvestimento = idInvestimento;
             IdCliente = idCliente;
             Valor = valor;
             MotivoResgate = motivoResgate;
             DataResgate = dataResgate;
+        }
+
+        public void AtualizaResgate(decimal valor, string motivoResgate, DateTime dataResgate)
+        {
+            ValidaDadosAtualizacaoResgate(valor,motivoResgate,dataResgate);
+            
+            Valor = valor;
+            MotivoResgate = motivoResgate;
+            DataResgate = dataResgate;
+        }
+
+        private static void ValidaDadosResgate(Guid idInvestimento, Guid idCliente, decimal valor, string motivoResgate, DateTime dataResgate)
+        {
+            if (Guid.Empty.Equals(idInvestimento)) 
+                throw new DomainException();
+            
+            if (Guid.Empty.Equals(idCliente)) 
+                throw new DomainException();
+            
+            if (string.IsNullOrWhiteSpace(motivoResgate)) 
+                throw new DomainException();
+            
+            if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
+                throw new DomainException();
+
+            if (dataResgate < DateTime.MinValue.AddYears(1949) || dataResgate > DateTime.MaxValue.AddYears(-7899))
+                throw new DomainException();
+        }
+
+        private static void ValidaDadosAtualizacaoResgate(decimal valor, string motivoResgate, DateTime dataResgate)
+        {
+            if (string.IsNullOrWhiteSpace(motivoResgate)) 
+                throw new DomainException();
+            
+            if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
+                throw new DomainException();
+
+            if (dataResgate < DateTime.MinValue.AddYears(1949) || dataResgate > DateTime.MaxValue.AddYears(-7899))
+                throw new DomainException();
         }
     }
 }

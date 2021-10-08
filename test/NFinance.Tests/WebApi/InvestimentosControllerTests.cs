@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.InvestimentosViewModel;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
@@ -31,14 +33,9 @@ namespace NFinance.Tests.WebApi
             return new(Guid.NewGuid(),"asdygaygsd",37219783.09M,DateTime.Today);
         }
 
-        private static Usuario GeraUsuario()
-        {
-            return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
-        }
-
         public static Cliente GeraCliente()
         {
-            return new("ASDASD", "12345678910", "teste@tst.com", GeraUsuario());
+            return new("ASDASD", "12345678910", "teste@tst.com","41865324578");
         }
 
         [Fact]
@@ -49,7 +46,7 @@ namespace NFinance.Tests.WebApi
             _investimentoApp.Setup(x => x.RealizarInvestimento(It.IsAny<RealizarInvestimentoViewModel.Request>())).ReturnsAsync(new RealizarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
             var investimentoRequest = new RealizarInvestimentoViewModel.Request();
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "ADSHSDHASD8ASUDASD NASIDUAS089D7A0-S8DNAS87DBAS8D7";
 
             //Act
             var teste = controller.RealizarInvestimento(token, investimentoRequest);
@@ -74,7 +71,7 @@ namespace NFinance.Tests.WebApi
             _investimentoApp.Setup(x => x.AtualizarInvestimento(It.IsAny<Guid>(),It.IsAny<AtualizarInvestimentoViewModel.Request>())).ReturnsAsync(new AtualizarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
             var investimentoRequest = new AtualizarInvestimentoViewModel.Request();
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "ADSHSDHASD8ASUDASD NASIDUAS089D7A0-S8DNAS87DBAS8D7";
 
             //Act
             var teste = controller.AtualizarInvestimento(token,investimento.Id,investimentoRequest);
@@ -98,7 +95,7 @@ namespace NFinance.Tests.WebApi
             var investimento = GeraInvestimento();
             _investimentoApp.Setup(x => x.ConsultarInvestimento(It.IsAny<Guid>())).ReturnsAsync(new ConsultarInvestimentoViewModel.Response(investimento));
             var controller = InicializarInvestimentoController();
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "ADSHSDHASD8ASUDASD NASIDUAS089D7A0-S8DNAS87DBAS8D7";
 
             //Act
             var teste = controller.ConsultarInvestimento(token,investimento.Id);
@@ -125,17 +122,13 @@ namespace NFinance.Tests.WebApi
             var nomeInvestimento = "uasduhasha";
             var valor = 1238.12M;
             var dataAplicacao = DateTime.Today;
-            var listaInvestimento = new List<Investimento>();
-            var investimento = new Investimento { Id = id, IdCliente = idCliente, NomeInvestimento = nomeInvestimento,Valor = valor, DataAplicacao = dataAplicacao };
-            var investimento1 = new Investimento { Id = id1, IdCliente = idCliente, NomeInvestimento = nomeInvestimento, Valor = valor, DataAplicacao = dataAplicacao };
-            listaInvestimento.Add(investimento);
-            listaInvestimento.Add(investimento1);
+            var listaInvestimento = new List<Investimento> { GeraInvestimento(), GeraInvestimento()};
             var listarInvestimentos = new ConsultarInvestimentosViewModel.Response(listaInvestimento);
             _investimentoApp.Setup(x => x.ConsultarInvestimentos(It.IsAny<Guid>())).ReturnsAsync(listarInvestimentos);
             var controller = InicializarInvestimentoController();
 
             //Act
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "ADSHSDHASD8ASUDASD NASIDUAS089D7A0-S8DNAS87DBAS8D7";
             var teste = controller.ConsultarInvestimentos(token,idCliente);
             var okResult = teste.Result as ObjectResult;
             var consultarInvestimentosViewModel = Assert.IsType<ConsultarInvestimentosViewModel.Response>(okResult.Value);

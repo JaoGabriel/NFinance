@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\NFinance.Application\NFinance.Application.csproj" />
     <ProjectReference Include="..\..\src\NFinance.WebApi\NFinance.WebApi.csproj" />
   </ItemGroup>
 

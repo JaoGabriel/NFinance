@@ -13,12 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\NFinance.Domain\NFinance.Domain.csproj" />
-    <ProjectReference Include="..\src\NFinance.Infra\NFinance.Infra.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="RedisApp.cs" />
+    <ProjectReference Include="..\NFinance.Domain\NFinance.Domain.csproj" />
+    <ProjectReference Include="..\NFinance.Infra\NFinance.Infra.csproj" />
   </ItemGroup>
 
 </Project>

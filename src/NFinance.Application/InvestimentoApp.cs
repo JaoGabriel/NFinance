@@ -18,8 +18,9 @@ namespace NFinance.Application
 
         public async Task<AtualizarInvestimentoViewModel.Response> AtualizarInvestimento(Guid idInvestimento, AtualizarInvestimentoViewModel.Request request)
         {
-            var investimentoDadosAtualizados = new Investimento(idInvestimento, request.IdCliente,request.NomeInvestimento,request.Valor,request.DataAplicacao);
-            var investimentoAtualizado = await _investimentoRepository.AtualizarInvestimento(investimentoDadosAtualizados);
+            var investimento = await _investimentoRepository.ConsultarInvestimento(idInvestimento);
+            investimento.AtualizaInvestimento(request.NomeInvestimento,request.Valor,request.DataAplicacao);
+            var investimentoAtualizado = await _investimentoRepository.AtualizarInvestimento(investimento);
             var resposta = new AtualizarInvestimentoViewModel.Response(investimentoAtualizado);
             return resposta;
         }

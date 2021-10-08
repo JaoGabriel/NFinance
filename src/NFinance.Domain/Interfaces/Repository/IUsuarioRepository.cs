@@ -1,7 +1,7 @@
 ﻿using NFinance.Domain.Identidade;
 using System.Threading.Tasks;
 
-namespace NFinance.Domain.Repository
+namespace NFinance.Domain.Interfaces.Repository
 {
     public interface IUsuarioRepository
     {

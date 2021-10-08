@@ -4,9 +4,16 @@ using NFinance.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.Linq;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.GanhoViewModel;
+using NFinance.Application.ViewModel.GastosViewModel;
+using NFinance.Application.ViewModel.InvestimentosViewModel;
+using NFinance.Application.ViewModel.ResgatesViewModel;
+using NFinance.Application.ViewModel.TelaInicialViewModel;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
@@ -34,7 +41,7 @@ namespace NFinance.Tests.WebApi
 
         public static Cliente GeraCliente()
         {
-            return new("ASDASD", "12345678910", "teste@tst.com", GeraUsuario());
+            return new("ASDASD", "12345678910", "teste@tst.com", "41986547840");
         }
 
         private static Gasto GeraGasto(Cliente cliente)
@@ -78,7 +85,7 @@ namespace NFinance.Tests.WebApi
             var telaInicialViewModelR = new TelaInicialViewModel(cliente,ganhoMensal,gastoMensal,investimentoMensal,resgateMensal,4000M);
             var controller = InicializarLoginController();
             _telaInicialApp.Setup(x => x.TelaInicial(It.IsAny<Guid>())).ReturnsAsync(telaInicialViewModelR);
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "3H12O3HU123JKDSAHLKDHASUILDHYIAUSD1209312KJH";
 
             //Act
             var teste = controller.TelaInicial(token,cliente.Id);

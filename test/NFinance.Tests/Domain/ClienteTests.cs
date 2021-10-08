@@ -29,21 +29,15 @@ namespace NFinance.Tests.Domain
         [InlineData(null,"245.227.196-98","vitoriadanieladamata@live.co.uk","(86) 98241-7606")]
         public void DadoUmClienteComDadosInvalidos_QuandoCadastrarCliente_DeveRetornarException(string nome,string cpf,string email, string celular)
         {
-            //Arrange
-            var cliente = new Cliente();
-
             //Assert
-            Assert.Throws<DomainException>(() => cliente.CadastrarCliente(nome, cpf, email, celular));
+            Assert.Throws<DomainException>(() => new Cliente(nome, cpf, email, celular));
         }
 
         [Fact]
         public void DadoUmClienteComDadosValidos_QuandoCadastrarCliente_DeveCadastrarClienteComsucesso()
         {
-            //Arrange
-            var cliente = new Cliente();
-
             //Act
-            cliente.CadastrarCliente(_nome, _cpf, _email, _celular);
+            var cliente = new Cliente(_nome, _cpf, _email, _celular);
             
             //Assert
             Assert.NotNull(cliente);
@@ -57,7 +51,7 @@ namespace NFinance.Tests.Domain
         public void DadoUmClienteInvalido_QuandoAtribuirUsuario_DeveRetornarException()
         {
             //Arrange
-            var cliente = new Cliente();
+            var cliente = new Cliente(_nome,_cpf,_email,_celular);
             
             //Assert
             Assert.Throws<DomainException>(() => cliente.AtruibiUsuarioCliente(null));
@@ -67,9 +61,8 @@ namespace NFinance.Tests.Domain
         public void DadoUmClienteValido_QuandoAtribuirUsuario_DeveAtribuirUsuarioComsucesso()
         {
             //Arrange
-            var cliente = new Cliente();
+            var cliente = new Cliente(_nome, _cpf, _email, _celular);
             var usuario = new Usuario(cliente);
-            cliente.CadastrarCliente(_nome, _cpf, _email, _celular);
 
             //Act
             cliente.AtruibiUsuarioCliente(usuario);
@@ -88,11 +81,8 @@ namespace NFinance.Tests.Domain
         [InlineData(null,"245.227.196-98","vitoriadanieladamata@live.co.uk","(86) 98241-7606")]
         public void DadoUmClienteComDadosInvalidos_QuandoAtualizarDados_DeveRetornarException(string nome,string cpf,string email, string celular)
         {
-            //Arrange
-            var cliente = new Cliente();
-
             //Assert
-            Assert.Throws<DomainException>(() => cliente.CadastrarCliente(nome, cpf, email, celular));
+            Assert.Throws<DomainException>(() =>new Cliente(nome, cpf, email, celular));
         }
 
         [Fact]
@@ -103,8 +93,7 @@ namespace NFinance.Tests.Domain
             var novoEmail = "leticiaisabeljoanamoura@truran.com.br";
             var novoCpf = "531.042.868-25";
             var novoCelular = "(82) 99324-3188";
-            var cliente = new Cliente();
-            cliente.CadastrarCliente(_nome, _cpf, _email, _celular);
+            var cliente = new Cliente(_nome, _cpf, _email, _celular);
 
             //Act
             cliente.AtualizarDadosCliente(novoNome,novoCpf,novoEmail,novoCelular);

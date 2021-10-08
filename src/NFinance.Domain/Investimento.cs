@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using NFinance.Domain.Exceptions;
 
 namespace NFinance.Domain
 {
@@ -26,10 +28,10 @@ namespace NFinance.Domain
         [Range(typeof(DateTime),"01/01/1950","12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataAplicacao { get; set; }
 
-        public Investimento() { }
-
         public Investimento(Guid idCliente, string nomeInvestimento, decimal valor, DateTime dataAplicacao)
         {
+            ValidaInformacoesInvestimento(nomeInvestimento, valor, dataAplicacao);
+            
             Id = Guid.NewGuid();
             IdCliente = idCliente;
             NomeInvestimento = nomeInvestimento;
@@ -37,13 +39,25 @@ namespace NFinance.Domain
             DataAplicacao = dataAplicacao;
         }
 
-        public Investimento(Guid id, Guid idCliente, string nomeInvestimento, decimal valor, DateTime dataAplicacao)
+        public void AtualizaInvestimento(string nomeInvestimento, decimal valor, DateTime dataAplicacao)
         {
-            Id = id;
-            IdCliente = idCliente;
+            ValidaInformacoesInvestimento(nomeInvestimento, valor, dataAplicacao);
+            
             NomeInvestimento = nomeInvestimento;
             Valor = valor;
             DataAplicacao = dataAplicacao;
+        }
+
+        private static void ValidaInformacoesInvestimento(string nomeInvestimento, decimal valor, DateTime dataAplicacao)
+        {
+            if (string.IsNullOrWhiteSpace(nomeInvestimento)) 
+                throw new DomainException("Nome Inválido.");
+
+            if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
+                throw new DomainException("Valor Inválido");
+            
+            if (dataAplicacao < DateTime.MinValue.AddYears(1949) || dataAplicacao > DateTime.MaxValue.AddYears(-7899))
+                throw new DomainException("Data Inválida.");
         }
     }
 }

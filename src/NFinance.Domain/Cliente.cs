@@ -27,7 +27,7 @@ namespace NFinance.Domain
         [Required]
         public Celular Celular { get; set; }
 
-        public void CadastrarCliente(string nome, string cpf, string email,string celular)
+        public Cliente(string nome, string cpf, string email,string celular)
         {
             ValidaDadosCliente(nome,cpf,email,celular);
             
@@ -37,7 +37,7 @@ namespace NFinance.Domain
             Email = new Email(email);
             Celular = new Celular(celular);
         }
-        
+
         public void AtualizarDadosCliente(string nome, string cpf, string email,string celular)
         {
             ValidaDadosCliente(nome,cpf,email,celular);

@@ -24,7 +24,7 @@ namespace NFinance.Infra
             {
                 //Claims
                 options.Tokens.AuthenticatorIssuer = "NFinance";
-                
+
                 //Login
                 options.SignIn.RequireConfirmedPhoneNumber = true;
                 options.SignIn.RequireConfirmedEmail = false;

@@ -18,8 +18,9 @@ namespace NFinance.Application
 
         public async Task<AtualizarGastoViewModel.Response> AtualizarGasto(Guid idGasto, AtualizarGastoViewModel.Request request)
         {
-            var gastoDadosAtualizados = new Gasto(idGasto,request.IdCliente,request.NomeGasto,request.Valor,request.QuantidadeParcelas,request.DataDoGasto);
-            var gastoAtualizado = await _gastoRepository.AtualizarGasto(gastoDadosAtualizados);
+            var gasto = await _gastoRepository.ConsultarGasto(idGasto);
+            gasto.AtualizaGasto(request.NomeGasto,request.Valor,request.QuantidadeParcelas,request.DataDoGasto);
+            var gastoAtualizado = await _gastoRepository.AtualizarGasto(gasto);
             var resposta = new AtualizarGastoViewModel.Response(gastoAtualizado);
             return resposta;
         }

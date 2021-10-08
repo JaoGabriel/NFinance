@@ -1,36 +1,40 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NFinance.Domain.Exceptions;
+using NFinance.Application.Exceptions;
 using NFinance.Application.Interfaces;
-using NFinance.Domain.Exceptions.Autenticacao;
 using NFinance.Application.ViewModel.AutenticacaoViewModel;
-using NFinance.Domain.Repository;
+using NFinance.Domain.Interfaces.Repository;
+using NFinance.Infra.Token;
 
 namespace NFinance.Application
 {
     public class AutenticacaoApp : IAutenticacaoApp
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly ITokenService _tokenService;
 
-        public AutenticacaoApp(IUsuarioRepository usuarioRepository)
+        public AutenticacaoApp(IUsuarioRepository usuarioRepository, ITokenService tokenService)
         {
             _usuarioRepository = usuarioRepository;
+            _tokenService = tokenService;
         }
 
         public async Task<LoginViewModel.Response> EfetuarLogin(LoginViewModel login)
         {
-            if (string.IsNullOrWhiteSpace(login.Email) || string.IsNullOrWhiteSpace(login.Senha)) throw new LoginException("Email ou senha invalida");
+            if (string.IsNullOrWhiteSpace(login.Email) || string.IsNullOrWhiteSpace(login.Senha)) throw new AutenticacaoException("Email ou senha invalida");
 
             var usuario = await _usuarioRepository.Conectar(login.Email, login.Senha);
 
-            var token = TokenApp.GerarToken(usuario);
+            if (usuario is null) throw new AutenticacaoException("Ocorreu um erro ao efetuar o login.");
 
-            return new LoginViewModel.Response(usuario, token);
+            var token = _tokenService.GerarToken(usuario);
+            
+            return new LoginViewModel.Response(usuario,token);
         }
 
         public async Task<LogoutViewModel.Response> EfetuarLogoff(LogoutViewModel logout)
         {
-            if (Guid.Empty.Equals(logout.IdCliente)) throw new IdException("Id invalido");
+            if (Guid.Empty.Equals(logout.IdCliente)) throw new AutenticacaoException("Id invalido");
 
             await _usuarioRepository.Desconectar();
             

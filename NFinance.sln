@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFinance.WebApi", "src\NFin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFinance.Tests", "test\NFinance.Tests\NFinance.Tests.csproj", "{08B17FA5-A291-4A0B-B521-B075D5D53AE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFinance.Application", "NFinance.Application\NFinance.Application.csproj", "{9DDE33B0-88B2-4649-B75E-8E9B10D0D1BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFinance.Application", "src\NFinance.Application\NFinance.Application.csproj", "{9DDE33B0-88B2-4649-B75E-8E9B10D0D1BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

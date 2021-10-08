@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using NFinance.Domain.Exceptions;
 
 namespace NFinance.Domain
 {
@@ -30,12 +31,10 @@ namespace NFinance.Domain
         [Range(typeof(DateTime), "01/01/1950", "12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
         public DateTime DataDoGasto { get; set; }
 
-        public string MotivoExclusao { get; set; }
-
-        public Gasto() { }
-
         public Gasto(Guid idCliente, string nomeGasto, decimal valor, int quantidadeParcelas, DateTime dataDoGasto)
         {
+            ValidaDadosGasto(idCliente,nomeGasto,valor,quantidadeParcelas,dataDoGasto);
+            
             Id = Guid.NewGuid();
             IdCliente = idCliente;
             NomeGasto = nomeGasto;
@@ -44,14 +43,47 @@ namespace NFinance.Domain
             DataDoGasto = dataDoGasto;
         }
 
-        public Gasto(Guid id, Guid idCliente, string nomeGasto, decimal valor, int quantidadeParcelas, DateTime dataDoGasto)
+        public void AtualizaGasto(string nomeGasto, decimal valor, int quantidadeParcelas, DateTime dataDoGasto)
         {
-            Id = id;
-            IdCliente = idCliente;
+            ValidaDadosAtualizacaoGasto(nomeGasto,valor,quantidadeParcelas,dataDoGasto);
+            
             NomeGasto = nomeGasto;
             Valor = valor;
             QuantidadeParcelas = quantidadeParcelas;
             DataDoGasto = dataDoGasto;
+        }
+
+        private static void ValidaDadosGasto(Guid idCliente, string nomeGasto, decimal valor, int quantidadeParcelas, DateTime dataDoGasto)
+        {
+            if (Guid.Empty.Equals(idCliente)) 
+                throw new DomainException("Cliente Inválido.");
+            
+            if (string.IsNullOrWhiteSpace(nomeGasto)) 
+                throw new DomainException("Nome Inválido.");
+            
+            if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
+                throw new DomainException("Valor Inválido.");
+
+            if (quantidadeParcelas < 0)
+                throw new DomainException("Quantidade de parcelas inválida.");
+
+            if (dataDoGasto < DateTime.MinValue.AddYears(1949) || dataDoGasto > DateTime.MaxValue.AddYears(-7899))
+                throw new DomainException("Data Inválida.");
+        }
+
+        private static void ValidaDadosAtualizacaoGasto(string nomeGasto, decimal valor, int quantidadeParcelas, DateTime dataDoGasto)
+        {
+            if (string.IsNullOrWhiteSpace(nomeGasto)) 
+                throw new DomainException("Nome Inválido.");
+            
+            if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
+                throw new DomainException("Valor Inválido.");
+
+            if (quantidadeParcelas < 0)
+                throw new DomainException("Quantidade de parcelas inválida.");
+
+            if (dataDoGasto < DateTime.MinValue.AddYears(1949) || dataDoGasto > DateTime.MaxValue.AddYears(-7899))
+                throw new DomainException("Data Inválida.");
         }
     }
 }

@@ -2,8 +2,8 @@
 using Cronos;
 using NFinance.Domain;
 using System.Threading.Tasks;
-using NFinance.Domain.Exceptions;
 using System.Collections.Generic;
+using NFinance.Application.Exceptions;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.GanhoViewModel;
@@ -33,7 +33,7 @@ namespace NFinance.Application
 
         public async Task<TelaInicialViewModel> TelaInicial(Guid idCliente)
         {
-            if (Guid.Empty.Equals(idCliente)) throw new IdException("Id cliente invalido");
+            if (Guid.Empty.Equals(idCliente)) throw new TelaInicialException("Cliente Inválido.");
 
             var cliente = await _clienteRepository.ConsultarCliente(idCliente);
             var ganhoMensal = await GanhoMensal(idCliente);

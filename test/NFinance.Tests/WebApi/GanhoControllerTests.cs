@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
@@ -70,10 +72,9 @@ namespace NFinance.Tests.WebApi
             _ganhoApp.Setup(x => x.AtualizarGanho(It.IsAny<Guid>(),It.IsAny<AtualizarGanhoViewModel.Request>())).ReturnsAsync(new AtualizarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
             var ganhoRequest = new AtualizarGanhoViewModel.Request(ganho);
-            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
-            var teste = controller.AtualizarGanho(token,ganho.Id,ganhoRequest);
+            var teste = controller.AtualizarGanho("HKI3UH1EQE1U2H34LKEHASDAHLDU2OPLI31H2UI3H",ganho.Id,ganhoRequest);
             var okResult = teste.Result as ObjectResult;
             var atualizarGanhoViewModel = Assert.IsType<AtualizarGanhoViewModel.Response>(okResult.Value);
 
@@ -95,7 +96,7 @@ namespace NFinance.Tests.WebApi
             var ganho = GeraGanho();
             _ganhoApp.Setup(x => x.ConsultarGanho(It.IsAny<Guid>())).ReturnsAsync(new ConsultarGanhoViewModel.Response(ganho));
             var controller = InicializarGanhoController();
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "HKI3UH1EQE1U2H34LKEHASDAHLDU2OPLI31H2UI3H";
             
             //Act
             var teste = controller.ConsultarGanho(token,ganho.Id);
@@ -123,8 +124,8 @@ namespace NFinance.Tests.WebApi
             var mensagemSucesso = "Excluido com sucesso";
             _ganhoApp.Setup(x => x.ExcluirGanho(It.IsAny<ExcluirGanhoViewModel.Request>())).ReturnsAsync(new ExcluirGanhoViewModel.Response {StatusCode = 200, DataExclusao = DateTime.Today, Mensagem = mensagemSucesso});
             var controller = InicializarGanhoController();
-            var ganho = new ExcluirGanhoViewModel.Request {IdCliente = idCliente, IdGanho = idGanho, MotivoExclusao = motivo};
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var ganho = new ExcluirGanhoViewModel.Request { IdGanho = idGanho, MotivoExclusao = motivo};
+            var token = "HKI3UH1EQE1U2H34LKEHASDAHLDU2OPLI31H2UI3H";
 
             //Act
             var teste = controller.ExcluirGanho(token,ganho);
@@ -148,29 +149,17 @@ namespace NFinance.Tests.WebApi
             var idCliente = Guid.NewGuid();
             var nomeGanho = "uasduhasha";
             var valor = 1238.12M;
+            var dataGanho = DateTime.Today;
+            var dataGanho2 = DateTime.Today.AddDays(-1);
             var listaGanho = new List<Ganho>();
-            var ganho = new Ganho
-            {
-                Id = id,
-                IdCliente = idCliente,
-                NomeGanho = nomeGanho,
-                Recorrente = true,
-                Valor = valor
-            };
-            var ganho1 = new Ganho
-            {
-                Id = id1,
-                IdCliente = idCliente,
-                NomeGanho = nomeGanho,
-                Recorrente = false,
-                Valor = valor
-            };
+            var ganho = new Ganho(idCliente, nomeGanho, valor, true, dataGanho);
+            var ganho1 = new Ganho(idCliente, nomeGanho, valor, false, dataGanho2);
             listaGanho.Add(ganho);
             listaGanho.Add(ganho1);
             var listarGanhos = new ConsultarGanhosViewModel.Response(listaGanho);
             _ganhoApp.Setup(x => x.ConsultarGanhos(It.IsAny<Guid>())).ReturnsAsync(listarGanhos);
             var controller = InicializarGanhoController();
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "UI2H3I1U2H3I1UH3IU1HIU31HIU3H2";
 
             //Act
             var teste = controller.ConsultarGanhos(token,idCliente);

@@ -10,6 +10,8 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
         public string Nome { get; set; }
 
         public string Cpf { get; set; }
+
+        public string Celular { get; set; }
         
         public string Email { get; set; }
 
@@ -21,8 +23,9 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
         {
             Id = cliente.Id;
             Nome = cliente.Nome;
-            Cpf = cliente.Cpf;
-            Email = cliente.Email;
+            Cpf = cliente.Cpf.ToString();
+            Email = cliente.Email.ToString();
+            Celular = cliente.Celular.ToString();
         }
 
         public class Response
@@ -32,6 +35,8 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
             public string Nome { get; set; }
             
             public string Cpf { get; set; }
+
+            public string Celular { get; set; }
         
             public string Email { get; set; }
 
@@ -41,23 +46,9 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
             {
                 Id = cliente.Id;
                 Nome = cliente.Nome;
-                Cpf = cliente.Cpf;
-                Email = cliente.Email;
-            }
-        }
-
-        public class SimpleResponse
-        {
-            public Guid Id { get; set; }
-
-            public string Nome { get; set; }
-
-            public SimpleResponse() { }
-
-            public SimpleResponse(Cliente cliente)
-            {
-                Id = cliente.Id;
-                Nome = cliente.Nome;
+                Cpf = cliente.Cpf.ToString();
+                Email = cliente.Email.ToString();
+                Celular = cliente.Celular.ToString();
             }
         }
     }

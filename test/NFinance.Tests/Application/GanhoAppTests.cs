@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using System.Threading.Tasks;
 using Moq;
+using NFinance.Application;
+using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Repository;
+using NFinance.Domain.Exceptions;
 
 namespace NFinance.Tests.Application
 {
@@ -74,7 +78,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => app.CadastrarGanho(cadastrarGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.CadastrarGanho(cadastrarGanhoVm));
         }
         
         [Theory]
@@ -88,7 +92,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<NomeGanhoException>(() => app.CadastrarGanho(cadastrarGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.CadastrarGanho(cadastrarGanhoVm));
         }
         
         [Theory]
@@ -100,7 +104,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<ValorGanhoException>(() => app.CadastrarGanho(cadastrarGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.CadastrarGanho(cadastrarGanhoVm));
         }
         
         [Theory]
@@ -112,7 +116,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<DataGanhoException>(() => app.CadastrarGanho(cadastrarGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.CadastrarGanho(cadastrarGanhoVm));
         }
         
         [Fact]
@@ -147,7 +151,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => app.AtualizarGanho(Guid.Empty, atualizaGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.AtualizarGanho(Guid.Empty, atualizaGanhoVm));
         }
 
         [Theory]
@@ -161,7 +165,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<NomeGanhoException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
         }
         
         [Theory]
@@ -173,7 +177,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<ValorGanhoException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
         }
         
         [Theory]
@@ -185,7 +189,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<DataGanhoException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
         }
         
         [Fact]
@@ -196,7 +200,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
+            await Assert.ThrowsAsync<DomainException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
         }
         
         [Fact]
@@ -206,7 +210,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => app.ConsultarGanho(Guid.Empty));
+            await Assert.ThrowsAsync<DomainException>(() => app.ConsultarGanho(Guid.Empty));
         }
         
         [Fact]
@@ -259,15 +263,15 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<IdException>(() => app.ConsultarGanhos(Guid.Empty));
+            await Assert.ThrowsAsync<DomainException>(() => app.ConsultarGanhos(Guid.Empty));
         }
         
         [Fact]
         public async Task GanhoApp_ExcluirGanho_ComSucesso()
         {
             //Arrange
-            var ganho = new Ganho(_id,_idCliente,"Teste");
-            var excluirGanhoVm = new ExcluirGanhoViewModel.Request(ganho);
+            var ganho = new Ganho(_idCliente,"Teste",1000,false,DateTime.Now);
+            var excluirGanhoVm = new ExcluirGanhoViewModel.Request { IdGanho = ganho.Id, MotivoExclusao = "teste" };
             _ganhoRepository.Setup(x => x.ExcluirGanho(It.IsAny<Guid>())).ReturnsAsync(true);
             var app = IniciaApplication();
             

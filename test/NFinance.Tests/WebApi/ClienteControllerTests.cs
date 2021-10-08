@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.ClientesViewModel;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
@@ -33,7 +35,7 @@ namespace NFinance.Tests.WebApi
 
         public static Cliente GeraCliente()
         {
-            return new("Jorgin da Lages", "12345678910", "aloha@teste.com", GeraUsuario());
+            return new("Jorgin da Lages", "12345678910", "aloha@teste.com","41986537456");
         }
 
         [Fact]
@@ -66,10 +68,9 @@ namespace NFinance.Tests.WebApi
             var cliente = GeraCliente();
             _clienteApp.Setup(x => x.ConsultaCliente(It.IsAny<Guid>())).ReturnsAsync(new ConsultarClienteViewModel.Response(cliente));
             var controller = InicializarClienteController();
-            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
-            var teste = controller.ConsultarCliente(token,cliente.Id);
+            var teste = controller.ConsultarCliente("DHUAUHDASUIHDIAUHDSIUHASDHUI",cliente.Id);
             var okResult = teste.Result as ObjectResult;
             var consultarClienteViewModel = Assert.IsType<ConsultarClienteViewModel.Response>(okResult.Value);
 
@@ -78,8 +79,8 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
             Assert.Equal(cliente.Id, consultarClienteViewModel.Id);
             Assert.Equal(cliente.Nome, consultarClienteViewModel.Nome);
-            Assert.Equal(cliente.Cpf, consultarClienteViewModel.Cpf);
-            Assert.Equal(cliente.Email, consultarClienteViewModel.Email);
+            Assert.Equal(cliente.Cpf.ToString(), consultarClienteViewModel.Cpf);
+            Assert.Equal(cliente.Email.ToString(), consultarClienteViewModel.Email);
         }
 
         [Fact]
@@ -90,10 +91,9 @@ namespace NFinance.Tests.WebApi
             _clienteApp.Setup(x => x.AtualizarDadosCadastrais(It.IsAny<Guid>(),It.IsAny<AtualizarClienteViewModel.Request>())).ReturnsAsync(new AtualizarClienteViewModel.Response(cliente));
             var clienteRequest = new AtualizarClienteViewModel.Request(cliente);
             var controller = InicializarClienteController();
-            var token = TokenApp.GerarToken(GeraUsuario());
 
             //Act
-            var teste = controller.AtualizarCliente(token,cliente.Id, clienteRequest);
+            var teste = controller.AtualizarCliente("21U3LKJSDALIJ12OI3KJHASDHI12342EQLJEUH127",cliente.Id, clienteRequest);
             var okResult = teste.Result as ObjectResult;
             var AtualizarClienteViewModel = Assert.IsType<AtualizarClienteViewModel.Response>(okResult.Value);
 
@@ -102,8 +102,8 @@ namespace NFinance.Tests.WebApi
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
             Assert.Equal(cliente.Id, AtualizarClienteViewModel.Id);
             Assert.Equal(cliente.Nome, AtualizarClienteViewModel.Nome);
-            Assert.Equal(cliente.Cpf, AtualizarClienteViewModel.Cpf);
-            Assert.Equal(cliente.Email, AtualizarClienteViewModel.Email);
+            Assert.Equal(cliente.Cpf.ToString(), AtualizarClienteViewModel.Cpf);
+            Assert.Equal(cliente.Email.ToString(), AtualizarClienteViewModel.Email);
         }
     }
 }

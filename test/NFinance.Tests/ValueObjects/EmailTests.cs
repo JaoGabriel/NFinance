@@ -1,4 +1,5 @@
-﻿using NFinance.Domain.ObjetosDeValor;
+﻿using NFinance.Domain.Exceptions;
+using NFinance.Domain.ObjetosDeValor;
 using Xunit;
 
 namespace NFinance.Tests.ValueObjects
@@ -26,7 +27,7 @@ namespace NFinance.Tests.ValueObjects
         [InlineData("@teste.com.br")]
         public void DeveLancarUmaDomainException_QuandoEmailForInvalido(string endereco)
         {
-            Assert.Throws<EmailException>(() => new Email(endereco));
+            Assert.Throws<DomainException>(() => new Email(endereco));
         }
         
         [Fact]

@@ -1,4 +1,5 @@
-﻿using NFinance.Domain.ObjetosDeValor;
+﻿using NFinance.Domain.Exceptions;
+using NFinance.Domain.ObjetosDeValor;
 using Xunit;
 
 namespace NFinance.Tests.ValueObjects
@@ -39,7 +40,7 @@ namespace NFinance.Tests.ValueObjects
         [InlineData(null)]
         public void DeveLancarUmaDomainExcption_QuandoNumeroForBrancoNuloOuVazio(string numero)
         {
-            Assert.Throws<CelularException>(() => new Celular(numero));
+            Assert.Throws<DomainException>(() => new Celular(numero));
         }
 
         [Fact]

@@ -1,20 +1,24 @@
 ﻿using System;
-using System.Text;
-using NFinance.Infra;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using NFinance.Domain.Identidade;
+using NFinance.Infra.Options;
 
-namespace NFinance.Application
+namespace NFinance.Infra.Token
 {
-    [ExcludeFromCodeCoverage]
-    public static class TokenApp
+    public class TokenService : ITokenService
     {
-        private static readonly TokenSettings _tokenSettings;
+        private readonly TokenSettingsOptions _tokenSettings;
+
+        public TokenService(IOptions<TokenSettingsOptions> options)
+        {
+            _tokenSettings = options.Value;
+        }
         
-        public static string GerarToken(Usuario usuario)
+        public string GerarToken(Usuario usuario)
         {
             if (usuario == null) throw new ArgumentException("Ocorreu um erro ao efetuar o login!");
 

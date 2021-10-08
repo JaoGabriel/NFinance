@@ -24,7 +24,7 @@ namespace NFinance.Infra.Repository
         public async Task<Resgate> RealizarResgate(Resgate resgate)
         {
             var investimento = await _context.Investimento.FindAsync(resgate.IdInvestimento);
-            var resgateResponse = new Resgate() {Valor = resgate.Valor, MotivoResgate = resgate.MotivoResgate, DataResgate = DateTime.UtcNow};
+            var resgateResponse = new Resgate(resgate.IdInvestimento,resgate.IdCliente,resgate.Valor, resgate.MotivoResgate,DateTime.UtcNow);
             await _context.Resgate.AddAsync(resgateResponse);
             _context.Investimento.Remove(investimento);
             await _context.SaveChangesAsync();

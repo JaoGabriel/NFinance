@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Xunit;
 
-namespace NFinance.Tests
+namespace NFinance.Tests.ValueObjects
 {
     public class ValueObjectsTests
     {

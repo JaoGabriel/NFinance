@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using NFinance.WebApi.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NFinance.Application.Interfaces;
+using NFinance.Application.ViewModel.ResgatesViewModel;
 using NFinance.Domain.Identidade;
 
 namespace NFinance.Tests.WebApi
@@ -39,7 +41,7 @@ namespace NFinance.Tests.WebApi
 
         public static Cliente GeraCliente()
         {
-            return new("ASDASD", "12345678910", "teste@tst.com", GeraUsuario());
+            return new("ASDASD", "12345678910", "teste@tst.com", "41986531478");
         }
 
         [Fact]
@@ -50,7 +52,7 @@ namespace NFinance.Tests.WebApi
             _resgateApp.Setup(x => x.RealizarResgate(It.IsAny<RealizarResgateViewModel.Request>())).ReturnsAsync(new RealizarResgateViewModel.Response(resgate));
             var controller = InicializarResgateController();
             var resgateRequest = new RealizarResgateViewModel.Request();
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "123hlkdjasdjq'p3o0i20-9i4esfmdkljao9u87"; ;
             
             //Act
             var teste = controller.RealizarResgate(token, resgateRequest);
@@ -76,7 +78,7 @@ namespace NFinance.Tests.WebApi
             var controller = InicializarResgateController();
 
             //Act
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "123hlkdjasdjq'p3o0i20-9i4esfmdkljao9u87";
             var teste = controller.ConsultarResgate(token,resgate.Id);
             var okResult = teste.Result as ObjectResult;
             var consultarResgateViewModel = Assert.IsType<ConsultarResgateViewModel.Response>(okResult.Value);
@@ -101,29 +103,11 @@ namespace NFinance.Tests.WebApi
             var motivoResgate = "uasduhasha";
             var valor = 1238.12M;
             var dataResgate = DateTime.Today;
-            var listaResgate = new List<Resgate>();
-            var gasto = new Resgate
-            {
-                Id = id,
-                IdInvestimento = idInvestimento,
-                MotivoResgate = motivoResgate,
-                Valor = valor,
-                DataResgate = dataResgate
-            };
-            var gasto1 = new Resgate
-            {
-                Id = id1,
-                IdInvestimento = idInvestimento,
-                MotivoResgate = motivoResgate,
-                Valor = valor,
-                DataResgate = dataResgate
-            };
-            listaResgate.Add(gasto);
-            listaResgate.Add(gasto1);
+            var listaResgate = new List<Resgate> { GeraResgate(), GeraResgate() };
             var listarResgates = new ConsultarResgatesViewModel.Response(listaResgate);
             _resgateApp.Setup(x => x.ConsultarResgates(It.IsAny<Guid>())).ReturnsAsync(listarResgates);
             var controller = InicializarResgateController();
-            var token = TokenApp.GerarToken(GeraUsuario());
+            var token = "123hlkdjasdjq'p3o0i20-9i4esfmdkljao9u87";
 
             //Act
             var teste = controller.ConsultarResgates(token,idInvestimento);
