@@ -56,7 +56,7 @@ namespace NFinance.Domain.ObjetosDeValor
 
         public override string ToString()
         {
-            return Ddd + Numero;
+            return $"({Ddd}) {Numero[0..5]}-{Numero[5..9]}";
         }
     }
 }

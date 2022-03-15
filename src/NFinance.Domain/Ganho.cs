@@ -32,7 +32,7 @@ namespace NFinance.Domain
 
         public Ganho(Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
         {
-            ValidaCadastroGanho(idCliente,nomeGanho,valor,dataDoGanho);
+            ValidaDadosCadastroGanho(idCliente,nomeGanho,valor,dataDoGanho);
             
             Id = Guid.NewGuid();
             IdCliente = idCliente;
@@ -44,7 +44,7 @@ namespace NFinance.Domain
 
         public void AtualizaGanho(string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
         {
-            ValidaGanho(nomeGanho,valor,dataDoGanho);
+            ValidaDadosAtualizacaoGanho(nomeGanho,valor,dataDoGanho);
             
             NomeGanho = nomeGanho;
             Valor = valor;
@@ -52,31 +52,31 @@ namespace NFinance.Domain
             DataDoGanho = dataDoGanho;
         }
 
-        private static void ValidaCadastroGanho(Guid idCliente, string nomeGanho, decimal valor, DateTime dataDoGanho)
+        private static void ValidaDadosCadastroGanho(Guid idCliente, string nomeGanho, decimal valor, DateTime dataDoGanho)
         {
             if (Guid.Empty.Equals(idCliente)) 
-                throw new DomainException();
+                throw new DomainException("Cliente invalido ou inexistente.");
             
             if (string.IsNullOrWhiteSpace(nomeGanho)) 
-                throw new DomainException();
+                throw new DomainException("Nome invalido.");
             
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
-                throw new DomainException();
+                throw new DomainException("Valor invalido.");
 
             if (dataDoGanho < DateTime.MinValue.AddYears(1949) || dataDoGanho > DateTime.MaxValue.AddYears(-7899))
-                throw new DomainException();
+                throw new DomainException("Data invalida.");
         }
         
-        private static void ValidaGanho(string nomeGanho, decimal valor, DateTime dataDoGanho)
+        private static void ValidaDadosAtualizacaoGanho(string nomeGanho, decimal valor, DateTime dataDoGanho)
         {
             if (string.IsNullOrWhiteSpace(nomeGanho)) 
-                throw new DomainException();
+                throw new DomainException("Nome invalido.");
             
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
-                throw new DomainException();
+                throw new DomainException("Valor invalido.");
 
             if (dataDoGanho <= DateTime.MinValue || dataDoGanho >= DateTime.MaxValue)
-                throw new DomainException();
+                throw new DomainException("Data invalida.");
         }
     }
 }

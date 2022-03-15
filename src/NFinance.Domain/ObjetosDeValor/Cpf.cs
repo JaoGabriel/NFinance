@@ -128,5 +128,10 @@ namespace NFinance.Domain.ObjetosDeValor
         {
             yield return Numero;
         }
+
+        public override string ToString()
+        {
+            return $"{Numero[0..3]}.{Numero[3..6]}.{Numero[6..9]}-{Numero[9..11]}";
+        }
     }
 }
