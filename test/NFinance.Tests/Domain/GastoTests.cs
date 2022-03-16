@@ -19,13 +19,12 @@ namespace NFinance.Tests.Domain
             new object[] {Guid.NewGuid(),"",1000,DateTime.Today, 15},
             new object[] {Guid.NewGuid()," ",1000,DateTime.Today, 15},
             new object[] {Guid.NewGuid(),null,1000,DateTime.Today, 15},
-            new object[] {Guid.NewGuid(),"Teste Gasto",0,DateTime.Today, 15},
             new object[] {Guid.NewGuid(),"Teste Gasto",decimal.MinValue,DateTime.Today, 15},
             new object[] {Guid.NewGuid(),"Teste Gasto",decimal.MinusOne,DateTime.Today, 15},
             new object[] {Guid.NewGuid(),"Teste Gasto",decimal.MaxValue,DateTime.Today, 15},
+            new object[] {Guid.NewGuid(),"Teste Gasto",1000,DateTime.Today, -1 },
             new object[] {Guid.NewGuid(),"Teste Gasto",1000,DateTime.MaxValue, 15},
             new object[] {Guid.NewGuid(),"Teste Gasto",1000,DateTime.MinValue, 15},
-            new object[] {Guid.NewGuid(),"Teste Gasto",1000,DateTime.Today, -1 }
         };
         
         public static IEnumerable<object[]> AtualizarGastosInvalidos => new List<object[]>
@@ -37,9 +36,9 @@ namespace NFinance.Tests.Domain
             new object[] {"Teste Gasto",decimal.MinValue,DateTime.Today, 15},
             new object[] {"Teste Gasto",decimal.MinusOne,DateTime.Today, 15},
             new object[] {"Teste Gasto",decimal.MaxValue,DateTime.Today, 15},
+            new object[] {"Teste Gasto",1000,DateTime.Today, -5 },
             new object[] {"Teste Gasto",1000,DateTime.MaxValue, 15},
-            new object[] {"Teste Gasto",1000,DateTime.MinValue, 15},
-            new object[] {"Teste Gasto",1000,DateTime.Today, -5 }
+            new object[] {"Teste Gasto",1000,DateTime.MinValue, 15}
         };
 
         [Fact]
