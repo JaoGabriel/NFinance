@@ -21,7 +21,7 @@ namespace NFinance.Application
 
         public async Task<AtualizarClienteViewModel.Response> AtualizarDadosCadastrais(Guid id, AtualizarClienteViewModel.Request request)
         {
-            var dadosClienteAtualizados = new Cliente(request.Nome, request.Nome, request.Cpf, request.Email);
+            var dadosClienteAtualizados = new Cliente(request.Nome, request.Cpf, request.Email, request.Celular);
             var clienteAtualizado = await _clienteRepository.AtualizarCliente(dadosClienteAtualizados);
             var resposta = new AtualizarClienteViewModel.Response(clienteAtualizado);
             return resposta;

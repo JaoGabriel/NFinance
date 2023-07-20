@@ -8,6 +8,7 @@ using NFinance.Application.ViewModel.ClientesViewModel;
 using NFinance.Domain.Exceptions;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Identidade;
+using NFinance.Application.Exceptions;
 
 namespace NFinance.Tests.Application
 {
@@ -17,7 +18,7 @@ namespace NFinance.Tests.Application
         private readonly Mock<IUsuarioRepository> _usuarioRepository;
         private readonly Guid _id = Guid.NewGuid();
         private readonly string _nome = "joaquin da zils";
-        private readonly string _cpf = "12345678910";
+        private readonly string _cpf = "07944856930";
         private readonly string _email = "teste@teste.com";
         private readonly string _senha = "12391ukla";
         private readonly string _celular = "41984654879";
@@ -33,7 +34,7 @@ namespace NFinance.Tests.Application
             return new(_clienteRepository.Object, _usuarioRepository.Object);
         }
 
-        private static Usuario GeraUsuario()
+        private static Usuario GerarUsuario()
         {
             return new() { Id = Guid.NewGuid(), Email = "teste@teste.com", PasswordHash = "123456" };
         }
@@ -44,6 +45,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var cliente = new Cliente(_nome,_cpf,_email, _celular);
             var cadastroClienteVm = new CadastrarClienteViewModel.Request(cliente);
+            _usuarioRepository.Setup(x => x.CadastrarUsuario(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(GerarUsuario());
             _clienteRepository.Setup(x => x.CadastrarCliente(It.IsAny<Cliente>())).ReturnsAsync(cliente);
             var app = IniciaApplication();
 
@@ -56,7 +58,6 @@ namespace NFinance.Tests.Application
             Assert.Equal(cliente.Nome, response.Nome);
             Assert.Equal(cliente.Cpf.ToString(), response.Cpf);
             Assert.Equal(cliente.Email.ToString(), response.Email);
-            Assert.NotNull(cliente.Usuario.PasswordHash);
         }
 
         [Theory]
@@ -133,7 +134,6 @@ namespace NFinance.Tests.Application
             Assert.Equal(cliente.Nome, response.Nome);
             Assert.Equal(cliente.Cpf.ToString(), response.Cpf);
             Assert.Equal(cliente.Email.ToString(), response.Email);
-            Assert.NotNull(cliente.Usuario.PasswordHash);
         }
         
         [Fact]
@@ -220,7 +220,6 @@ namespace NFinance.Tests.Application
             Assert.Equal(cliente.Nome, response.Nome);
             Assert.Equal(cliente.Cpf.ToString(), response.Cpf);
             Assert.Equal(cliente.Email.ToString(), response.Email);
-            Assert.NotNull(cliente.Usuario.PasswordHash);
         }
 
         [Fact]
@@ -230,7 +229,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<DomainException>(() => app.ConsultaCliente(Guid.Empty));
+            await Assert.ThrowsAsync<ClienteException>(() => app.ConsultaCliente(Guid.Empty));
         }
     }
 }

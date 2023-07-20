@@ -11,7 +11,7 @@ namespace NFinance.Domain
         [Required] 
         public Guid Id { get; set; }
 
-        [ForeignKey("Id")] 
+        [ForeignKey(nameof(Cliente))] 
         [Required] 
         public Guid IdCliente { get; set; }
 
@@ -27,10 +27,10 @@ namespace NFinance.Domain
         public bool Recorrente { get; set; }
 
         [Required]
-        [Range(typeof(DateTime), "01/01/1950", "31/12/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
-        public DateTime DataDoGanho { get; set; }
+        [Range(typeof(DateTimeOffset), "01/01/1950", "31/12/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
+        public DateTimeOffset DataDoGanho { get; set; }
 
-        public Ganho(Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
+        public Ganho(Guid idCliente, string nomeGanho, decimal valor, bool recorrente, DateTimeOffset dataDoGanho)
         {
             ValidaDadosCadastroGanho(idCliente,nomeGanho,valor,dataDoGanho);
             
@@ -42,7 +42,7 @@ namespace NFinance.Domain
             DataDoGanho = dataDoGanho;
         }
 
-        public void AtualizaGanho(string nomeGanho, decimal valor, bool recorrente, DateTime dataDoGanho)
+        public void AtualizaGanho(string nomeGanho, decimal valor, bool recorrente, DateTimeOffset dataDoGanho)
         {
             ValidaDadosAtualizacaoGanho(nomeGanho,valor,dataDoGanho);
             
@@ -52,7 +52,7 @@ namespace NFinance.Domain
             DataDoGanho = dataDoGanho;
         }
 
-        private static void ValidaDadosCadastroGanho(Guid idCliente, string nomeGanho, decimal valor, DateTime dataDoGanho)
+        private static void ValidaDadosCadastroGanho(Guid idCliente, string nomeGanho, decimal valor, DateTimeOffset dataDoGanho)
         {
             if (Guid.Empty.Equals(idCliente)) 
                 throw new DomainException("Cliente invalido ou inexistente.");
@@ -63,11 +63,11 @@ namespace NFinance.Domain
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
                 throw new DomainException("Valor invalido.");
 
-            if (dataDoGanho < DateTime.MinValue.AddYears(1949) || dataDoGanho > DateTime.MaxValue.AddYears(-7899))
+            if (dataDoGanho <= DateTimeOffset.MinValue || dataDoGanho >= DateTimeOffset.MaxValue)
                 throw new DomainException("Data invalida.");
         }
         
-        private static void ValidaDadosAtualizacaoGanho(string nomeGanho, decimal valor, DateTime dataDoGanho)
+        private static void ValidaDadosAtualizacaoGanho(string nomeGanho, decimal valor, DateTimeOffset dataDoGanho)
         {
             if (string.IsNullOrWhiteSpace(nomeGanho)) 
                 throw new DomainException("Nome invalido.");
@@ -75,7 +75,7 @@ namespace NFinance.Domain
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
                 throw new DomainException("Valor invalido.");
 
-            if (dataDoGanho <= DateTime.MinValue || dataDoGanho >= DateTime.MaxValue)
+            if (dataDoGanho <= DateTimeOffset.MinValue || dataDoGanho >= DateTimeOffset.MaxValue)
                 throw new DomainException("Data invalida.");
         }
     }

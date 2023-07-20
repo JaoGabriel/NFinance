@@ -19,7 +19,8 @@ namespace NFinance.Application
 
         public async Task<AtualizarGanhoViewModel.Response> AtualizarGanho(Guid idGanho, AtualizarGanhoViewModel.Request request)
         {
-            var ganho = await _ganhoRepository.ConsultarGanho(idGanho);
+            ValidaId(idGanho);
+            var ganho = await _ganhoRepository.ConsultarGanho(idGanho) ?? throw new GanhoException("Não foi possível encontrar esse ganho!");
             ganho.AtualizaGanho(request.NomeGanho,request.Valor,request.Recorrente,request.DataDoGanho);
             var ganhoAtualizado = await _ganhoRepository.AtualizarGanho(ganho);
             var resposta = new AtualizarGanhoViewModel.Response(ganhoAtualizado);
@@ -37,7 +38,7 @@ namespace NFinance.Application
         public async Task<ConsultarGanhoViewModel.Response> ConsultarGanho(Guid idGanho)
         {
             ValidaId(idGanho);
-            var ganhoConsultado = await _ganhoRepository.ConsultarGanho(idGanho);
+            var ganhoConsultado = await _ganhoRepository.ConsultarGanho(idGanho) ?? throw new GanhoException("Não foi possível encontrar esse ganho!");
             var resposta = new ConsultarGanhoViewModel.Response(ganhoConsultado);
             return resposta;
         }

@@ -15,7 +15,7 @@ namespace NFinance.Application.ViewModel.ResgatesViewModel
         
             public string MotivoResgate { get; set; }
         
-            public DateTime DataResgate { get; set; }
+            public DateTimeOffset DataResgate { get; set; }
         }
 
         public class Response : ResgateViewModel

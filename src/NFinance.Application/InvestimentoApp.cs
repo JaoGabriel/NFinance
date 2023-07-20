@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.InvestimentosViewModel;
+using NFinance.Application.Exceptions;
 
 namespace NFinance.Application
 {
@@ -18,6 +19,7 @@ namespace NFinance.Application
 
         public async Task<AtualizarInvestimentoViewModel.Response> AtualizarInvestimento(Guid idInvestimento, AtualizarInvestimentoViewModel.Request request)
         {
+            ValidaId(idInvestimento);
             var investimento = await _investimentoRepository.ConsultarInvestimento(idInvestimento);
             investimento.AtualizaInvestimento(request.NomeInvestimento,request.Valor,request.DataAplicacao);
             var investimentoAtualizado = await _investimentoRepository.AtualizarInvestimento(investimento);
@@ -27,6 +29,7 @@ namespace NFinance.Application
 
         public async Task<ConsultarInvestimentoViewModel.Response> ConsultarInvestimento(Guid idInvestimento)
         {
+            ValidaId(idInvestimento);
             var investimento = await _investimentoRepository.ConsultarInvestimento(idInvestimento);
             var resposta = new ConsultarInvestimentoViewModel.Response(investimento);
             return resposta;
@@ -34,6 +37,7 @@ namespace NFinance.Application
 
         public async Task<ConsultarInvestimentosViewModel.Response> ConsultarInvestimentos(Guid idCliente)
         {
+            ValidaId(idCliente);
             var investimentos = await _investimentoRepository.ConsultarInvestimentos(idCliente);
             var resposta = new ConsultarInvestimentosViewModel.Response(investimentos);
             return resposta;
@@ -45,6 +49,12 @@ namespace NFinance.Application
             var investimentoRealizado = await _investimentoRepository.AtualizarInvestimento(investimento);
             var resposta = new RealizarInvestimentoViewModel.Response(investimentoRealizado);
             return resposta;
+        }
+
+        private static void ValidaId(Guid id)
+        {
+            if (Guid.Empty.Equals(id))
+                throw new GastoException();
         }
     }
 }

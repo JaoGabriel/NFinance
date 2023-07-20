@@ -13,6 +13,7 @@ namespace NFinance.Application.ViewModel.ClientesViewModel
                 Nome = request.Nome;
                 Cpf = request.Cpf.ToString();
                 Email = request.Email.ToString();
+                Celular = request.Celular.ToString();
             }
         }
 

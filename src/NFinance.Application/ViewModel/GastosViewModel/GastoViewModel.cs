@@ -15,7 +15,7 @@ namespace NFinance.Application.ViewModel.GastosViewModel
         
         public int QuantidadeParcelas { get; set; }
         
-        public DateTime DataDoGasto { get; set; }
+        public DateTimeOffset DataDoGasto { get; set; }
 
         public GastoViewModel() { }
 

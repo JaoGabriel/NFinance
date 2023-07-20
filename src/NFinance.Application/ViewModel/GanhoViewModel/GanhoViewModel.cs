@@ -15,7 +15,7 @@ namespace NFinance.Application.ViewModel.GanhoViewModel
 
         public bool Recorrente { get; set; }
 
-        public DateTime DataDoGanho { get; set; }
+        public DateTimeOffset DataDoGanho { get; set; }
 
         public GanhoViewModel() { }
 

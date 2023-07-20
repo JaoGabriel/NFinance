@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.ResgatesViewModel;
+using NFinance.Application.Exceptions;
 
 namespace NFinance.Application
 {
@@ -18,6 +19,7 @@ namespace NFinance.Application
 
         public async Task<ConsultarResgateViewModel.Response> ConsultarResgate(Guid idResgate)
         {
+            ValidaId(idResgate);
             var resgate = await _resgateRepository.ConsultarResgate(idResgate);
             var resposta = new ConsultarResgateViewModel.Response(resgate);
             return resposta;
@@ -25,6 +27,7 @@ namespace NFinance.Application
 
         public async Task<ConsultarResgatesViewModel.Response> ConsultarResgates(Guid idCliente)
         {
+            ValidaId(idCliente);
             var resgates = await _resgateRepository.ConsultarResgates(idCliente);
             var resposta = new ConsultarResgatesViewModel.Response(resgates);
             return resposta;
@@ -36,6 +39,12 @@ namespace NFinance.Application
             var resgateRealizado = await _resgateRepository.RealizarResgate(realizarResgate);
             var resposta = new RealizarResgateViewModel.Response(resgateRealizado);
             return resposta;
+        }
+
+        private static void ValidaId(Guid id)
+        {
+            if (Guid.Empty.Equals(id))
+                throw new ResgateException();
         }
     }
 }

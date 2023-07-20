@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NFinance.Application.Interfaces;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Application.ViewModel.GastosViewModel;
+using NFinance.Application.Exceptions;
 
 namespace NFinance.Application
 {
@@ -18,7 +19,8 @@ namespace NFinance.Application
 
         public async Task<AtualizarGastoViewModel.Response> AtualizarGasto(Guid idGasto, AtualizarGastoViewModel.Request request)
         {
-            var gasto = await _gastoRepository.ConsultarGasto(idGasto);
+            ValidaId(idGasto);
+            var gasto = await _gastoRepository.ConsultarGasto(idGasto) ?? throw new GastoException("Não foi possível encontrar o gasto!");
             gasto.AtualizaGasto(request.NomeGasto,request.Valor,request.QuantidadeParcelas,request.DataDoGasto);
             var gastoAtualizado = await _gastoRepository.AtualizarGasto(gasto);
             var resposta = new AtualizarGastoViewModel.Response(gastoAtualizado);
@@ -35,13 +37,15 @@ namespace NFinance.Application
 
         public async Task<ConsultarGastoViewModel.Response> ConsultarGasto(Guid idGasto)
         {
-            var gasto = await _gastoRepository.ConsultarGasto(idGasto);
+            ValidaId(idGasto);
+            var gasto = await _gastoRepository.ConsultarGasto(idGasto) ?? throw new GastoException("Não foi possível encontrar o gasto!");
             var resposta = new ConsultarGastoViewModel.Response(gasto);
             return resposta;
         }
 
         public async Task<ConsultarGastosViewModel.Response> ConsultarGastos(Guid idCliente)
         {
+            ValidaId(idCliente);
             var gastos = await _gastoRepository.ConsultarGastos(idCliente);
             var resposta = new ConsultarGastosViewModel.Response(gastos);
             return resposta;
@@ -53,6 +57,12 @@ namespace NFinance.Application
             var gastoExcluido = await _gastoRepository.ExcluirGasto(request.IdGasto);
             var resposta = new ExcluirGastoViewModel.Response(gastoExcluido);
             return resposta;
+        }
+
+        private static void ValidaId(Guid id)
+        {
+            if (Guid.Empty.Equals(id))
+                throw new GastoException();
         }
     }
 }

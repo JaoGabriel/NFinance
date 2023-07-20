@@ -11,33 +11,33 @@ namespace NFinance.Tests.Domain
         private readonly Guid _idCliente = Guid.NewGuid();
         private readonly string _nome = "Salario";
         private readonly decimal _valorGanho = 1524.01M;
-        private readonly DateTime _dataGanho = new(2021, 10, 05);
+        private readonly DateTimeOffset _dataGanho = new(2021, 10, 05, 0, 0, 0, new(0,0,0));
 
         public static IEnumerable<object[]> GanhosInvalidos => new List<object[]>
         {
-            new object[] {Guid.Empty,"Nome Ganho",1000,DateTime.Today},
-            new object[] {Guid.NewGuid(),"",1000,DateTime.Today},
-            new object[] {Guid.NewGuid()," ",1000,DateTime.Today},
-            new object[] {Guid.NewGuid(),null,1000,DateTime.Today},
-            new object[] {Guid.NewGuid(),"Teste Ganho",0,DateTime.Today},
-            new object[] {Guid.NewGuid(),"Teste Ganho",decimal.MinValue,DateTime.Today},
-            new object[] {Guid.NewGuid(),"Teste Ganho",decimal.MinusOne,DateTime.Today},
-            new object[] {Guid.NewGuid(),"Teste Ganho",decimal.MaxValue,DateTime.Today},
-            new object[] {Guid.NewGuid(),"Teste Ganho",1000,DateTime.MaxValue},
-            new object[] {Guid.NewGuid(),"Teste Ganho",1000,DateTime.MinValue}
+            new object[] {Guid.Empty,"Nome Ganho",1000,DateTimeOffset.Now.DateTime},
+            new object[] {Guid.NewGuid(),"",1000,DateTimeOffset.Now.DateTime},
+            new object[] {Guid.NewGuid()," ",1000,DateTimeOffset.Now.DateTime},
+            new object[] {Guid.NewGuid(),null,1000,DateTimeOffset.Now.DateTime},
+            new object[] {Guid.NewGuid(),"Teste Ganho",0,DateTimeOffset.Now.DateTime},
+            new object[] {Guid.NewGuid(),"Teste Ganho",decimal.MinValue,DateTimeOffset.Now.DateTime},
+            new object[] {Guid.NewGuid(),"Teste Ganho",decimal.MinusOne,DateTimeOffset.Now.DateTime},
+            new object[] {Guid.NewGuid(),"Teste Ganho",decimal.MaxValue,DateTimeOffset.Now.DateTime},
+            new object[] {Guid.NewGuid(),"Teste Ganho",1000,DateTimeOffset.MaxValue},
+            new object[] {Guid.NewGuid(),"Teste Ganho",1000,DateTimeOffset.MinValue}
         };
         
         public static IEnumerable<object[]> AtualizarGanhosInvalidos => new List<object[]>
         {
-            new object[] {true,"",1000,DateTime.Today},
-            new object[] {false," ",1000,DateTime.Today},
-            new object[] {true,null,1000,DateTime.Today},
-            new object[] {true,"Teste Ganho",0,DateTime.Today},
-            new object[] {false,"Teste Ganho",decimal.MinValue,DateTime.Today},
-            new object[] {true,"Teste Ganho",decimal.MinusOne,DateTime.Today},
-            new object[] {false,"Teste Ganho",decimal.MaxValue,DateTime.Today},
-            new object[] {false,"Teste Ganho",1000,DateTime.MaxValue},
-            new object[] {true,"Teste Ganho",1000,DateTime.MinValue}
+            new object[] {true,"",1000,DateTimeOffset.Now.DateTime},
+            new object[] {false," ",1000,DateTimeOffset.Now.DateTime},
+            new object[] {true,null,1000,DateTimeOffset.Now.DateTime},
+            new object[] {true,"Teste Ganho",0,DateTimeOffset.Now.DateTime},
+            new object[] {false,"Teste Ganho",decimal.MinValue,DateTimeOffset.Now.DateTime},
+            new object[] {true,"Teste Ganho",decimal.MinusOne,DateTimeOffset.Now.DateTime},
+            new object[] {false,"Teste Ganho",decimal.MaxValue,DateTimeOffset.Now.DateTime},
+            new object[] {false,"Teste Ganho",1000,DateTimeOffset.MaxValue},
+            new object[] {true,"Teste Ganho",1000,DateTimeOffset.MinValue}
         };
 
         [Fact]
@@ -57,7 +57,7 @@ namespace NFinance.Tests.Domain
 
         [Theory]
         [MemberData(nameof(GanhosInvalidos))]
-        public void DadoUmGanho_QuandoCadastrarEDadosForemInvalidos_DeveRetornarDomainException(Guid idCliente, string nome, decimal valorGanho, DateTime dataGanho)
+        public void DadoUmGanho_QuandoCadastrarEDadosForemInvalidos_DeveRetornarDomainException(Guid idCliente, string nome, decimal valorGanho, DateTimeOffset dataGanho)
         {
             //Arrange   
             Assert.Throws<DomainException>(() => new Ganho(idCliente, nome, valorGanho, false, dataGanho));
@@ -70,7 +70,7 @@ namespace NFinance.Tests.Domain
             var ganho = new Ganho(_idCliente, _nome, _valorGanho, true, _dataGanho);
             
             //Act
-            ganho.AtualizaGanho("Novo Nome",12345.11M,false,new DateTime(2021,10,6));
+            ganho.AtualizaGanho("Novo Nome",12345.11M,false,new DateTimeOffset(2021, 10, 6, 0, 0, 0, new(0, 0, 0)));
 
             //Assert
             Assert.NotEqual(_nome, ganho.NomeGanho);
@@ -81,7 +81,7 @@ namespace NFinance.Tests.Domain
 
         [Theory]
         [MemberData(nameof(AtualizarGanhosInvalidos))]
-        public void DadoUmGanho_QuandoAtualizarEDadosForemInvalidos_DeveRetornarDomainException(bool recorrencia, string nome, decimal valorGanho, DateTime dataGanho)
+        public void DadoUmGanho_QuandoAtualizarEDadosForemInvalidos_DeveRetornarDomainException(bool recorrencia, string nome, decimal valorGanho, DateTimeOffset dataGanho)
         {
             //Arrange
             var ganho = new Ganho(_idCliente, _nome, _valorGanho, true, _dataGanho);

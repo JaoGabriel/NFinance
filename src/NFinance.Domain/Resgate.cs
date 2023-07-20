@@ -11,11 +11,11 @@ namespace NFinance.Domain
         [Required]
         public Guid Id { get; set; }
 
-        [ForeignKey("Id")]
+        [ForeignKey(nameof(Investimento))]
         [Required]
         public Guid IdInvestimento { get; set; }
 
-        [ForeignKey("Id")]
+        [ForeignKey(nameof(Cliente))]
         [Required]
         public Guid IdCliente { get; set; }
 
@@ -28,10 +28,10 @@ namespace NFinance.Domain
         public string MotivoResgate { get; set; }
 
         [Required]
-        [Range(typeof(DateTime), "01/01/1950", "12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
-        public DateTime DataResgate { get; set; }
+        [Range(typeof(DateTimeOffset), "01/01/1950", "12/31/2100", ErrorMessage = "Data {0} deve estar entre {1} e {2}")]
+        public DateTimeOffset DataResgate { get; set; }
 
-        public Resgate(Guid idInvestimento, Guid idCliente, decimal valor, string motivoResgate, DateTime dataResgate)
+        public Resgate(Guid idInvestimento, Guid idCliente, decimal valor, string motivoResgate, DateTimeOffset dataResgate)
         {
             ValidaDadosResgate(idInvestimento,idCliente,valor,motivoResgate,dataResgate);
             
@@ -43,7 +43,7 @@ namespace NFinance.Domain
             DataResgate = dataResgate;
         }
 
-        public void AtualizaResgate(decimal valor, string motivoResgate, DateTime dataResgate)
+        public void AtualizaResgate(decimal valor, string motivoResgate, DateTimeOffset dataResgate)
         {
             ValidaDadosAtualizacaoResgate(valor,motivoResgate,dataResgate);
             
@@ -52,7 +52,7 @@ namespace NFinance.Domain
             DataResgate = dataResgate;
         }
 
-        private static void ValidaDadosResgate(Guid idInvestimento, Guid idCliente, decimal valor, string motivoResgate, DateTime dataResgate)
+        private static void ValidaDadosResgate(Guid idInvestimento, Guid idCliente, decimal valor, string motivoResgate, DateTimeOffset dataResgate)
         {
             if (Guid.Empty.Equals(idInvestimento)) 
                 throw new DomainException();
@@ -66,11 +66,11 @@ namespace NFinance.Domain
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
                 throw new DomainException();
 
-            if (dataResgate < DateTime.MinValue.AddYears(1949) || dataResgate > DateTime.MaxValue.AddYears(-7899))
+            if (dataResgate <= DateTimeOffset.MinValue || dataResgate >= DateTimeOffset.MaxValue)
                 throw new DomainException();
         }
 
-        private static void ValidaDadosAtualizacaoResgate(decimal valor, string motivoResgate, DateTime dataResgate)
+        private static void ValidaDadosAtualizacaoResgate(decimal valor, string motivoResgate, DateTimeOffset dataResgate)
         {
             if (string.IsNullOrWhiteSpace(motivoResgate)) 
                 throw new DomainException();
@@ -78,7 +78,7 @@ namespace NFinance.Domain
             if (valor is <= decimal.MinValue or >= decimal.MaxValue or <= decimal.Zero)
                 throw new DomainException();
 
-            if (dataResgate < DateTime.MinValue.AddYears(1949) || dataResgate > DateTime.MaxValue.AddYears(-7899))
+            if (dataResgate <= DateTimeOffset.MinValue || dataResgate >= DateTimeOffset.MaxValue)
                 throw new DomainException();
         }
     }

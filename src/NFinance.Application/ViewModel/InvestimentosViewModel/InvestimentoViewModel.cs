@@ -13,7 +13,7 @@ namespace NFinance.Application.ViewModel.InvestimentosViewModel
 
         public decimal Valor { get; set; }
 
-        public DateTime DataAplicacao { get; set; }
+        public DateTimeOffset DataAplicacao { get; set; }
 
         public InvestimentoViewModel() { }
 

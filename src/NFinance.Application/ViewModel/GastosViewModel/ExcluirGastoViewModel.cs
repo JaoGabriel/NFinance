@@ -19,7 +19,7 @@ namespace NFinance.Application.ViewModel.GastosViewModel
             
             public string Mensagem { get; set; }
             
-            public DateTime DataExclusao { get; set; }
+            public DateTimeOffset DataExclusao { get; set; }
            
             public Response() { }
 
@@ -28,13 +28,13 @@ namespace NFinance.Application.ViewModel.GastosViewModel
                 if (status)
                 {
                     StatusCode = 200;
-                    DataExclusao = DateTime.UtcNow;
+                    DataExclusao = DateTimeOffset.Now.DateTime;
                     Mensagem = "Excluido Com Sucesso";
                 }
                 else
                 {
                     StatusCode = 400;
-                    DataExclusao = DateTime.UtcNow;
+                    DataExclusao = DateTimeOffset.Now.DateTime;
                     Mensagem = "Ocorreu um erro ao Excluir";
                 }
             }

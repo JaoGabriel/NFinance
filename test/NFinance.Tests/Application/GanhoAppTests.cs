@@ -9,6 +9,7 @@ using NFinance.Application.ViewModel.GanhoViewModel;
 using NFinance.Domain;
 using NFinance.Domain.Interfaces.Repository;
 using NFinance.Domain.Exceptions;
+using NFinance.Application.Exceptions;
 
 namespace NFinance.Tests.Application
 {
@@ -20,7 +21,7 @@ namespace NFinance.Tests.Application
         private readonly string _nomeGanho = "ganho";
         private readonly decimal _valor = 12312.123M;
         private readonly bool _recorrente = false;
-        private readonly DateTime _dataGanho = DateTime.Today;
+        private readonly DateTimeOffset _dataGanho = DateTimeOffset.Now;
 
         public GanhoAppTests()
         {
@@ -44,8 +45,8 @@ namespace NFinance.Tests.Application
         public static IEnumerable<object[]> Data =>
             new List<object[]>
             {
-                new object[] { DateTime.MaxValue },
-                new object[] { DateTime.MinValue }
+                new object[] { DateTimeOffset.MaxValue },
+                new object[] { DateTimeOffset.MinValue }
             };
         
         [Fact]
@@ -109,7 +110,7 @@ namespace NFinance.Tests.Application
         
         [Theory]
         [MemberData(nameof(Data))]
-        public async Task GanhoApp_CadastraGanho_ComData_Invalida(DateTime data)
+        public async Task GanhoApp_CadastraGanho_ComData_Invalida(DateTimeOffset data)
         {
             //Arrange
             var cadastrarGanhoVm = new CadastrarGanhoViewModel.Request { IdCliente = _idCliente, Recorrente = _recorrente,Valor = _valor, NomeGanho = _nomeGanho, DataDoGanho = data};
@@ -125,6 +126,7 @@ namespace NFinance.Tests.Application
             //Arrange
             var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
             var atualizaGanhoVm = new AtualizarGanhoViewModel.Request(ganho);
+            _ganhoRepository.Setup(x => x.ConsultarGanho(It.IsAny<Guid>())).ReturnsAsync(ganho);
             _ganhoRepository.Setup(x => x.AtualizarGanho(It.IsAny<Ganho>())).ReturnsAsync(ganho);
             var app = IniciaApplication();
             
@@ -151,7 +153,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<DomainException>(() => app.AtualizarGanho(Guid.Empty, atualizaGanhoVm));
+            await Assert.ThrowsAsync<GanhoException>(() => app.AtualizarGanho(Guid.Empty, atualizaGanhoVm));
         }
 
         [Theory]
@@ -162,8 +164,10 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var atualizaGanhoVm = new AtualizarGanhoViewModel.Request { IdCliente = _idCliente, NomeGanho = nome,Valor = _valor,Recorrente = false, DataDoGanho = _dataGanho};
+            var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
+            _ganhoRepository.Setup(x => x.ConsultarGanho(It.IsAny<Guid>())).ReturnsAsync(ganho);
             var app = IniciaApplication();
-            
+
             //Assert
             await Assert.ThrowsAsync<DomainException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
         }
@@ -174,6 +178,8 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var atualizaGanhoVm = new AtualizarGanhoViewModel.Request { IdCliente = _idCliente, NomeGanho = _nomeGanho,Valor = valor,Recorrente = false, DataDoGanho = _dataGanho};
+            var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
+            _ganhoRepository.Setup(x => x.ConsultarGanho(It.IsAny<Guid>())).ReturnsAsync(ganho);
             var app = IniciaApplication();
             
             //Assert
@@ -182,10 +188,12 @@ namespace NFinance.Tests.Application
         
         [Theory]
         [MemberData(nameof(Data))]
-        public async Task GanhoApp_AtualizaGanho_ComData_Invalido(DateTime data)
+        public async Task GanhoApp_AtualizaGanho_ComData_Invalido(DateTimeOffset data)
         {
             //Arrange
             var atualizaGanhoVm = new AtualizarGanhoViewModel.Request { IdCliente = _idCliente, NomeGanho = _nomeGanho,Valor = _valor,Recorrente = false, DataDoGanho = data};
+            var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
+            _ganhoRepository.Setup(x => x.ConsultarGanho(It.IsAny<Guid>())).ReturnsAsync(ganho);
             var app = IniciaApplication();
             
             //Assert
@@ -197,10 +205,11 @@ namespace NFinance.Tests.Application
         {
             //Arrange
             var atualizaGanhoVm = new AtualizarGanhoViewModel.Request { IdCliente = Guid.Empty, NomeGanho = _nomeGanho,Valor = _valor,Recorrente = false, DataDoGanho = _dataGanho};
+            var ganho = new Ganho(_idCliente, _nomeGanho, _valor, _recorrente, _dataGanho);
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<DomainException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
+            await Assert.ThrowsAsync<GanhoException>(() => app.AtualizarGanho(_id, atualizaGanhoVm));
         }
         
         [Fact]
@@ -210,7 +219,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<DomainException>(() => app.ConsultarGanho(Guid.Empty));
+            await Assert.ThrowsAsync<GanhoException>(() => app.ConsultarGanho(Guid.Empty));
         }
         
         [Fact]
@@ -263,7 +272,7 @@ namespace NFinance.Tests.Application
             var app = IniciaApplication();
             
             //Assert
-            await Assert.ThrowsAsync<DomainException>(() => app.ConsultarGanhos(Guid.Empty));
+            await Assert.ThrowsAsync<GanhoException>(() => app.ConsultarGanhos(Guid.Empty));
         }
         
         [Fact]

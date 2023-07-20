@@ -15,7 +15,7 @@ namespace NFinance.Application.ViewModel.ResgatesViewModel
         
         public string MotivoResgate { get; set; }
         
-        public DateTime DataResgate { get; set; }
+        public DateTimeOffset DataResgate { get; set; }
 
         public ResgateViewModel() { }
 
@@ -24,7 +24,7 @@ namespace NFinance.Application.ViewModel.ResgatesViewModel
             Id = resgate.Id;
             Valor = resgate.Valor;
             MotivoResgate = resgate.MotivoResgate;
-            DataResgate = resgate.DataResgate;
+            DataResgate = resgate.DataResgate.LocalDateTime;
             IdInvestimento = resgate.IdInvestimento;
             IdCliente = resgate.IdCliente;
         }
