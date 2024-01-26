@@ -16,7 +16,7 @@ namespace NFinance.Infra
         public static void AddInfraServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<BaseDadosContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("BancoDeDados")).EnableSensitiveDataLogging());
+                options.UseNpgsql(configuration.GetConnectionString("BancoDeDados")).EnableSensitiveDataLogging());
 
             services.AddIdentity<Usuario, Role>().AddEntityFrameworkStores<BaseDadosContext>().AddDefaultTokenProviders();
 

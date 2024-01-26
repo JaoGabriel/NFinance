@@ -80,7 +80,7 @@ namespace NFinance.WebApi
         public static void Configure(IApplicationBuilder app)
         {
             app.UseOpenApi(c => c.DocumentName = "Nfinance.WebApi");
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi();
 
             app.UseMiddleware(typeof(UsuarioInfoMiddleware));
             
